@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "magic": "PHONICS1",
+  "sample_rate": 16000,
+  "format": "PCM signed 16-bit little-endian, mono",
+  "asset_count": 42,
+  "bytes": 950976,
+  "sha256": "563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72",
+  "flash_partition": {
+    "label": "ffat",
+    "offset": "0x610000",
+    "size": "0x9E0000"
+  },
+  "assets": [
+    {
+      "id": "cowboy_a",
+      "offset": 32,
+      "length": 26624
+    },
+    {
+      "id": "cowboy_b",
+      "offset": 26656,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_c",
+      "offset": 41674,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_d",
+      "offset": 56692,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_e",
+      "offset": 71710,
+      "length": 26624
+    },
+    {
+      "id": "cowboy_f",
+      "offset": 98334,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_g",
+      "offset": 113352,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_h",
+      "offset": 128370,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_i",
+      "offset": 143388,
+      "length": 26624
+    },
+    {
+      "id": "cowboy_j",
+      "offset": 170012,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_k",
+      "offset": 185030,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_l",
+      "offset": 200048,
+      "length": 17066
+    },
+    {
+      "id": "cowboy_m",
+      "offset": 217114,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_n",
+      "offset": 232132,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_o",
+      "offset": 247150,
+      "length": 26624
+    },
+    {
+      "id": "cowboy_p",
+      "offset": 273774,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_q",
+      "offset": 288792,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_r",
+      "offset": 303810,
+      "length": 16384
+    },
+    {
+      "id": "cowboy_s",
+      "offset": 320194,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_t",
+      "offset": 335212,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_u",
+      "offset": 350230,
+      "length": 27990
+    },
+    {
+      "id": "cowboy_v",
+      "offset": 378220,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_w",
+      "offset": 393238,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_x",
+      "offset": 408256,
+      "length": 15018
+    },
+    {
+      "id": "cowboy_y",
+      "offset": 423274,
+      "length": 18432
+    },
+    {
+      "id": "cowboy_z",
+      "offset": 441706,
+      "length": 15018
+    },
+    {
+      "id": "prompt_which_one_says",
+      "offset": 456724,
+      "length": 30422
+    },
+    {
+      "id": "prompt_can_you_find",
+      "offset": 487146,
+      "length": 19154
+    },
+    {
+      "id": "prompt_which_letter_makes",
+      "offset": 506300,
+      "length": 28152
+    },
+    {
+      "id": "prompt_tap_the_one_that_says",
+      "offset": 534452,
+      "length": 38978
+    },
+    {
+      "id": "prompt_listen_which_one_says",
+      "offset": 573430,
+      "length": 39370
+    },
+    {
+      "id": "nudge_have_another_listen",
+      "offset": 612800,
+      "length": 27254
+    },
+    {
+      "id": "nudge_take_your_time",
+      "offset": 640054,
+      "length": 67042
+    },
+    {
+      "id": "nudge_listen_once_more",
+      "offset": 707096,
+      "length": 29684
+    },
+    {
+      "id": "nudge_which_one_do_you_think",
+      "offset": 736780,
+      "length": 29646
+    },
+    {
+      "id": "wrong_no_no",
+      "offset": 766426,
+      "length": 26562
+    },
+    {
+      "id": "wrong_not_it_try_again",
+      "offset": 792988,
+      "length": 48942
+    },
+    {
+      "id": "wrong_try_the_other_one",
+      "offset": 841930,
+      "length": 26518
+    },
+    {
+      "id": "praise_nice_job",
+      "offset": 868448,
+      "length": 23834
+    },
+    {
+      "id": "praise_great_work",
+      "offset": 892282,
+      "length": 20918
+    },
+    {
+      "id": "praise_you_got_it",
+      "offset": 913200,
+      "length": 21970
+    },
+    {
+      "id": "praise_thats_it",
+      "offset": 935170,
+      "length": 15806
+    }
+  ]
+}

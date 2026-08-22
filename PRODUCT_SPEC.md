@@ -14,6 +14,10 @@ listing that described the original SH8601 + FT3168 revision.
 - The answer side, distractor, prompt wording, and one of six bounded card
   layouts vary independently. Layout variation is subtle and never changes hit
   area size, overlaps cards, crowds an edge, or hints at the correct answer.
+- The screen contains exactly two letter cards and one fixed replay control near
+  the top. There is no printed "listen", "pick one", score, or instructional
+  chrome. The replay control repeats the exact current prompt and sound without
+  changing the round, and restarts the current idle-nudge deadline.
 - Five opening phrasings are available. Each is followed by the target Cowboy
   phonics clip; the printed screen never reveals the target sound.
 - With no input, give one calm nudge at 8 seconds and a second after another 10
@@ -33,13 +37,33 @@ listing that described the original SH8601 + FT3168 revision.
   never be shuffled, regenerated per round, or reassigned in a later release.
 - Only the cards' bounded positions vary. Position variation must not alter a
   letter's color, texture, typeface, case, or white foreground treatment.
-- The onboard accelerometer may shift the complete foreground by at most seven
-  pixels per axis. Motion is smoothed and rate-limited, never changes the
-  letter identity mapping, and the visible card position remains the hit area.
+- The onboard accelerometer slowly translates both cards together by at most 19
+  horizontal and 44 vertical pixels. It never rotates them. The QMI8658 is
+  mounted clockwise relative to the portrait panel, so screen motion uses
+  `screen X = -sensor Y` and `screen Y = sensor X`. Motion is smoothed and
+  rate-limited; the visible card positions remain their exact hit areas.
+- Across all six layouts, every accelerometer position, and the full correct
+  pulse, card bodies and shadows remain on-screen, never overlap one another,
+  and never enter the replay control's enlarged toddler hit target. The replay
+  control stays fixed while the cards move, making it a dependable target.
 - Letters use a heavy rounded child-readable face with a dark halo. Texture
   contrast stays low so the glyph is always the dominant shape.
 - All speech and phonics are offline authored assets. There is no microphone,
   speech recognition, account, network dependency, or runtime synthesis.
+
+## Power behavior
+
+- A short press-and-release of the physical PWR button toggles logical standby.
+  Standby turns the AMOLED fully off, mutes the codec, disables the speaker amp,
+  and pauses the current round, nudge deadline, and celebration deadline.
+- Wake restores the retained complete frame before brightness, quietly primes
+  the audio path, resumes the same round and remaining deadlines, and requires
+  a zero-finger touch sample before accepting another choice.
+- The software ignores a held PWR release at 1.5 seconds or longer and leaves
+  the board's factory PMIC long-hold hard-off/cold-start behavior in control.
+  BOOT/GPIO0 is not used as a power key because it is a boot strap.
+- This is a polled logical standby rather than ESP deep sleep: PWR is exposed
+  through XCA9554 P4, not a native RTC wake GPIO.
 
 ## Audio playback
 

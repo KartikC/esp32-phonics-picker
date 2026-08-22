@@ -6,7 +6,7 @@
 .venv/
 backups/
 build/
-audio/generated/
+audio/generated/cowboy-cues/
 previews/
 __pycache__/
 *.py[cod]

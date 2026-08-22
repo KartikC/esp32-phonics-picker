@@ -4,12 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import os
 import struct
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT_ROOT = Path("/Users/kartiksathappan/Documents/ChatGPT/Letterboard/android/app/src/main/res/font")
+LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
+FONT_ROOT = LETTERBOARD / "android/app/src/main/res/font"
 WIDTH, HEIGHT = 368, 448
 COLORS_565 = [
     0x934A, 0x1B6A, 0x63C8, 0x93A3, 0x2B4A, 0x8B4A, 0x13A9,
@@ -38,7 +40,7 @@ def lcg(value):
 def card(draw, letter, rect, font):
     x, y, w, h = rect
     base = rgb565(COLORS_565[ord(letter) - 97])
-    fill = blend(base, rgb565(0x1108), 205)
+    fill = blend(base, (0, 0, 0), 205)
     draw.rounded_rectangle((x + 3, y + 6, x + w + 3, y + h + 6), 20, fill=rgb565(0x0204))
     draw.rounded_rectangle((x, y, x + w, y + h), 20, fill=fill,
                            outline=blend((255, 255, 255), base, 145), width=1)
@@ -74,15 +76,15 @@ def make_frame(left, right, layout):
     image = Image.new("RGB", (WIDTH, HEIGHT), "black")
     draw = ImageDraw.Draw(image)
     letter_font = ImageFont.truetype(str(FONT_ROOT / "nunito_black.ttf"), 112)
-    guide_font = ImageFont.truetype(str(FONT_ROOT / "nunito_bold.ttf"), 28)
     moon = rgb565(0xEF5C)
-    draw.text((WIDTH / 2, 87), "listen", font=guide_font, anchor="mm", fill=moon)
-    draw.ellipse((154, 109, 214, 169), outline=moon)
-    draw.polygon(((174, 130), (174, 148), (194, 139)), fill=moon)
-    draw.text((WIDTH / 2, 190), "pick one", font=guide_font, anchor="mm", fill=moon)
+    replay_fill = blend(rgb565(0x1CBF), (0, 0, 0), 105)
+    draw.ellipse((156, 32, 212, 88), fill=replay_fill, outline=moon)
+    draw.ellipse((157, 33, 211, 87),
+                 outline=blend((255, 255, 255), rgb565(0x1CBF), 165))
+    draw.polygon(((176, 49), (176, 71), (195, 60)), fill="white")
     lx, ly, rx, ry = LAYOUTS[layout]
-    card(draw, left, (22 + lx, 220 + ly, 145, 158), letter_font)
-    card(draw, right, (201 + rx, 220 + ry, 145, 158), letter_font)
+    card(draw, left, (32 + lx, 206 + ly, 138, 158), letter_font)
+    card(draw, right, (195 + rx, 206 + ry, 138, 158), letter_font)
     return image
 
 

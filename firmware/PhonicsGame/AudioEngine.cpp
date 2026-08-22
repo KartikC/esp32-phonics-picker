@@ -49,7 +49,10 @@ const esp_partition_t* partition = nullptr;
 uint8_t* audioPackBuffer = nullptr;
 QueueHandle_t commandQueue = nullptr;
 std::atomic<uint32_t> generation{0};
+std::atomic<bool> acceptingCommands{false};
+std::atomic<bool> audioTaskBusy{false};
 bool initialized = false;
+bool audioSuspended = false;
 int16_t monoBuffer[kMonoChunkSamples];
 int16_t stereoBuffer[kMonoChunkSamples * 2];
 uint8_t verificationBuffer[4096];
@@ -170,18 +173,22 @@ void audioTask(void*) {
   AudioCommand command;
   while (true) {
     if (xQueueReceive(commandQueue, &command, portMAX_DELAY) != pdTRUE) continue;
-    if (!current(command.generation)) continue;
-    stream(command.first, command.generation);
-    if (command.second && current(command.generation)) {
+    audioTaskBusy.store(true, std::memory_order_release);
+    if (current(command.generation)) {
+      stream(command.first, command.generation);
+      if (command.second && current(command.generation)) {
+        gap(command.generation);
+        stream(command.second, command.generation);
+      }
       gap(command.generation);
-      stream(command.second, command.generation);
     }
-    gap(command.generation);
+    audioTaskBusy.store(false, std::memory_order_release);
   }
 }
 
 void enqueue(const char* firstId, const char* secondId) {
-  if (!initialized) return;
+  if (!initialized ||
+      !acceptingCommands.load(std::memory_order_acquire)) return;
   AudioCommand command{
       findPackedAudioAsset(firstId),
       secondId ? findPackedAudioAsset(secondId) : nullptr,
@@ -256,6 +263,7 @@ bool AudioEngine::begin() {
     digitalWrite(PA, LOW);
     return false;
   }
+  acceptingCommands.store(true, std::memory_order_release);
 #ifdef PHONICS_AUDIO_DIAGNOSTIC
   stream(findPackedAudioAsset("prompt_which_one_says"), 0);
   gap(0);
@@ -265,7 +273,57 @@ bool AudioEngine::begin() {
   return true;
 }
 
-bool AudioEngine::ready() { return initialized; }
+bool AudioEngine::ready() { return initialized && !audioSuspended; }
+
+bool AudioEngine::suspend() {
+  if (!initialized) return false;
+  if (audioSuspended) return true;
+
+  // Stop new work first, then invalidate both queued and currently streaming
+  // audio. A chunk is only 16 ms, so the bounded acknowledgement normally
+  // completes almost immediately without tearing down the cross-core task.
+  acceptingCommands.store(false, std::memory_order_release);
+  generation.fetch_add(1, std::memory_order_acq_rel);
+  xQueueReset(commandQueue);
+  const bool muted = codec && es8311_voice_mute(codec, true) == ESP_OK;
+  digitalWrite(PA, LOW);
+  const uint32_t waitStartedAtMs = millis();
+  while (audioTaskBusy.load(std::memory_order_acquire) &&
+         millis() - waitStartedAtMs < 120) {
+    delay(1);
+  }
+  const bool idle = !audioTaskBusy.load(std::memory_order_acquire);
+  // Never disable the I2S channel while the other core may be in i2s.write().
+  const bool silenced = idle && resetOutputToSilence();
+  audioSuspended = true;
+  return muted && idle && silenced;
+}
+
+bool AudioEngine::resume() {
+  if (!initialized) return false;
+  if (!audioSuspended) return true;
+
+  digitalWrite(PA, LOW);
+  const bool muted = codec && es8311_voice_mute(codec, true) == ESP_OK;
+  const uint32_t waitStartedAtMs = millis();
+  while (audioTaskBusy.load(std::memory_order_acquire) &&
+         millis() - waitStartedAtMs < 120) {
+    delay(1);
+  }
+  const bool idle = !audioTaskBusy.load(std::memory_order_acquire);
+  const bool silenced = idle && resetOutputToSilence();
+  if (!(muted && idle && silenced)) return false;
+  digitalWrite(PA, HIGH);
+  delay(10);
+  const bool unmuted = codec && es8311_voice_mute(codec, false) == ESP_OK;
+  if (!unmuted) {
+    digitalWrite(PA, LOW);
+    return false;
+  }
+  audioSuspended = false;
+  acceptingCommands.store(true, std::memory_order_release);
+  return true;
+}
 
 void AudioEngine::play(const char* assetId) { enqueue(assetId, nullptr); }
 

@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import mlx.core as mx
@@ -22,7 +23,7 @@ from scipy.io import wavfile
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "audio/cowboy-cues.json"
 OUTPUT = ROOT / "audio/generated/cowboy-cues/raw"
-LETTERBOARD = Path("/Users/kartiksathappan/Documents/ChatGPT/Letterboard")
+LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
 ANCHOR = LETTERBOARD / "Tools/audio/raw/cowboy/word-voice-reference.wav"
 ANCHOR_SHA256 = "3e9134770d92fb179601a32a5384c1a52715628faf455a585d163d13250c60d3"
 ANCHOR_TEXT = "Apple. Car. Dog."

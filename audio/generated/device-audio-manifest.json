@@ -1,0 +1,440 @@
+{
+  "version": 1,
+  "playback_status": "gentler processing accepted by human listening",
+  "format": "PCM signed 16-bit little-endian, mono, 16000 Hz",
+  "speaker_tuning": {
+    "highpass_hz": 300,
+    "lowpass_hz": 5000,
+    "equalization": "no resonance notch or presence boost",
+    "cue_silence": "leading trim only; internal cadence preserved",
+    "normalization": "two-pass linear loudnorm",
+    "phonics_gain_db": -2.06,
+    "phonics_leveling": "Letterboard relative levels preserved; shared peak ceiling",
+    "loudness_lufs": -21,
+    "true_peak_dbtp": -4
+  },
+  "asset_count": 42,
+  "total_bytes": 954220,
+  "assets": [
+    {
+      "kind": "phonics",
+      "id": "cowboy_a",
+      "source_sha256": "5f43fc49b71e27c16d8b23a85985e49a592515b14c2f1ebdb2a1853d9338f4d5",
+      "output_sha256": "83c9cc222c23f096466f59aee8d31feafd4c620fcdf786399753a780b01fa97c",
+      "bytes": 26702,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.832
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_b",
+      "source_sha256": "0a16d5bd94c51a8d9c7580523ea6e07c04ee08b413f57c3d1bf388456ffad2b7",
+      "output_sha256": "df57515d1270e9b84c9d3d112862629a8e9630f308e2b03edda9020e31f9faee",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_c",
+      "source_sha256": "df40f78aeac5f6418fdf8ac583747d734ae95ff746123c8d57a115a57437d2dd",
+      "output_sha256": "76488a4c90849a782f0eded6a07428faff430b3f88d7916605a93fe459e07349",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_d",
+      "source_sha256": "185f1a214298b0258507679536f6102cd2fc9bc6b9390e5fe93e31ee6fd60f03",
+      "output_sha256": "b9a91921cfb8e26a2405dee7a1700de6185e4bd1d1dd34d7e668fb8074ee66a8",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_e",
+      "source_sha256": "ec7f34602694f58252eb625fa5fc3d71285f1ed5a672a6d2475bbc6c2e7475b9",
+      "output_sha256": "e30ac4e023cb908a75b2febf0e45b10b45daa7fa6bc3a746ba2a604452efe97e",
+      "bytes": 26702,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.832
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_f",
+      "source_sha256": "71e7b5e60a2cede76aa55d096fc8fc0e834fcd8a1b19ed5213dc6de5397c0d51",
+      "output_sha256": "82f42836aad44badf1f103d374b709c4eee9390a788d773c877cb4f61a9c70a4",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_g",
+      "source_sha256": "139963109dd5326f03b8f9d7c801527c8793f1285f0b65dc19127011866f0099",
+      "output_sha256": "ba029f7bc1e2f69ff876582f3b2e552ff8389549e646dd12c6733c2bd8d1af03",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_h",
+      "source_sha256": "0b287ea144491e0d1e9772cb05144f23980a696525f77245c19a3f8e4cba9263",
+      "output_sha256": "44596bbf20757caab42547dc3757d7415dd59ede018b6d5c7fde38efc083dd53",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_i",
+      "source_sha256": "8b4fd87b9a86ecaf69a3106d5c6f9141d4a80acbf06dfe1a1f8d20e9b37f1066",
+      "output_sha256": "1f80cfa1084f859545f718d8ab9b6eb821ed798503c1a41d4f016c5fd19a3009",
+      "bytes": 26702,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.832
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_j",
+      "source_sha256": "cc00a016006487e6c57956638751a1cf3c2f2a33db9ef78af4e71cc6c5ee61ff",
+      "output_sha256": "83de1eedb1b381ea5f42a579c73973f8c37800a6deba58ba996cf0009b37624e",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_k",
+      "source_sha256": "418cafd6df9f11ba74cea6caf6632f733566a26e08e1db4b3b4a135cc2c61e91",
+      "output_sha256": "33f54322ce2b4f0c327d8792a62ac10fe38762209bfd440fcc3a1b7cf085b8f3",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_l",
+      "source_sha256": "7c4ec9d74cc0c04eb3e2e29026e9b494042437c83b8cf876d66b91b3a878860a",
+      "output_sha256": "9a03f0ae753b21f57dd6a8ce940c9f7555d6773805b4886430ad8adb5f7e68a9",
+      "bytes": 17144,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.533
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_m",
+      "source_sha256": "b092e9fb3ab875acb37439721fe15aa009106fbd0ff0b1e46985e60e7108a44a",
+      "output_sha256": "932360d2d617347da615673e56255c2683b92640fa68ad4b0af7dcbf8eebbe4f",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_n",
+      "source_sha256": "5753d40aa6c049980295f63066686de51e927c03440195a0ffed67b5a06cd98c",
+      "output_sha256": "68bd7c051aa2b1c60eb788097183f8fb47cd4193771541a70494dbf0501c3218",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_o",
+      "source_sha256": "e8b0af1cd55dfe20dac589017f3fb854374e128091e0fad261e43096602388a3",
+      "output_sha256": "b4f203e3f43f8fe1afcd171e592f5ba0bf2d4bcff2a09690820299d731a84a21",
+      "bytes": 26702,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.832
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_p",
+      "source_sha256": "92e2815537de07df8fb4d3185c40bd8f4678154ec390482d4c0bddc71c5c7e70",
+      "output_sha256": "c62d2f68a81889946a1f231edcec2609bda56507588af043ddbd5e3d31c1191d",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_q",
+      "source_sha256": "ca6e21ff9e4716e31e0d296ebc83331c770e438a227362f250cf7bda16f38491",
+      "output_sha256": "3f12cf5293580d4a6e20f0281fbebbcf8446b3ff0b97ec8db6572c0a3eea9158",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_r",
+      "source_sha256": "c2aa5642553490a569203492195e6635972c9fef93782575478ea125250a6975",
+      "output_sha256": "dc849abb5714f13035c0474215d07e4d08bcdc52dc5aeece4c550496f1998c16",
+      "bytes": 16462,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.512
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_s",
+      "source_sha256": "642419cb7dd1c265d821cdb49624431571217446a770a698723de7a6d747c4a6",
+      "output_sha256": "2a6117d4c43c00b808199ce44bf082c5f63a723fa5a8980e2509cd706ef9259c",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_t",
+      "source_sha256": "ee1af6982b3920bd351f9950ac009e474d4c233e788bd10a0bb0e5f0c4b8a3f4",
+      "output_sha256": "bedcd12aeeb69dc6e510ec11a1061aeb7ffe3de037f55e3fe37dfb0023a0cec1",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_u",
+      "source_sha256": "1b02f3b9ef17a7a034675ece98042a80c04f3f9603304d3455d25c1c76434e60",
+      "output_sha256": "b82a7f9849fc3b35a86eb325d8af39481ea346d533ba3d77953e8bbb705b97bb",
+      "bytes": 28068,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.875
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_v",
+      "source_sha256": "6aed1cde5548515abc7e441e72c744c89d18ee25a5937ded0f99da3e63fc395c",
+      "output_sha256": "e4cb53c4d0ae7cdb3ae380e3c4e0552788f85972072d5a9cf5e7a5b6760a1287",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_w",
+      "source_sha256": "dd8a4141b5b4b2ed4726e8aa9ecfa5b62634b498259be3de2980792bbc163c87",
+      "output_sha256": "fdf301a76fea69b135e84d994e4558c63fe9ed57fd510e8b4ffdb443112003ba",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_x",
+      "source_sha256": "6280780aff0900d3294ee6bff57fd075ba55eb3d973ba572add419c826cab3dc",
+      "output_sha256": "dd07a3fade80033046e5363a7431614d02a86f61ad73fcb5d9817e91e966bcb0",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_y",
+      "source_sha256": "46a19bceedb433b89d0f55ea6b38f64c556ad41a17f545be735d408a96d53ad7",
+      "output_sha256": "a29500fb59c47a4c1b230467b8125c5d7a3156d454c97e68b75c401fbd8b1238",
+      "bytes": 18510,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.576
+    },
+    {
+      "kind": "phonics",
+      "id": "cowboy_z",
+      "source_sha256": "0ee33cbcc615d68e0876c300c3735e1310a13b962d046d3c7d88824022ba018a",
+      "output_sha256": "27bd4d011a963fe94a389b977eff230de1b0bdeafe2f1616f1a55bae444e05b6",
+      "bytes": 15096,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.469
+    },
+    {
+      "kind": "speech",
+      "id": "prompt_which_one_says",
+      "source_sha256": "651ea125973d332f1f6ccbc4147188ea0ed93acede1691f2a35be930e53d780a",
+      "output_sha256": "3ee5b5fcc38a9f98c76e03a5858d8aba8206fa4d900b891e4f4cf5d9ef790c79",
+      "bytes": 30500,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.951
+    },
+    {
+      "kind": "speech",
+      "id": "prompt_can_you_find",
+      "source_sha256": "d39deb5affc345ccc94c89b04a8a5cd3010c2f0fbdfdb1d43b56ecded8b9f243",
+      "output_sha256": "6267365791d9ac3458cc90f65fea4bdaca543d73ff9fb53734fa78ad2b5bc95b",
+      "bytes": 19232,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.599
+    },
+    {
+      "kind": "speech",
+      "id": "prompt_which_letter_makes",
+      "source_sha256": "350f46e4db614619f4ea62a726afd4861eec8d695e15bc8e9ad15b0389012bd3",
+      "output_sha256": "f194f72a8e8fdc9c0cb8ce072e5892aeba104927e17d553bbbf54dda60f1a1f4",
+      "bytes": 28230,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.88
+    },
+    {
+      "kind": "speech",
+      "id": "prompt_tap_the_one_that_says",
+      "source_sha256": "db24698ca27047715389946ba042044b7cf67a6fc408fb80c064466beb0e2f00",
+      "output_sha256": "dc1a1214d520e958fe722faff54faff05c3d39f0d767254e95e9487f26e4e488",
+      "bytes": 39056,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 1.218
+    },
+    {
+      "kind": "speech",
+      "id": "prompt_listen_which_one_says",
+      "source_sha256": "f313842040b6df0b6eb841d09bc349114b88663f0f8632d15bb8ccd16ba29f23",
+      "output_sha256": "26842b5ef8d0ab46f87934c886adf107fce6bb12805fe3e60f2d4dd4396119c9",
+      "bytes": 39448,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 1.23
+    },
+    {
+      "kind": "speech",
+      "id": "nudge_have_another_listen",
+      "source_sha256": "4766ffe1bda246d070134652d6a99823f433795f864940e8b893ca071f3dc624",
+      "output_sha256": "253de2df5f67002a27f4da1f5154be7d0ed28c3917e74fc59ecdb4d0ff04993a",
+      "bytes": 27332,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.852
+    },
+    {
+      "kind": "speech",
+      "id": "nudge_take_your_time",
+      "source_sha256": "b586ee6fc3542793b823bd8bff9c0a3ad74febefd617b1a9730627d46a2fded2",
+      "output_sha256": "aeb1ba0e2c0fdcef46da7d6b9b94e36f286d070624d8913eae3555a71704b17f",
+      "bytes": 67120,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 2.095
+    },
+    {
+      "kind": "speech",
+      "id": "nudge_listen_once_more",
+      "source_sha256": "633e40282c0b3f3d1434f0fb7c4eb01a15b5b9f84109d365f3adc5bb56a2afa2",
+      "output_sha256": "40de1efe689f104d00f75e118c3933cdc0eb6300acc7f03a137078703ece2162",
+      "bytes": 29762,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.928
+    },
+    {
+      "kind": "speech",
+      "id": "nudge_which_one_do_you_think",
+      "source_sha256": "8045d0f5621068a21ef7b37eb6708d7c5623e56374f52d0572a5135b7b600351",
+      "output_sha256": "02664603db8646b0afd59a734aca5a5f0b4ab75f73985110e507a9ccb21e5fc8",
+      "bytes": 29724,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.926
+    },
+    {
+      "kind": "speech",
+      "id": "wrong_no_no",
+      "source_sha256": "c38d5de09fd5ce091b3817f943f6ce6860a809799f9706093d6fd5fa177865e6",
+      "output_sha256": "c6eaa4408c83145e9f0ffa5e3b3975936b35c3c887c2c08553bffc3eccfb0de9",
+      "bytes": 26640,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.83
+    },
+    {
+      "kind": "speech",
+      "id": "wrong_not_it_try_again",
+      "source_sha256": "d29349742cfa19f76e770e6c11863e81f90d21f56e5f9368c55ab6535ca6fcc3",
+      "output_sha256": "2c2946352f5c1e40c6964a0d6f0665b90a97401fc8c945adf57ff9d0d08dade9",
+      "bytes": 49020,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 1.529
+    },
+    {
+      "kind": "speech",
+      "id": "wrong_try_the_other_one",
+      "source_sha256": "0e742cb6963fe9f8c41351ab329dceb5e01be5613f1405c847333f64dcb47154",
+      "output_sha256": "f2b2118e65d1491c88f546b10785632f5b7b6b42e5dcf7eef8d786d641db66a7",
+      "bytes": 26596,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.829
+    },
+    {
+      "kind": "speech",
+      "id": "praise_nice_job",
+      "source_sha256": "9b5712145157f9608877cfe79b1e2c57bbb0c8b5048d6d8bb37dad3b4fdb91dd",
+      "output_sha256": "4e80096461bfa3573f7151eac6a8473da64c1b0500f8b2c3f431a40065ce6d38",
+      "bytes": 23912,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.745
+    },
+    {
+      "kind": "speech",
+      "id": "praise_great_work",
+      "source_sha256": "8d7b764de815b480e840507f59c177b7873d07babc8c9158262d74df12a504a4",
+      "output_sha256": "7773178749671c2e5de021ae08e9f5165502dd1e90567411aae683694dbdb253",
+      "bytes": 20996,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.654
+    },
+    {
+      "kind": "speech",
+      "id": "praise_you_got_it",
+      "source_sha256": "451b88128f3196a9b51b5ba9ce54bf2d1cad8c9f3b8c20fb1466280c90c667a7",
+      "output_sha256": "d3d4a636b12e109840a014101c29148074ea1da6959cda0d95bd5ef47f2502a2",
+      "bytes": 22048,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.687
+    },
+    {
+      "kind": "speech",
+      "id": "praise_thats_it",
+      "source_sha256": "cfb67fc341aaa9eb512dd80b489f8231c41db5a4fa034dfc42292131c1be38c5",
+      "output_sha256": "0e0109e36b94ff6dcf49efacfec704f91c731ed6cd660486e7a926d867a888f0",
+      "bytes": 15884,
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 0.494
+    }
+  ]
+}

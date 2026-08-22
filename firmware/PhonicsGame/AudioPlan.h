@@ -52,6 +52,16 @@ class AudioPlan {
     return false;
   }
 
+  static bool suspend() {
+    if constexpr (kAudioPlaybackEnabled) return AudioEngine::suspend();
+    return true;
+  }
+
+  static bool resume() {
+    if constexpr (kAudioPlaybackEnabled) return AudioEngine::resume();
+    return true;
+  }
+
   static void initial(uint8_t variant, char target) {
     if constexpr (!kAudioPlaybackEnabled) return;
     logSequence(kInitialPromptIds[variant], target);

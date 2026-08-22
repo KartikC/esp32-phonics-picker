@@ -10,15 +10,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LETTERBOARD_SOUNDS = Path(
-    "/Users/kartiksathappan/Documents/ChatGPT/Letterboard/ios/Letterboard/Resources/Sounds"
-)
+LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
+LETTERBOARD_SOUNDS = LETTERBOARD / "ios/Letterboard/Resources/Sounds"
 RAW_CUES = ROOT / "audio/generated/cowboy-cues/raw"
 OUTPUT = ROOT / "audio/generated/device-pcm"
 MANIFEST = ROOT / "audio/generated/device-audio-manifest.json"

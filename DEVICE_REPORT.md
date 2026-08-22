@@ -31,19 +31,27 @@ Restore only when explicitly requested:
 - source: `firmware/PhonicsGame/`
 - Arduino-ESP32: `3.3.11`
 - Waveshare source commit: `7ab8f957e22ea1ab811256359f4eddcaaf49ee91`
-- application SHA-256: `6cd6df2262886bbc1ace970f80485f0f7f32c0812cd7f67e9d8681551a20018e`
-- merged-image SHA-256: `4603bdd4b46cd7a436924cd31818c173852018409d182448f77a907e8433a0f0`
+- application SHA-256: `8dd963ad010766fa07f328520c9154357f310c9d7dabca3c4d2379d66ff47472`
+- merged-image SHA-256: `b521308cc47e209ae0cffc901905501efefa726ee0ae06117fb4cc1fe9bdb117`
 - audio-pack SHA-256: `563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72`
 - flash verification: all written-region hashes passed
-- footprint: 464,240-byte app image (464,084 bytes reported code/data);
-  31,056 bytes static RAM
-- live display verification: two distinct readable lowercase choices (`n` and
-  `k` in the final camera still), permanent contrasting cards, pure-black
-  unused canvas
+- footprint: 462,048-byte app image (461,896 bytes reported code/data);
+  31,088 bytes static RAM
+- live display verification: exactly two distinct readable lowercase choices,
+  one working replay control, pure-black unused canvas, and no header text.
+  Human observation confirmed the corrected portrait motion mapping
+  (`screen X = -sensor Y`, `screen Y = sensor X`) moves in the tilt direction.
 - game-engine verification: 131,072 seeded rounds plus the focused flow tests;
-  every target and distractor differed and C/K never opposed one another
+  every target and distractor differed and C/K never opposed one another.
+  Exhaustive geometry tests cover all layouts, integer motion positions, pulse
+  sizes, both pulse sides, display bounds, card separation, and replay clearance.
 - audio: ES8311 managed logical volume 100 (`DAC_REG32 = 0xC6`), full-resolution
-  PCM, deterministic V2 codec reset/configuration, asynchronous playback
+  PCM, deterministic V2 codec reset/configuration, asynchronous playback.
+  Live `REPLAY` invoked prompt variant 2 plus `/k/` at volume 100.
+- standby: the physical PWR short-press cycle was exercised manually on the V2
+  unit. A separate USB cycle reported `standby=yes` with audio suspended, then
+  restored the same `k`/`z` round with `audio=ready`; factory PMIC long-hold
+  hard-off was deliberately not exercised remotely.
 
 ## Installed audio
 

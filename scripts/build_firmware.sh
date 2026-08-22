@@ -6,6 +6,7 @@ vendor_root="$project_root/vendor/waveshare-esp32-s3-touch-amoled-1.8/examples/a
 slim_root="$project_root/vendor/slim"
 build_root="$project_root/build/incremental-slim/PhonicsGame"
 mkdir -p "$build_root"
+cd "$project_root"
 
 "$project_root/.tools/arduino-cli-1.5.1/arduino-cli" \
   --config-file "$project_root/.arduino/arduino-cli.yaml" compile \

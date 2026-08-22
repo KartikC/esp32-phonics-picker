@@ -31,9 +31,15 @@ the running AMOLED preview receiver:
 
 Send `GAME\n` over the same serial port to restore live gameplay.
 
+The production USB maintenance commands are `STATUS`, `REPLAY`, `SLEEP`, and
+`WAKE` (each newline-terminated). They exercise the same replay and standby
+paths as touch and the physical PWR button without requiring a diagnostic
+firmware build.
+
 The connected device currently runs the production game with its offline audio
 pack enabled at managed logical volume 100. See `PRODUCT_SPEC.md` for the audio
-and interaction contract.
+and interaction contract. A short physical PWR press-and-release toggles
+logical standby; the PMIC retains ownership of its long-hold hard-off behavior.
 
 ## Audio preparation and verification
 
@@ -43,14 +49,18 @@ cues only when their source text or Cowboy anchor changes, then prepare and
 pack the gently band-limited, level-managed PCM:
 
 ```sh
-/Users/kartiksathappan/Documents/ChatGPT/Letterboard/.venv-audio/bin/python \
-  scripts/generate_cowboy_cues.py
+export LETTERBOARD_ROOT=/path/to/Letterboard
+"$LETTERBOARD_ROOT/.venv-audio/bin/python" scripts/generate_cowboy_cues.py
 python3 scripts/prepare_device_audio.py
 python3 scripts/pack_device_audio.py
 ```
 
-Generated files stay under `audio/generated/` and are excluded from git. The
-device manifest records 42 assets, their hashes, durations, and speaker tuning.
+Raw generated cue candidates stay under `audio/generated/cowboy-cues/` and are
+excluded from git. The accepted device PCM, verified pack, and manifests are
+checked in under `audio/generated/` so a clone can reproduce the installed
+audio without access to Letterboard or the original voice-generation service.
+The device manifest records 42 assets, their hashes, durations, and speaker
+tuning.
 The earlier `previews/device-production-final.wav` capture was rejected after
 human listening. The current comparative capture is
 `previews/device-production-gentle-native48.wav`; it was recorded at low level

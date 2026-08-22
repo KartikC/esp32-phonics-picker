@@ -62,11 +62,12 @@ class GameEngine {
 
   Event begin(uint32_t nowMs) {
     started_ = true;
+    suspended_ = false;
     return beginRound(nowMs);
   }
 
   Event update(uint32_t nowMs) {
-    if (!started_) return Event{};
+    if (!started_ || suspended_) return Event{};
 
     if (celebrating_) {
       if (elapsed(nowMs, celebrationStartedAtMs_) >= kCelebrationDurationMs) {
@@ -90,7 +91,7 @@ class GameEngine {
   }
 
   Event choose(bool choseLeft, uint32_t nowMs) {
-    if (!started_ || celebrating_) return Event{};
+    if (!started_ || suspended_ || celebrating_) return Event{};
     lastInteractionAtMs_ = nowMs;
     const bool correct = choseLeft == round_.targetOnLeft;
     if (!correct) {
@@ -102,10 +103,34 @@ class GameEngine {
     return Event{EventType::correctChoice, random_.below(kPraiseVariantCount)};
   }
 
+  // Replay keeps the exact round and prompt, but counts as engagement so an
+  // idle nudge never talks over the replayed instruction.
+  bool replay(uint32_t nowMs) {
+    if (!started_ || suspended_ || celebrating_) return false;
+    lastInteractionAtMs_ = nowMs;
+    return true;
+  }
+
+  void suspend(uint32_t nowMs) {
+    if (!started_ || suspended_) return;
+    suspended_ = true;
+    suspendedAtMs_ = nowMs;
+  }
+
+  void resume(uint32_t nowMs) {
+    if (!suspended_) return;
+    const uint32_t pausedMs = elapsed(nowMs, suspendedAtMs_);
+    lastInteractionAtMs_ += pausedMs;
+    if (celebrating_) celebrationStartedAtMs_ += pausedMs;
+    suspended_ = false;
+  }
+
   const Round& round() const { return round_; }
   bool celebrating() const { return celebrating_; }
+  bool suspended() const { return suspended_; }
   uint32_t celebrationElapsed(uint32_t nowMs) const {
-    return celebrating_ ? elapsed(nowMs, celebrationStartedAtMs_) : 0;
+    const uint32_t effectiveNow = suspended_ ? suspendedAtMs_ : nowMs;
+    return celebrating_ ? elapsed(effectiveNow, celebrationStartedAtMs_) : 0;
   }
   uint8_t nudgeLevel() const { return nudgeLevel_; }
 
@@ -157,6 +182,7 @@ class GameEngine {
   Round round_;
   bool started_ = false;
   bool celebrating_ = false;
+  bool suspended_ = false;
   bool hasPreviousTarget_ = false;
   uint8_t previousTarget_ = 0;
   uint8_t nudgeLevel_ = 0;
@@ -164,6 +190,7 @@ class GameEngine {
   uint8_t lastNudgeVariant_ = 0xff;
   uint32_t lastInteractionAtMs_ = 0;
   uint32_t celebrationStartedAtMs_ = 0;
+  uint32_t suspendedAtMs_ = 0;
 };
 
 }  // namespace phonics_game

@@ -10,8 +10,8 @@
 
 #include "AudioPlan.h"
 #include "GameEngine.h"
+#include "LayoutGeometry.h"
 #include "fonts/NunitoBlack112.h"
-#include "fonts/NunitoBold28.h"
 
 using namespace phonics_game;
 
@@ -34,29 +34,13 @@ std::unique_ptr<Arduino_IIC> touch(new Arduino_CST816x(
 
 GameEngine game(1);
 
-struct CardRect {
-  int16_t x;
-  int16_t y;
-  int16_t w;
-  int16_t h;
-};
-
-struct LayoutOffset {
-  int8_t leftX;
-  int8_t leftY;
-  int8_t rightX;
-  int8_t rightY;
-};
-
-constexpr LayoutOffset kLayoutOffsets[kLayoutVariantCount] = {
-    {0, 0, 0, 6}, {-7, 7, 5, -2}, {5, -4, -7, 7},
-    {-3, -6, 7, 3}, {7, 4, -4, -5}, {-5, 2, 4, 8},
-};
-
-constexpr uint16_t kBackgroundTop = 0x0863;    // #050D1C, RGB565
-constexpr uint16_t kBackgroundBottom = 0x1108; // #121F3E, RGB565
 constexpr uint16_t kMoonlight = 0xEF5C;
 constexpr uint16_t kWhite = 0xFFFF;
+constexpr uint8_t kDisplayBrightness = 190;
+constexpr uint8_t kPowerButtonPin = 4;
+constexpr uint32_t kPowerDebounceMs = 50;
+constexpr uint32_t kSoftwareShortPressMaxMs = 1500;
+constexpr uint32_t kMotionSampleMs = 80;
 // Permanent a-z identities. Never randomize or reorder this table: the color
 // is part of the child's visual memory of each letter.
 constexpr uint16_t kLetterColors[26] = {
@@ -71,13 +55,24 @@ uint8_t lastCelebrationFrame = 0xff;
 uint32_t lastMotionSampleMs = 0;
 float neutralAccelX = 0.0f;
 float neutralAccelY = 0.0f;
-float smoothAccelX = 0.0f;
-float smoothAccelY = 0.0f;
+float filteredAccelX = 0.0f;
+float filteredAccelY = 0.0f;
+float easedSlideX = 0.0f;
+float easedSlideY = 0.0f;
 bool motionReady = false;
 bool imuAvailable = false;
-int8_t visualTiltX = 0;
-int8_t visualTiltY = 0;
+int16_t tileSlideX = 0;
+int16_t tileSlideY = 0;
 bool previewMode = false;
+bool standbyMode = false;
+bool powerButtonAvailable = false;
+bool awaitingTouchRelease = false;
+bool powerRawPressed = false;
+bool powerStablePressed = false;
+bool powerButtonArmed = false;
+bool powerPressActive = false;
+uint32_t powerRawChangedAtMs = 0;
+uint32_t powerPressedAtMs = 0;
 
 void onTouchInterrupt() {
   touch->IIC_Interrupt_Flag = true;
@@ -102,14 +97,7 @@ void drawBackground() {
 }
 
 CardRect cardRect(bool left, uint8_t layoutVariant, int16_t pulse = 0) {
-  const LayoutOffset& offset = kLayoutOffsets[layoutVariant];
-  const int16_t baseX = left ? 22 : 201;
-  const int16_t xOffset = left ? offset.leftX : offset.rightX;
-  const int16_t yOffset = left ? offset.leftY : offset.rightY;
-  return CardRect{static_cast<int16_t>(baseX + xOffset + visualTiltX - pulse),
-                  static_cast<int16_t>(220 + yOffset + visualTiltY - pulse),
-                  static_cast<int16_t>(145 + pulse * 2),
-                  static_cast<int16_t>(158 + pulse * 2)};
+  return makeCardRect(left, layoutVariant, tileSlideX, tileSlideY, pulse);
 }
 
 void drawCentered(const char* text, int16_t centerX, int16_t centerY,
@@ -160,7 +148,7 @@ void drawCard(const CardRect& card, char letter, bool pulsing) {
   const uint16_t color = kLetterColors[letter - 'a'];
   gfx->fillRoundRect(card.x + 3, card.y + 6, card.w, card.h, 20, 0x0204);
   gfx->fillRoundRect(card.x, card.y, card.w, card.h, 20,
-                     blend565(color, kBackgroundBottom, pulsing ? 225 : 205));
+                     blend565(color, 0x0000, pulsing ? 225 : 205));
   gfx->drawRoundRect(card.x, card.y, card.w, card.h, 20,
                      pulsing ? kWhite : blend565(kWhite, color, 145));
   gfx->drawFastHLine(card.x + 22, card.y + 11, card.w - 44,
@@ -179,43 +167,69 @@ void drawCard(const CardRect& card, char letter, bool pulsing) {
                &NunitoBlack112, kWhite);
 }
 
-void drawPromptHeader() {
-  const int16_t x = LCD_WIDTH / 2 + visualTiltX;
-  drawCentered("listen", x, 87 + visualTiltY, &NunitoBold28, kMoonlight);
-  gfx->drawCircle(x, 139 + visualTiltY, 30, kMoonlight);
-  gfx->fillTriangle(x - 10, 130 + visualTiltY,
-                    x - 10, 148 + visualTiltY,
-                    x + 10, 139 + visualTiltY, kMoonlight);
-  drawCentered("pick one", x, 190 + visualTiltY, &NunitoBold28, kMoonlight);
+void drawReplayButton() {
+  gfx->fillCircle(kReplayCenterX, kReplayCenterY, kReplayVisualRadius,
+                  blend565(0x1CBF, 0x0000, 105));
+  gfx->drawCircle(kReplayCenterX, kReplayCenterY, kReplayVisualRadius,
+                  kMoonlight);
+  gfx->drawCircle(kReplayCenterX, kReplayCenterY,
+                  kReplayVisualRadius - 1, blend565(kWhite, 0x1CBF, 165));
+  gfx->fillTriangle(kReplayCenterX - 8, kReplayCenterY - 11,
+                    kReplayCenterX - 8, kReplayCenterY + 11,
+                    kReplayCenterX + 11, kReplayCenterY, kWhite);
 }
 
 bool updateMotion(uint32_t now) {
-  if (!imuAvailable || now - lastMotionSampleMs < 100 || !qmi.getDataReady()) return false;
+  if (!imuAvailable || now - lastMotionSampleMs < kMotionSampleMs ||
+      !qmi.getDataReady()) return false;
   lastMotionSampleMs = now;
   IMUdata acceleration;
   if (!qmi.getAccelerometer(acceleration.x, acceleration.y, acceleration.z)) {
     return false;
   }
   if (!motionReady) {
-    neutralAccelX = smoothAccelX = acceleration.x;
-    neutralAccelY = smoothAccelY = acceleration.y;
+    neutralAccelX = filteredAccelX = acceleration.x;
+    neutralAccelY = filteredAccelY = acceleration.y;
     motionReady = true;
     return false;
   }
-  // Heavy smoothing and a seven-pixel cap make motion visible but calm.
-  smoothAccelX = smoothAccelX * 0.82f + acceleration.x * 0.18f;
-  smoothAccelY = smoothAccelY * 0.82f + acceleration.y * 0.18f;
-  const int8_t nextX = constrain(static_cast<int>(roundf((smoothAccelX - neutralAccelX) * 9.0f)), -7, 7);
-  const int8_t nextY = constrain(static_cast<int>(roundf((smoothAccelY - neutralAccelY) * 9.0f)), -7, 7);
-  if (nextX == visualTiltX && nextY == visualTiltY) return false;
-  visualTiltX = nextX;
-  visualTiltY = nextY;
+
+  // Low-pass the sensor and then ease the shared tile translation toward the
+  // gravity target. A shared vector makes the pair feel loose while preserving
+  // the proven gap between the cards at every frame.
+  filteredAccelX = filteredAccelX * 0.88f + acceleration.x * 0.12f;
+  filteredAccelY = filteredAccelY * 0.88f + acceleration.y * 0.12f;
+  const auto targetPixels = [](float delta, float scale, int16_t limit) {
+    constexpr float deadZoneG = 0.025f;
+    if (fabsf(delta) <= deadZoneG) return 0.0f;
+    delta += delta > 0.0f ? -deadZoneG : deadZoneG;
+    return constrain(delta * scale, -static_cast<float>(limit),
+                     static_cast<float>(limit));
+  };
+  // The QMI8658 package is rotated clockwise relative to the portrait panel.
+  // Live hardware observation confirms this screen-space transform: a right
+  // tilt must move right and a down tilt must move down.
+  const float screenHorizontalG = -(filteredAccelY - neutralAccelY);
+  const float screenVerticalG = filteredAccelX - neutralAccelX;
+  const float targetX = targetPixels(screenHorizontalG, 52.0f,
+                                     kMaxTileSlideX);
+  const float targetY = targetPixels(screenVerticalG, 70.0f,
+                                     kMaxTileSlideY);
+  easedSlideX = easedSlideX * 0.92f + targetX * 0.08f;
+  easedSlideY = easedSlideY * 0.92f + targetY * 0.08f;
+  const int16_t nextX = constrain(static_cast<int>(roundf(easedSlideX)),
+                                  -kMaxTileSlideX, kMaxTileSlideX);
+  const int16_t nextY = constrain(static_cast<int>(roundf(easedSlideY)),
+                                  -kMaxTileSlideY, kMaxTileSlideY);
+  if (nextX == tileSlideX && nextY == tileSlideY) return false;
+  tileSlideX = nextX;
+  tileSlideY = nextY;
   return true;
 }
 
 void drawRound(int16_t correctPulse = 0) {
   drawBackground();
-  drawPromptHeader();
+  drawReplayButton();
   const Round& round = game.round();
   const char leftLetter = GameEngine::letter(round.targetOnLeft ? round.target : round.distractor);
   const char rightLetter = GameEngine::letter(round.targetOnLeft ? round.distractor : round.target);
@@ -228,10 +242,123 @@ void drawRound(int16_t correctPulse = 0) {
   gfx->flush();
 }
 
+bool replayCurrentPrompt(uint32_t now) {
+  if (!game.replay(now)) return false;
+  const Round& round = game.round();
+  const char target = GameEngine::letter(round.target);
+  AudioPlan::initial(round.promptVariant, target);
+  USBSerial.printf("[replay] prompt=%u target=%c volume=%u\n",
+                   round.promptVariant, target, kAudioVolumePercent);
+  return true;
+}
+
+void setStandby(bool enabled, uint32_t now) {
+  if (enabled == standbyMode) return;
+  if (enabled) {
+    standbyMode = true;
+    game.suspend(now);
+    const bool audioQuiet = AudioPlan::suspend();
+    panel->setBrightness(0);
+    panel->displayOff();
+    touchWasDown = false;
+    USBSerial.printf("[power] standby; audio=%s\n",
+                     audioQuiet ? "quiet" : "muted-with-warning");
+    return;
+  }
+
+  panel->setBrightness(0);
+  panel->displayOn();
+  gfx->flush();
+  const bool audioReady = AudioPlan::resume();
+  panel->setBrightness(kDisplayBrightness);
+  game.resume(millis());
+  standbyMode = false;
+  awaitingTouchRelease = true;
+  touchWasDown = true;
+  USBSerial.printf("[power] awake; audio=%s\n",
+                   audioReady ? "ready" : "FAILED-muted");
+}
+
+void pollPowerButton(uint32_t now) {
+  if (!powerButtonAvailable) return;
+  const bool rawPressed = expander.digitalRead(kPowerButtonPin) == HIGH;
+  if (rawPressed != powerRawPressed) {
+    powerRawPressed = rawPressed;
+    powerRawChangedAtMs = now;
+    return;
+  }
+  if (now - powerRawChangedAtMs < kPowerDebounceMs) return;
+
+  if (powerStablePressed != rawPressed) {
+    powerStablePressed = rawPressed;
+    if (powerStablePressed) {
+      if (powerButtonArmed) {
+        powerPressActive = true;
+        powerPressedAtMs = now;
+      }
+    } else if (!powerButtonArmed) {
+      // A PWR press may still be held while the PMIC cold-boots the ESP. Its
+      // first debounced release only arms the control; it must not sleep again.
+      powerButtonArmed = true;
+      powerPressActive = false;
+    } else if (powerPressActive) {
+      powerPressActive = false;
+      const uint32_t heldMs = now - powerPressedAtMs;
+      if (heldMs < kSoftwareShortPressMaxMs) {
+        setStandby(!standbyMode, now);
+      } else {
+        USBSerial.printf("[power] long release ignored at %u ms; PMIC owns hard-off\n",
+                         static_cast<unsigned>(heldMs));
+      }
+    }
+    return;
+  }
+
+  // Normal boots often begin with P4 already LOW, so arm only after that LOW
+  // has itself survived the debounce interval.
+  if (!powerStablePressed && !powerButtonArmed && !powerPressActive) {
+    powerButtonArmed = true;
+  }
+}
+
+bool replayHit(int32_t x, int32_t y) {
+  const int32_t dx = x - kReplayCenterX;
+  const int32_t dy = y - kReplayCenterY;
+  return dx * dx + dy * dy <= kReplayHitRadius * kReplayHitRadius;
+}
+
 void handlePreviewCommands() {
   if (!USBSerial.available()) return;
   String command = USBSerial.readStringUntil('\n');
   command.trim();
+  if (command == "SLEEP") {
+    setStandby(true, millis());
+    return;
+  }
+  if (command == "WAKE") {
+    setStandby(false, millis());
+    return;
+  }
+  if (command == "STATUS") {
+    const Round& round = game.round();
+    const char* audioState = standbyMode ? "suspended" :
+                             (AudioPlan::ready() ? "ready" : "FAILED");
+    USBSerial.printf(
+        "[status] psram=%u audio=%s volume=%u imu=%s preview=%s standby=%s "
+        "target=%c distractor=%c distinct=%s slide=%d,%d\n",
+        ESP.getPsramSize(), audioState, kAudioVolumePercent,
+        imuAvailable ? "ready" : "FAILED", previewMode ? "yes" : "no",
+        standbyMode ? "yes" : "no", GameEngine::letter(round.target),
+        GameEngine::letter(round.distractor),
+        round.target != round.distractor ? "yes" : "NO",
+        tileSlideX, tileSlideY);
+    return;
+  }
+  if (standbyMode) {
+    USBSerial.println("[power] asleep; send WAKE before other commands");
+    return;
+  }
+
   if (command == "FRAME") {
     constexpr size_t frameBytes = LCD_WIDTH * LCD_HEIGHT * sizeof(uint16_t);
     const size_t received = USBSerial.readBytes(
@@ -249,23 +376,10 @@ void handlePreviewCommands() {
     previewMode = false;
     drawRound();
     USBSerial.println("[preview] game resumed");
-  } else if (command == "STATUS") {
-    const Round& round = game.round();
-    USBSerial.printf(
-        "[status] psram=%u audio=%s volume=%u imu=%s preview=%s "
-        "target=%c distractor=%c distinct=%s tilt=%d,%d\n",
-        ESP.getPsramSize(), AudioPlan::ready() ? "ready" : "FAILED",
-        kAudioVolumePercent,
-        imuAvailable ? "ready" : "FAILED", previewMode ? "yes" : "no",
-        GameEngine::letter(round.target), GameEngine::letter(round.distractor),
-        round.target != round.distractor ? "yes" : "NO",
-        visualTiltX, visualTiltY);
-  } else if (command == "AUDIO") {
-    const Round& round = game.round();
-    AudioPlan::initial(round.promptVariant, GameEngine::letter(round.target));
-    USBSerial.printf("[test] replayed prompt=%u target=%c volume=%u\n",
-                     round.promptVariant, GameEngine::letter(round.target),
-                     kAudioVolumePercent);
+  } else if (command == "AUDIO" || command == "REPLAY") {
+    if (!replayCurrentPrompt(millis())) {
+      USBSerial.println("[replay] unavailable during celebration");
+    }
   } else if (command == "ANIMATE") {
     previewMode = false;
     dispatch(game.choose(game.round().targetOnLeft, millis()));
@@ -274,12 +388,14 @@ void handlePreviewCommands() {
     previewMode = false;
     dispatch(game.choose(!game.round().targetOnLeft, millis()));
     USBSerial.println("[test] wrong-choice response triggered");
-  } else if (command == "TILT") {
+  } else if (command == "TILT" || command == "MOTION") {
     previewMode = false;
-    visualTiltX = visualTiltX >= 0 ? -7 : 7;
-    visualTiltY = visualTiltY >= 0 ? 5 : -5;
+    tileSlideX = tileSlideX >= 0 ? -kMaxTileSlideX : kMaxTileSlideX;
+    tileSlideY = tileSlideY >= 0 ? kMaxTileSlideY : -kMaxTileSlideY;
+    easedSlideX = tileSlideX;
+    easedSlideY = tileSlideY;
     drawRound();
-    USBSerial.printf("[test] tilt frame=%d,%d\n", visualTiltX, visualTiltY);
+    USBSerial.printf("[test] slide frame=%d,%d\n", tileSlideX, tileSlideY);
   }
 }
 
@@ -324,8 +440,18 @@ void initializeBoard() {
     expander.pinMode(pin, OUTPUT);
     expander.digitalWrite(pin, LOW);
   }
+  powerButtonAvailable = expander.pinMode(kPowerButtonPin, INPUT);
+  if (!powerButtonAvailable) {
+    USBSerial.println("[power] PWR input unavailable; standby disabled");
+  }
   delay(20);
   for (uint8_t pin = 0; pin < 3; ++pin) expander.digitalWrite(pin, HIGH);
+  if (powerButtonAvailable) {
+    powerRawPressed = expander.digitalRead(kPowerButtonPin) == HIGH;
+    powerStablePressed = powerRawPressed;
+    powerRawChangedAtMs = millis();
+    USBSerial.println("[power] PWR short-release standby enabled; long hold belongs to PMIC");
+  }
 
   while (!touch->begin()) {
     USBSerial.println("[wait] CST820 touch controller");
@@ -341,7 +467,7 @@ void initializeBoard() {
                             SensorQMI8658::LPF_MODE_0);
     qmi.enableAccelerometer();
     imuAvailable = true;
-    USBSerial.println("[imu] subtle visual tilt enabled");
+    USBSerial.println("[imu] slow tile sliding enabled");
   } else {
     USBSerial.println("[imu] unavailable; static visuals");
   }
@@ -350,7 +476,7 @@ void initializeBoard() {
     USBSerial.println("[fatal] CO5300 display initialization failed");
     while (true) delay(1000);
   }
-  panel->setBrightness(190);
+  panel->setBrightness(kDisplayBrightness);
   if (!gfx->begin(GFX_SKIP_OUTPUT_BEGIN)) {
     USBSerial.println("[fatal] off-screen framebuffer allocation failed");
     while (true) delay(1000);
@@ -375,7 +501,12 @@ void setup() {
 }
 
 void loop() {
+  pollPowerButton(millis());
   handlePreviewCommands();
+  if (standbyMode) {
+    delay(20);
+    return;
+  }
   if (previewMode) {
     delay(8);
     return;
@@ -397,7 +528,13 @@ void loop() {
   const int32_t touchPoints = touch->IIC_Read_Device_Value(
       touch->Arduino_IIC_Touch::Value_Information::TOUCH_FINGER_NUMBER);
   const bool touchDown = touchPoints > 0;
-  if (touchDown && !touchWasDown && !game.celebrating()) {
+  if (awaitingTouchRelease) {
+    touchWasDown = touchDown;
+    if (!touchDown) {
+      awaitingTouchRelease = false;
+      touchWasDown = false;
+    }
+  } else if (touchDown && !touchWasDown && !game.celebrating()) {
     const int32_t x = touch->IIC_Read_Device_Value(
         touch->Arduino_IIC_Touch::Value_Information::TOUCH_COORDINATE_X);
     const int32_t y = touch->IIC_Read_Device_Value(
@@ -407,9 +544,12 @@ void loop() {
     const auto contains = [](const CardRect& card, int32_t px, int32_t py) {
       return px >= card.x && px < card.x + card.w && py >= card.y && py < card.y + card.h;
     };
-    if (contains(left, x, y)) dispatch(game.choose(true, now));
+    if (replayHit(x, y)) replayCurrentPrompt(now);
+    else if (contains(left, x, y)) dispatch(game.choose(true, now));
     else if (contains(right, x, y)) dispatch(game.choose(false, now));
+    touchWasDown = touchDown;
+  } else {
+    touchWasDown = touchDown;
   }
-  touchWasDown = touchDown;
   delay(8);
 }

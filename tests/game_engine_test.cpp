@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #include "../firmware/PhonicsGame/GameEngine.h"
+#include "../firmware/PhonicsGame/LayoutGeometry.h"
 
 using namespace phonics_game;
 
@@ -61,6 +62,70 @@ int main() {
   assert(wrongGame.round().distractor == original.distractor);
   assert(wrongGame.update(600 + kFirstNudgeDelayMs - 1).type == EventType::none);
   assert(wrongGame.update(600 + kFirstNudgeDelayMs).type == EventType::nudge);
+
+  GameEngine replayGame(81);
+  replayGame.begin(1000);
+  const Round replayRound = replayGame.round();
+  assert(replayGame.update(1000 + kFirstNudgeDelayMs - 1).type == EventType::none);
+  assert(replayGame.replay(1000 + kFirstNudgeDelayMs - 1));
+  assert(replayGame.round().target == replayRound.target);
+  assert(replayGame.round().distractor == replayRound.distractor);
+  assert(replayGame.round().targetOnLeft == replayRound.targetOnLeft);
+  assert(replayGame.round().promptVariant == replayRound.promptVariant);
+  assert(replayGame.update(1000 + 2 * kFirstNudgeDelayMs - 2).type == EventType::none);
+  assert(replayGame.update(1000 + 2 * kFirstNudgeDelayMs - 1).type == EventType::nudge);
+
+  GameEngine pausedIdleGame(91);
+  pausedIdleGame.begin(1000);
+  pausedIdleGame.suspend(5000);
+  assert(pausedIdleGame.suspended());
+  assert(pausedIdleGame.update(UINT32_MAX).type == EventType::none);
+  assert(!pausedIdleGame.replay(6000));
+  assert(pausedIdleGame.choose(pausedIdleGame.round().targetOnLeft, 6000).type ==
+         EventType::none);
+  pausedIdleGame.resume(25000);
+  assert(!pausedIdleGame.suspended());
+  assert(pausedIdleGame.update(29000 - 1).type == EventType::none);
+  assert(pausedIdleGame.update(29000).type == EventType::nudge);
+
+  GameEngine pausedCelebrationGame(92);
+  pausedCelebrationGame.begin(100);
+  assert(pausedCelebrationGame.choose(
+             pausedCelebrationGame.round().targetOnLeft, 200).type ==
+         EventType::correctChoice);
+  pausedCelebrationGame.suspend(500);
+  assert(pausedCelebrationGame.celebrationElapsed(90000) == 300);
+  pausedCelebrationGame.resume(10500);
+  assert(pausedCelebrationGame.update(11299).type == EventType::none);
+  assert(pausedCelebrationGame.update(11300).type == EventType::roundStarted);
+
+  // Exhaust every rendered position and celebration pulse. The shadow is
+  // included because it is part of the visible tile envelope.
+  for (uint8_t layout = 0; layout < kLayoutVariantCount; ++layout) {
+    for (int16_t slideX = -kMaxTileSlideX;
+         slideX <= kMaxTileSlideX; ++slideX) {
+      for (int16_t slideY = -kMaxTileSlideY;
+           slideY <= kMaxTileSlideY; ++slideY) {
+        for (int16_t pulse = 0; pulse <= kMaxCelebrationPulse; ++pulse) {
+          for (uint8_t pulsedSide = 0; pulsedSide < 2; ++pulsedSide) {
+            const CardRect left = makeCardRect(
+                true, layout, slideX, slideY, pulsedSide == 0 ? pulse : 0);
+            const CardRect right = makeCardRect(
+                false, layout, slideX, slideY, pulsedSide == 1 ? pulse : 0);
+            assert(left.x >= 0 && left.y >= 0);
+            assert(right.x >= 0 && right.y >= 0);
+            assert(left.x + left.w + kCardShadowX <= kScreenWidth);
+            assert(right.x + right.w + kCardShadowX <= kScreenWidth);
+            assert(left.y + left.h + kCardShadowY <= kScreenHeight);
+            assert(right.y + right.h + kCardShadowY <= kScreenHeight);
+            assert(left.x + left.w + kCardShadowX <= right.x);
+            assert(left.y > kReplayCenterY + kReplayHitRadius);
+            assert(right.y > kReplayCenterY + kReplayHitRadius);
+          }
+        }
+      }
+    }
+  }
 
   // Two-choice integrity across many independent RNG streams and rounds.
   for (uint32_t seed = 1; seed <= 512; ++seed) {

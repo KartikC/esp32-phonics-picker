@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Convert Letterboard's Nunito faces into compact Arduino GFX fonts."""
 
+import os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = Path("/Users/kartiksathappan/Documents/ChatGPT/Letterboard/android/app/src/main/res/font")
+LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
+SOURCE = LETTERBOARD / "android/app/src/main/res/font"
 
 
 def packed_glyph(font, character):
