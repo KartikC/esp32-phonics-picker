@@ -1,0 +1,9 @@
+board_manager:
+  additional_urls:
+    - https://espressif.github.io/arduino-esp32/package_esp32_index.json
+build_cache:
+  path: /Users/kartiksathappan/Documents/ChatGPT/ESP32-C6-fun/.arduino/cache
+directories:
+  data: /Users/kartiksathappan/Documents/ChatGPT/ESP32-C6-fun/.arduino/data
+  downloads: /Users/kartiksathappan/Documents/ChatGPT/ESP32-C6-fun/.arduino/downloads
+  user: /Users/kartiksathappan/Documents/ChatGPT/ESP32-C6-fun/.arduino/user

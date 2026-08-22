@@ -1,0 +1,13 @@
+.arduino/data/
+.arduino/downloads/
+.arduino/user/
+.arduino/cache/
+.tools/
+.venv/
+backups/
+build/
+audio/generated/
+previews/
+__pycache__/
+*.py[cod]
+.DS_Store

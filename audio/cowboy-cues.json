@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "voice": "Letterboard approved Cowboy anchor",
+  "anchor_transcript": "Apple. Car. Dog.",
+  "clone_model": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit",
+  "playback_status": "gentler processing accepted by human listening",
+  "cues": {
+    "prompt_which_one_says": "Which one says...",
+    "prompt_can_you_find": "Can you find...",
+    "prompt_which_letter_makes": "Which letter makes...",
+    "prompt_tap_the_one_that_says": "Tap the one that says...",
+    "prompt_listen_which_one_says": "Listen. Which one says...",
+    "nudge_have_another_listen": "Have another listen.",
+    "nudge_take_your_time": "Take your time. Which letter says...",
+    "nudge_listen_once_more": "Listen once more.",
+    "nudge_which_one_do_you_think": "Which one do you think?",
+    "wrong_no_no": "No, no.",
+    "wrong_not_it_try_again": "That's not it. Try again.",
+    "wrong_try_the_other_one": "Try the other one.",
+    "praise_nice_job": "Nice job.",
+    "praise_great_work": "Great work.",
+    "praise_you_got_it": "You got it.",
+    "praise_thats_it": "That's it."
+  }
+}
