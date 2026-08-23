@@ -18,3 +18,12 @@ jobs:
           submodules: recursive
       - name: Verify payload, test game engine, and compile firmware
         run: ./scripts/test.sh --firmware
+      - name: Preserve firmware images for reproducibility diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-images-${{ runner.os }}
+          path: |
+            build/production/PhonicsGame/*.bin
+          if-no-files-found: error
+          retention-days: 7
