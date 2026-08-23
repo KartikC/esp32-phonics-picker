@@ -44,5 +44,7 @@ reproducible_flags="-DARDUINO_HOST_OS=\"reproducible\" -DARDUINO_FQBN=\"$BOARD_F
   --library "$vendor_root/Mylibrary" \
   "$project_root/firmware/PhonicsGame"
 
+"$python_bin" "$project_root/scripts/canonicalize_firmware.py" \
+  "$build_root/PhonicsGame.ino.bin"
 "$python_bin" "$project_root/scripts/verify_repo.py" --build-dir "$build_root"
 echo "Firmware build verified: $build_root"

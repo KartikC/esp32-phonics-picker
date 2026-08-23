@@ -201,6 +201,9 @@ def verify_build(build_dir: Path) -> None:
                 f"artifact SHA-256 differs from BUILD_MANIFEST.json: {path.name}; "
                 f"expected {artifact['sha256']}, got {actual_sha256}"
             )
+    application = (build_dir / "PhonicsGame.ino.bin").read_bytes()
+    if application[0xB0:0xD0] != b"\0" * 32:
+        fail("application contains non-canonical host-derived ELF metadata")
 
 
 def main() -> None:
@@ -213,6 +216,7 @@ def main() -> None:
         "firmware/PhonicsGame/fonts/NunitoBold28.h",
         "config/toolchain.env",
         "firmware/BUILD_MANIFEST.json",
+        "scripts/canonicalize_firmware.py",
         "PRODUCT_SPEC.md",
     ):
         require(ROOT / relative)
