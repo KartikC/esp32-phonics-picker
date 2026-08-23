@@ -31,20 +31,26 @@ Restore only when explicitly requested:
 - source: `firmware/PhonicsGame/`
 - Arduino-ESP32: `3.3.11`
 - Waveshare source commit: `7ab8f957e22ea1ab811256359f4eddcaaf49ee91`
-- application SHA-256: `8dd963ad010766fa07f328520c9154357f310c9d7dabca3c4d2379d66ff47472`
-- merged-image SHA-256: `b521308cc47e209ae0cffc901905501efefa726ee0ae06117fb4cc1fe9bdb117`
+- application SHA-256: `0a5d1c43b3c84149d1271ce4cda179d6a44009ee93c4c9a79f1a5beb58310a82`
+- merged recovery image: not regenerated for the telemetry-only update; the
+  app partition was flashed and verified separately, leaving the installed
+  audio partition intact
 - audio-pack SHA-256: `563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72`
 - flash verification: all written-region hashes passed
-- footprint: 462,048-byte app image (461,896 bytes reported code/data);
+- footprint: 463,632-byte app image (463,476 bytes reported code/data);
   31,088 bytes static RAM
 - live display verification: exactly two distinct readable lowercase choices,
   one working replay control, pure-black unused canvas, and no header text.
   Human observation confirmed the corrected portrait motion mapping
   (`screen X = -sensor Y`, `screen Y = sensor X`) moves in the tilt direction.
+  The installed independent-motion build assigned left/right easing rates of
+  0.110 and 0.126 on its verified round; live snapshots showed 1-3 pixels of
+  independent vertical trailing while both cards followed the same tilt.
 - game-engine verification: 131,072 seeded rounds plus the focused flow tests;
   every target and distractor differed and C/K never opposed one another.
-  Exhaustive geometry tests cover all layouts, integer motion positions, pulse
-  sizes, both pulse sides, display bounds, card separation, and replay clearance.
+  Exhaustive geometry tests cover all layouts, allowed independent horizontal
+  offsets, bounded vertical divergence, pulse sizes, both pulse sides, display
+  bounds, card separation, and replay clearance.
 - audio: ES8311 managed logical volume 100 (`DAC_REG32 = 0xC6`), full-resolution
   PCM, deterministic V2 codec reset/configuration, asynchronous playback.
   Live `REPLAY` invoked prompt variant 2 plus `/k/` at volume 100.
@@ -52,6 +58,15 @@ Restore only when explicitly requested:
   unit. A separate USB cycle reported `standby=yes` with audio suspended, then
   restored the same `k`/`z` round with `audio=ready`; factory PMIC long-hold
   hard-off was deliberately not exercised remotely.
+- parent battery indicator: three dim green dots centered at the extreme top
+  mean high/full, two dim yellow dots mean medium, and one dim red dot means
+  low. It has no text, animation, touch target, or gameplay meaning and
+  refreshes at most once per 30 seconds.
+- live check after installing the three-dot indicator: AXP2101 reported battery
+  connected at 100%, 4140 mV, USB present, and charging complete. A FaceTime
+  camera still confirmed that all three green dots are visible on the physical
+  display. The device was left awake so the six-second PWR hard-off gesture can
+  be exercised directly.
 
 ## Installed audio
 

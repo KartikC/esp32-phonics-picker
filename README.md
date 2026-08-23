@@ -34,12 +34,20 @@ Send `GAME\n` over the same serial port to restore live gameplay.
 The production USB maintenance commands are `STATUS`, `REPLAY`, `SLEEP`, and
 `WAKE` (each newline-terminated). They exercise the same replay and standby
 paths as touch and the physical PWR button without requiring a diagnostic
-firmware build.
+firmware build. `STATUS` includes the AXP2101 fuel-gauge percentage, battery
+voltage, USB-input state, and charging state.
+
+The live game also shows tiny battery-status dots centered at the extreme top:
+three dim green dots mean high/full, two dim yellow dots mean medium, and one
+dim red dot means low. This is a parent diagnostic, not a child-facing game
+element.
 
 The connected device currently runs the production game with its offline audio
 pack enabled at managed logical volume 100. See `PRODUCT_SPEC.md` for the audio
 and interaction contract. A short physical PWR press-and-release toggles
 logical standby; the PMIC retains ownership of its long-hold hard-off behavior.
+Hold PWR for 6 seconds for true power-off; from hard-off, click PWR once to
+start. The battery can continue charging over USB while the game is off.
 
 ## Audio preparation and verification
 

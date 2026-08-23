@@ -34,6 +34,9 @@ constexpr int16_t kRightCardBaseX = 195;
 constexpr int16_t kCardBaseY = 206;
 constexpr int16_t kMaxTileSlideX = 19;
 constexpr int16_t kMaxTileSlideY = 44;
+constexpr int16_t kMinHorizontalSlideSeparation = -2;
+constexpr int16_t kMaxHorizontalSlideSeparation = 6;
+constexpr int16_t kMaxVerticalSlideSeparation = 8;
 constexpr int16_t kMaxCelebrationPulse = 6;
 constexpr int16_t kCardShadowX = 3;
 constexpr int16_t kCardShadowY = 6;
@@ -70,9 +73,19 @@ static_assert(kCardBaseY + 8 + kMaxTileSlideY - kMaxCelebrationPulse +
                       kCardShadowY + kCardHeight + 2 * kMaxCelebrationPulse <=
                   kScreenHeight,
               "tile shadow can leave the display");
-static_assert(kRightCardBaseX - kLeftCardBaseX - kCardWidth - 14 -
-                      kMaxCelebrationPulse - kCardShadowX >=
-                  2,
+constexpr int16_t minimumBaseCardGap() {
+  int16_t minimum = kScreenWidth;
+  for (const LayoutOffset& offset : kLayoutOffsets) {
+    const int16_t gap = kRightCardBaseX + offset.rightX -
+                        (kLeftCardBaseX + offset.leftX + kCardWidth +
+                         kCardShadowX);
+    if (gap < minimum) minimum = gap;
+  }
+  return minimum;
+}
+
+static_assert(minimumBaseCardGap() - kMaxCelebrationPulse +
+                      kMinHorizontalSlideSeparation >= 2,
               "tile shadows can overlap");
 
 }  // namespace phonics_game

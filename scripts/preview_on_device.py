@@ -72,7 +72,19 @@ def card(draw, letter, rect, font):
     draw.text((bx, by), letter, font=font, anchor="ls", fill="white")
 
 
-def make_frame(left, right, layout):
+def battery_indicator(draw, percent):
+    tier = 3 if percent >= 60 else 2 if percent >= 25 else 1
+    source = (0, 255, 0) if tier == 3 else (255, 255, 0) if tier == 2 else (255, 0, 0)
+    amount = 145 if tier == 3 else 155 if tier == 2 else 175
+    color = blend(source, (0, 0, 0), amount)
+    center_x, center_y, spacing = WIDTH // 2, 14, 11
+    first_x = center_x - ((tier - 1) * spacing) // 2
+    for index in range(tier):
+        x = first_x + index * spacing
+        draw.ellipse((x - 3, center_y - 3, x + 3, center_y + 3), fill=color)
+
+
+def make_frame(left, right, layout, battery):
     image = Image.new("RGB", (WIDTH, HEIGHT), "black")
     draw = ImageDraw.Draw(image)
     letter_font = ImageFont.truetype(str(FONT_ROOT / "nunito_black.ttf"), 112)
@@ -82,6 +94,7 @@ def make_frame(left, right, layout):
     draw.ellipse((157, 33, 211, 87),
                  outline=blend((255, 255, 255), rgb565(0x1CBF), 165))
     draw.polygon(((176, 49), (176, 71), (195, 60)), fill="white")
+    battery_indicator(draw, battery)
     lx, ly, rx, ry = LAYOUTS[layout]
     card(draw, left, (32 + lx, 206 + ly, 138, 158), letter_font)
     card(draw, right, (195 + rx, 206 + ry, 138, 158), letter_font)
@@ -101,12 +114,13 @@ def main():
     parser.add_argument("--left", default="a", choices=list("abcdefghijklmnopqrstuvwxyz"))
     parser.add_argument("--right", default="m", choices=list("abcdefghijklmnopqrstuvwxyz"))
     parser.add_argument("--layout", type=int, default=0, choices=range(6))
+    parser.add_argument("--battery", type=int, default=50, choices=range(101))
     parser.add_argument("--output", type=Path, default=ROOT / "previews/latest.png")
     parser.add_argument("--port")
     args = parser.parse_args()
     if args.left == args.right:
         raise SystemExit("preview choices must be different letters")
-    image = make_frame(args.left, args.right, args.layout)
+    image = make_frame(args.left, args.right, args.layout, args.battery)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     image.save(args.output)
     print(args.output)

@@ -99,28 +99,44 @@ int main() {
   assert(pausedCelebrationGame.update(11299).type == EventType::none);
   assert(pausedCelebrationGame.update(11300).type == EventType::roundStarted);
 
-  // Exhaust every rendered position and celebration pulse. The shadow is
+  // Exhaust every independent horizontal pair allowed by the motion clamp,
+  // both vertical extremes, and every celebration pulse. The shadow is
   // included because it is part of the visible tile envelope.
+  constexpr int16_t verticalExtremes[] = {
+      static_cast<int16_t>(-kMaxTileSlideY), kMaxTileSlideY};
   for (uint8_t layout = 0; layout < kLayoutVariantCount; ++layout) {
-    for (int16_t slideX = -kMaxTileSlideX;
-         slideX <= kMaxTileSlideX; ++slideX) {
-      for (int16_t slideY = -kMaxTileSlideY;
-           slideY <= kMaxTileSlideY; ++slideY) {
-        for (int16_t pulse = 0; pulse <= kMaxCelebrationPulse; ++pulse) {
-          for (uint8_t pulsedSide = 0; pulsedSide < 2; ++pulsedSide) {
-            const CardRect left = makeCardRect(
-                true, layout, slideX, slideY, pulsedSide == 0 ? pulse : 0);
-            const CardRect right = makeCardRect(
-                false, layout, slideX, slideY, pulsedSide == 1 ? pulse : 0);
-            assert(left.x >= 0 && left.y >= 0);
-            assert(right.x >= 0 && right.y >= 0);
-            assert(left.x + left.w + kCardShadowX <= kScreenWidth);
-            assert(right.x + right.w + kCardShadowX <= kScreenWidth);
-            assert(left.y + left.h + kCardShadowY <= kScreenHeight);
-            assert(right.y + right.h + kCardShadowY <= kScreenHeight);
-            assert(left.x + left.w + kCardShadowX <= right.x);
-            assert(left.y > kReplayCenterY + kReplayHitRadius);
-            assert(right.y > kReplayCenterY + kReplayHitRadius);
+    for (int16_t leftX = -kMaxTileSlideX;
+         leftX <= kMaxTileSlideX; ++leftX) {
+      for (int16_t rightX = -kMaxTileSlideX;
+           rightX <= kMaxTileSlideX; ++rightX) {
+        const int16_t horizontalSeparation = rightX - leftX;
+        if (horizontalSeparation < kMinHorizontalSlideSeparation ||
+            horizontalSeparation > kMaxHorizontalSlideSeparation) continue;
+        for (int16_t leftY : verticalExtremes) {
+          for (int16_t verticalSeparation = -kMaxVerticalSlideSeparation;
+               verticalSeparation <= kMaxVerticalSlideSeparation;
+               ++verticalSeparation) {
+            const int16_t rightY = leftY + verticalSeparation;
+            if (rightY < -kMaxTileSlideY || rightY > kMaxTileSlideY) continue;
+            for (int16_t pulse = 0; pulse <= kMaxCelebrationPulse; ++pulse) {
+              for (uint8_t pulsedSide = 0; pulsedSide < 2; ++pulsedSide) {
+                const CardRect left = makeCardRect(
+                    true, layout, leftX, leftY,
+                    pulsedSide == 0 ? pulse : 0);
+                const CardRect right = makeCardRect(
+                    false, layout, rightX, rightY,
+                    pulsedSide == 1 ? pulse : 0);
+                assert(left.x >= 0 && left.y >= 0);
+                assert(right.x >= 0 && right.y >= 0);
+                assert(left.x + left.w + kCardShadowX <= kScreenWidth);
+                assert(right.x + right.w + kCardShadowX <= kScreenWidth);
+                assert(left.y + left.h + kCardShadowY <= kScreenHeight);
+                assert(right.y + right.h + kCardShadowY <= kScreenHeight);
+                assert(left.x + left.w + kCardShadowX <= right.x);
+                assert(left.y > kReplayCenterY + kReplayHitRadius);
+                assert(right.y > kReplayCenterY + kReplayHitRadius);
+              }
+            }
           }
         }
       }

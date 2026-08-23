@@ -18,6 +18,11 @@ listing that described the original SH8601 + FT3168 revision.
   the top. There is no printed "listen", "pick one", score, or instructional
   chrome. The replay control repeats the exact current prompt and sound without
   changing the round, and restarts the current idle-nudge deadline.
+- The only parent-facing status mark is a centered row of three-pixel-radius
+  dots at the extreme top edge: three dim green dots mean high/full (60-100%),
+  two dim yellow dots mean medium (25-59%), and one dim red dot means low
+  (0-24%). It has no text, animation, touch target, or gameplay meaning and is
+  sampled only every 30 seconds.
 - Five opening phrasings are available. Each is followed by the target Cowboy
   phonics clip; the printed screen never reveals the target sound.
 - With no input, give one calm nudge at 8 seconds and a second after another 10
@@ -37,8 +42,12 @@ listing that described the original SH8601 + FT3168 revision.
   never be shuffled, regenerated per round, or reassigned in a later release.
 - Only the cards' bounded positions vary. Position variation must not alter a
   letter's color, texture, typeface, case, or white foreground treatment.
-- The onboard accelerometer slowly translates both cards together by at most 19
-  horizontal and 44 vertical pixels. It never rotates them. The QMI8658 is
+- The onboard accelerometer translates both cards toward the same tilt target
+  by at most 19 horizontal and 44 vertical pixels. It never rotates them. Each
+  card has a subtly different per-round easing rate (10.5-12.8% per sample), so
+  one gently leads or trails the other. Relative horizontal separation is
+  clamped from -2 to +6 pixels and vertical separation to 8 pixels, preserving
+  the safe visual pair while making the motion feel less mechanical. The QMI8658 is
   mounted clockwise relative to the portrait panel, so screen motion uses
   `screen X = -sensor Y` and `screen Y = sensor X`. Motion is smoothed and
   rate-limited; the visible card positions remain their exact hit areas.
@@ -61,6 +70,8 @@ listing that described the original SH8601 + FT3168 revision.
   a zero-finger touch sample before accepting another choice.
 - The software ignores a held PWR release at 1.5 seconds or longer and leaves
   the board's factory PMIC long-hold hard-off/cold-start behavior in control.
+  Hold PWR for 6 seconds to hard-off; from hard-off, click PWR once to start.
+  USB charging remains available while the board is hard-off.
   BOOT/GPIO0 is not used as a power key because it is a boot strap.
 - This is a polled logical standby rather than ESP deep sleep: PWR is exposed
   through XCA9554 P4, not a native RTC wake GPIO.

@@ -41,6 +41,8 @@ constexpr uint8_t kPowerButtonPin = 4;
 constexpr uint32_t kPowerDebounceMs = 50;
 constexpr uint32_t kSoftwareShortPressMaxMs = 1500;
 constexpr uint32_t kMotionSampleMs = 80;
+constexpr uint8_t kAxp2101Address = 0x34;
+constexpr uint32_t kBatterySampleMs = 30000;
 // Permanent a-z identities. Never randomize or reorder this table: the color
 // is part of the child's visual memory of each letter.
 constexpr uint16_t kLetterColors[26] = {
@@ -57,12 +59,18 @@ float neutralAccelX = 0.0f;
 float neutralAccelY = 0.0f;
 float filteredAccelX = 0.0f;
 float filteredAccelY = 0.0f;
-float easedSlideX = 0.0f;
-float easedSlideY = 0.0f;
+float easedLeftSlideX = 0.0f;
+float easedLeftSlideY = 0.0f;
+float easedRightSlideX = 0.0f;
+float easedRightSlideY = 0.0f;
+float leftMotionEase = 0.115f;
+float rightMotionEase = 0.125f;
 bool motionReady = false;
 bool imuAvailable = false;
-int16_t tileSlideX = 0;
-int16_t tileSlideY = 0;
+int16_t leftSlideX = 0;
+int16_t leftSlideY = 0;
+int16_t rightSlideX = 0;
+int16_t rightSlideY = 0;
 bool previewMode = false;
 bool standbyMode = false;
 bool powerButtonAvailable = false;
@@ -74,8 +82,92 @@ bool powerPressActive = false;
 uint32_t powerRawChangedAtMs = 0;
 uint32_t powerPressedAtMs = 0;
 
+struct BatteryState {
+  bool valid = false;
+  bool connected = false;
+  bool usb = false;
+  bool charging = false;
+  uint8_t percent = 0;
+  uint8_t chargerState = 0;
+  uint16_t millivolts = 0;
+};
+
+BatteryState batteryState;
+uint32_t lastBatterySampleMs = 0;
+bool batteryVisualDirty = false;
+
 void onTouchInterrupt() {
   touch->IIC_Interrupt_Flag = true;
+}
+
+bool readPmicRegister(uint8_t address, uint8_t& value) {
+  Wire.beginTransmission(kAxp2101Address);
+  Wire.write(address);
+  if (Wire.endTransmission(false) != 0) return false;
+  if (Wire.requestFrom(kAxp2101Address, static_cast<uint8_t>(1)) != 1) return false;
+  value = Wire.read();
+  return true;
+}
+
+uint8_t batteryTier(const BatteryState& state) {
+  if (!state.valid || !state.connected) return 0;
+  if (state.percent >= 60) return 3;
+  if (state.percent >= 25) return 2;
+  return 1;
+}
+
+bool sampleBattery(uint32_t now) {
+  uint8_t status1 = 0;
+  uint8_t status2 = 0;
+  uint8_t voltageHigh = 0;
+  uint8_t voltageLow = 0;
+  uint8_t percent = 0;
+  if (!readPmicRegister(0x00, status1) ||
+      !readPmicRegister(0x01, status2) ||
+      !readPmicRegister(0x34, voltageHigh) ||
+      !readPmicRegister(0x35, voltageLow) ||
+      !readPmicRegister(0xA4, percent)) {
+    batteryState.valid = false;
+    batteryVisualDirty = true;
+    lastBatterySampleMs = now;
+    return false;
+  }
+
+  const BatteryState previous = batteryState;
+  batteryState.valid = true;
+  batteryState.connected = (status1 & (1u << 3)) != 0;
+  const bool vbusGood = (status1 & (1u << 5)) != 0;
+  batteryState.usb = vbusGood && (status2 & (1u << 3)) == 0;
+  const uint8_t powerState = status2 >> 5;
+  batteryState.charging = powerState == 1;
+  batteryState.percent = batteryState.connected ? percent : 0;
+  batteryState.chargerState = status2 & 0x07;
+  batteryState.millivolts = batteryState.connected ?
+      (static_cast<uint16_t>(voltageHigh & 0x1f) << 8) | voltageLow
+      : 0;
+  lastBatterySampleMs = now;
+  if (!previous.valid ||
+      batteryTier(previous) != batteryTier(batteryState)) {
+    batteryVisualDirty = true;
+  }
+  return true;
+}
+
+void reportBattery() {
+  if (!sampleBattery(millis())) {
+    USBSerial.println("[battery] pmic=unavailable");
+    return;
+  }
+  const char* chargerStates[] = {
+      "tri-charge", "pre-charge", "constant-current", "constant-voltage",
+      "reserved", "done", "stopped", "reserved"};
+  USBSerial.printf(
+      "[battery] connected=%s percent=%u voltage_mv=%u usb=%s charging=%s "
+      "charger=%s\n",
+      batteryState.connected ? "yes" : "no", batteryState.percent,
+      batteryState.millivolts, batteryState.usb ? "yes" : "no",
+      batteryState.charging ? "yes" : "no",
+      chargerStates[batteryState.chargerState]);
 }
 
 uint16_t blend565(uint16_t foreground, uint16_t background, uint8_t amount) {
@@ -97,7 +189,9 @@ void drawBackground() {
 }
 
 CardRect cardRect(bool left, uint8_t layoutVariant, int16_t pulse = 0) {
-  return makeCardRect(left, layoutVariant, tileSlideX, tileSlideY, pulse);
+  return makeCardRect(left, layoutVariant,
+                      left ? leftSlideX : rightSlideX,
+                      left ? leftSlideY : rightSlideY, pulse);
 }
 
 void drawCentered(const char* text, int16_t centerX, int16_t centerY,
@@ -179,6 +273,25 @@ void drawReplayButton() {
                     kReplayCenterX + 11, kReplayCenterY, kWhite);
 }
 
+void drawBatteryIndicator() {
+  if (!batteryState.valid || !batteryState.connected) {
+    batteryVisualDirty = false;
+    return;
+  }
+  const uint8_t tier = batteryTier(batteryState);
+  const uint16_t color = tier == 3 ? blend565(0x07E0, 0x0000, 145) :
+                         tier == 2 ? blend565(0xFFE0, 0x0000, 155) :
+                                     blend565(0xF800, 0x0000, 175);
+  constexpr int16_t centerX = LCD_WIDTH / 2;
+  constexpr int16_t centerY = 14;
+  constexpr int16_t spacing = 11;
+  const int16_t firstX = centerX - ((tier - 1) * spacing) / 2;
+  for (uint8_t i = 0; i < tier; ++i) {
+    gfx->fillCircle(firstX + i * spacing, centerY, 3, color);
+  }
+  batteryVisualDirty = false;
+}
+
 bool updateMotion(uint32_t now) {
   if (!imuAvailable || now - lastMotionSampleMs < kMotionSampleMs ||
       !qmi.getDataReady()) return false;
@@ -194,11 +307,11 @@ bool updateMotion(uint32_t now) {
     return false;
   }
 
-  // Low-pass the sensor and then ease the shared tile translation toward the
-  // gravity target. A shared vector makes the pair feel loose while preserving
-  // the proven gap between the cards at every frame.
-  filteredAccelX = filteredAccelX * 0.88f + acceleration.x * 0.12f;
-  filteredAccelY = filteredAccelY * 0.88f + acceleration.y * 0.12f;
+  // Low-pass the sensor, then let each tile ease independently toward the same
+  // gravity target. Per-round rates differ slightly, while the relative clamps
+  // preserve the proven gap and keep the pair feeling coherent.
+  filteredAccelX = filteredAccelX * 0.86f + acceleration.x * 0.14f;
+  filteredAccelY = filteredAccelY * 0.86f + acceleration.y * 0.14f;
   const auto targetPixels = [](float delta, float scale, int16_t limit) {
     constexpr float deadZoneG = 0.025f;
     if (fabsf(delta) <= deadZoneG) return 0.0f;
@@ -215,21 +328,65 @@ bool updateMotion(uint32_t now) {
                                      kMaxTileSlideX);
   const float targetY = targetPixels(screenVerticalG, 70.0f,
                                      kMaxTileSlideY);
-  easedSlideX = easedSlideX * 0.92f + targetX * 0.08f;
-  easedSlideY = easedSlideY * 0.92f + targetY * 0.08f;
-  const int16_t nextX = constrain(static_cast<int>(roundf(easedSlideX)),
-                                  -kMaxTileSlideX, kMaxTileSlideX);
-  const int16_t nextY = constrain(static_cast<int>(roundf(easedSlideY)),
-                                  -kMaxTileSlideY, kMaxTileSlideY);
-  if (nextX == tileSlideX && nextY == tileSlideY) return false;
-  tileSlideX = nextX;
-  tileSlideY = nextY;
+  easedLeftSlideX += (targetX - easedLeftSlideX) * leftMotionEase;
+  easedLeftSlideY += (targetY - easedLeftSlideY) * leftMotionEase;
+  easedRightSlideX += (targetX - easedRightSlideX) * rightMotionEase;
+  easedRightSlideY += (targetY - easedRightSlideY) * rightMotionEase;
+
+  const auto clampPair = [](float& left, float& right, float minDifference,
+                            float maxDifference) {
+    const float midpoint = (left + right) * 0.5f;
+    const float halfDifference = constrain((right - left) * 0.5f,
+                                           minDifference * 0.5f,
+                                           maxDifference * 0.5f);
+    left = midpoint - halfDifference;
+    right = midpoint + halfDifference;
+  };
+  clampPair(easedLeftSlideX, easedRightSlideX,
+            kMinHorizontalSlideSeparation,
+            kMaxHorizontalSlideSeparation);
+  clampPair(easedLeftSlideY, easedRightSlideY,
+            -kMaxVerticalSlideSeparation, kMaxVerticalSlideSeparation);
+
+  const int16_t nextLeftX = constrain(static_cast<int>(roundf(easedLeftSlideX)),
+                                      -kMaxTileSlideX, kMaxTileSlideX);
+  const int16_t nextLeftY = constrain(static_cast<int>(roundf(easedLeftSlideY)),
+                                      -kMaxTileSlideY, kMaxTileSlideY);
+  const int16_t roundedRightX = constrain(
+      static_cast<int>(roundf(easedRightSlideX)),
+      -kMaxTileSlideX, kMaxTileSlideX);
+  const int16_t roundedRightY = constrain(
+      static_cast<int>(roundf(easedRightSlideY)),
+      -kMaxTileSlideY, kMaxTileSlideY);
+  const int16_t nextRightX = nextLeftX + constrain(
+      roundedRightX - nextLeftX, kMinHorizontalSlideSeparation,
+      kMaxHorizontalSlideSeparation);
+  const int16_t nextRightY = nextLeftY + constrain(
+      roundedRightY - nextLeftY, -kMaxVerticalSlideSeparation,
+      kMaxVerticalSlideSeparation);
+  if (nextLeftX == leftSlideX && nextLeftY == leftSlideY &&
+      nextRightX == rightSlideX && nextRightY == rightSlideY) return false;
+  leftSlideX = nextLeftX;
+  leftSlideY = nextLeftY;
+  rightSlideX = nextRightX;
+  rightSlideY = nextRightY;
   return true;
+}
+
+void randomizeMotionRates() {
+  const uint32_t random = esp_random();
+  leftMotionEase = 0.105f + static_cast<float>(random & 0x0f) * 0.0015f;
+  rightMotionEase = 0.105f + static_cast<float>((random >> 8) & 0x0f) * 0.0015f;
+  if (fabsf(leftMotionEase - rightMotionEase) < 0.006f) {
+    rightMotionEase = rightMotionEase < 0.117f ?
+        rightMotionEase + 0.008f : rightMotionEase - 0.008f;
+  }
 }
 
 void drawRound(int16_t correctPulse = 0) {
   drawBackground();
   drawReplayButton();
+  drawBatteryIndicator();
   const Round& round = game.round();
   const char leftLetter = GameEngine::letter(round.targetOnLeft ? round.target : round.distractor);
   const char rightLetter = GameEngine::letter(round.targetOnLeft ? round.distractor : round.target);
@@ -340,18 +497,22 @@ void handlePreviewCommands() {
     return;
   }
   if (command == "STATUS") {
+    reportBattery();
     const Round& round = game.round();
     const char* audioState = standbyMode ? "suspended" :
                              (AudioPlan::ready() ? "ready" : "FAILED");
     USBSerial.printf(
         "[status] psram=%u audio=%s volume=%u imu=%s preview=%s standby=%s "
-        "target=%c distractor=%c distinct=%s slide=%d,%d\n",
+        "target=%c distractor=%c distinct=%s slide_left=%d,%d "
+        "slide_right=%d,%d motion_rate=%u,%u\n",
         ESP.getPsramSize(), audioState, kAudioVolumePercent,
         imuAvailable ? "ready" : "FAILED", previewMode ? "yes" : "no",
         standbyMode ? "yes" : "no", GameEngine::letter(round.target),
         GameEngine::letter(round.distractor),
         round.target != round.distractor ? "yes" : "NO",
-        tileSlideX, tileSlideY);
+        leftSlideX, leftSlideY, rightSlideX, rightSlideY,
+        static_cast<unsigned>(leftMotionEase * 1000.0f),
+        static_cast<unsigned>(rightMotionEase * 1000.0f));
     return;
   }
   if (standbyMode) {
@@ -390,12 +551,14 @@ void handlePreviewCommands() {
     USBSerial.println("[test] wrong-choice response triggered");
   } else if (command == "TILT" || command == "MOTION") {
     previewMode = false;
-    tileSlideX = tileSlideX >= 0 ? -kMaxTileSlideX : kMaxTileSlideX;
-    tileSlideY = tileSlideY >= 0 ? kMaxTileSlideY : -kMaxTileSlideY;
-    easedSlideX = tileSlideX;
-    easedSlideY = tileSlideY;
+    leftSlideX = leftSlideX >= 0 ? -kMaxTileSlideX : kMaxTileSlideX;
+    leftSlideY = leftSlideY >= 0 ? kMaxTileSlideY : -kMaxTileSlideY;
+    rightSlideX = leftSlideX;
+    rightSlideY = leftSlideY;
+    easedLeftSlideX = easedRightSlideX = leftSlideX;
+    easedLeftSlideY = easedRightSlideY = leftSlideY;
     drawRound();
-    USBSerial.printf("[test] slide frame=%d,%d\n", tileSlideX, tileSlideY);
+    USBSerial.printf("[test] slide frame=%d,%d\n", leftSlideX, leftSlideY);
   }
 }
 
@@ -403,6 +566,7 @@ void dispatch(const Event& event) {
   const char target = GameEngine::letter(game.round().target);
   switch (event.type) {
     case EventType::roundStarted:
+      randomizeMotionRates();
       USBSerial.printf("[round] target=%c distractor=%c side=%s layout=%u prompt=%u\n",
                        target, GameEngine::letter(game.round().distractor),
                        game.round().targetOnLeft ? "left" : "right",
@@ -489,6 +653,7 @@ void setup() {
   USBSerial.setTxTimeoutMs(0);
   USBSerial.setTimeout(8000);
   initializeBoard();
+  sampleBattery(millis());
   const bool audioReady = AudioPlan::begin();
   game = GameEngine(esp_random());
   if (AudioPlan::enabled()) {
@@ -512,6 +677,7 @@ void loop() {
     return;
   }
   const uint32_t now = millis();
+  if (now - lastBatterySampleMs >= kBatterySampleMs) sampleBattery(now);
   dispatch(game.update(now));
 
   if (game.celebrating()) {
@@ -521,8 +687,9 @@ void loop() {
       lastCelebrationFrame = frame;
       drawRound(frame == 1 ? 6 : 0);
     }
-  } else if (!game.celebrating() && updateMotion(now)) {
-    drawRound();
+  } else if (!game.celebrating()) {
+    const bool motionChanged = updateMotion(now);
+    if (motionChanged || batteryVisualDirty) drawRound();
   }
 
   const int32_t touchPoints = touch->IIC_Read_Device_Value(
