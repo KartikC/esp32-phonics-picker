@@ -10,8 +10,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
-FONT_ROOT = LETTERBOARD / "android/app/src/main/res/font"
+FONT_SOURCE_SETTING = os.environ.get("FONT_SOURCE_DIR")
+FONT_ROOT = Path(FONT_SOURCE_SETTING).expanduser() if FONT_SOURCE_SETTING else None
 WIDTH, HEIGHT = 368, 448
 COLORS_565 = [
     0x934A, 0x1B6A, 0x63C8, 0x93A3, 0x2B4A, 0x8B4A, 0x13A9,
@@ -85,6 +85,8 @@ def battery_indicator(draw, percent):
 
 
 def make_frame(left, right, layout, battery):
+    if FONT_ROOT is None or not FONT_ROOT.is_dir():
+        raise SystemExit("Set FONT_SOURCE_DIR to the folder containing the reviewed Nunito TTF files")
     image = Image.new("RGB", (WIDTH, HEIGHT), "black")
     draw = ImageDraw.Draw(image)
     letter_font = ImageFont.truetype(str(FONT_ROOT / "nunito_black.ttf"), 112)

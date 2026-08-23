@@ -1,0 +1,20 @@
+name: Reproducible firmware
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out pinned sources
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Verify payload, test game engine, and compile firmware
+        run: ./scripts/test.sh --firmware

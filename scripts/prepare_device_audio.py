@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare clear, gently band-limited 16 kHz mono PCM WAV assets.
 
-Letterboard's Cowboy masters keep their phonemes, cadence, and dynamics. The
+The reviewed Cowboy masters keep their phonemes, cadence, and dynamics. The
 device pass removes only inaudible speaker extremes, uses two-pass linear
 loudness normalization, and never boosts the board's resonant speech bands.
 """
@@ -17,8 +17,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
-LETTERBOARD_SOUNDS = LETTERBOARD / "ios/Letterboard/Resources/Sounds"
+PHONICS_SOURCE_SETTING = os.environ.get("PHONICS_SOURCE_DIR")
+PHONICS_SOUNDS = Path(PHONICS_SOURCE_SETTING).expanduser() if PHONICS_SOURCE_SETTING else None
 RAW_CUES = ROOT / "audio/generated/cowboy-cues/raw"
 OUTPUT = ROOT / "audio/generated/device-pcm"
 MANIFEST = ROOT / "audio/generated/device-audio-manifest.json"
@@ -95,7 +95,7 @@ def probe(path: Path) -> dict[str, int | float]:
 
 def convert_phonics(source: Path, destination: Path, gain_db: float) -> None:
     # EBU integrated loudness is unstable for these sub-400 ms phonemes. Keep
-    # Letterboard's reviewed relative levels and apply one shared peak-safe gain.
+    # Preserve the reviewed relative levels and apply one shared peak-safe gain.
     filters = f"{SPEAKER_BANDPASS},{RESAMPLE},volume={gain_db:.3f}dB"
     run(
         "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(source),
@@ -116,10 +116,12 @@ def convert_cue(source: Path, destination: Path) -> None:
 
 
 def main() -> None:
+    if PHONICS_SOUNDS is None or not PHONICS_SOUNDS.is_dir():
+        raise SystemExit("Set PHONICS_SOURCE_DIR to the folder containing the reviewed cowboy_*.m4a files")
     OUTPUT.mkdir(parents=True, exist_ok=True)
     assets = []
     phonics_sources = [
-        LETTERBOARD_SOUNDS / f"cowboy_{letter}.m4a"
+        PHONICS_SOUNDS / f"cowboy_{letter}.m4a"
         for letter in "abcdefghijklmnopqrstuvwxyz"
     ]
     phonics_peak = max(
@@ -128,7 +130,7 @@ def main() -> None:
     )
     phonics_gain_db = min(0.0, TARGET_TRUE_PEAK - phonics_peak)
     for letter in "abcdefghijklmnopqrstuvwxyz":
-        source = LETTERBOARD_SOUNDS / f"cowboy_{letter}.m4a"
+        source = PHONICS_SOUNDS / f"cowboy_{letter}.m4a"
         destination = OUTPUT / f"cowboy_{letter}.wav"
         convert_phonics(source, destination, phonics_gain_db)
         assets.append({
@@ -161,7 +163,7 @@ def main() -> None:
             "cue_silence": "leading trim only; internal cadence preserved",
             "normalization": "two-pass linear loudnorm",
             "phonics_gain_db": round(phonics_gain_db, 3),
-            "phonics_leveling": "Letterboard relative levels preserved; shared peak ceiling",
+            "phonics_leveling": "reviewed relative levels preserved; shared peak ceiling",
             "loudness_lufs": TARGET_LUFS,
             "true_peak_dbtp": TARGET_TRUE_PEAK,
         },

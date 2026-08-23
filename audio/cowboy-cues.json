@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "voice": "Letterboard approved Cowboy anchor",
+  "voice": "approved Cowboy anchor",
   "anchor_transcript": "Apple. Car. Dog.",
   "clone_model": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit",
   "playback_status": "gentler processing accepted by human listening",

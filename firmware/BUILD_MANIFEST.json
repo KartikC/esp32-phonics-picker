@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "target": "Waveshare ESP32-S3-Touch-AMOLED-1.8 V2",
+  "board_fqbn": "esp32:esp32:esp32s3:FlashSize=16M,PartitionScheme=app3M_fat9M_16MB,PSRAM=opi,CDCOnBoot=cdc",
+  "arduino_cli": "1.5.1",
+  "arduino_esp32": "3.3.11",
+  "waveshare_commit": "7ab8f957e22ea1ab811256359f4eddcaaf49ee91",
+  "source_date_epoch": 1787458547,
+  "artifacts": [
+    {
+      "name": "PhonicsGame.ino.bootloader.bin",
+      "offset": "0x0",
+      "bytes": 19968,
+      "sha256": "31b3c1be45dc5a76aa85c82540d6787b675e711eaf11021a5eea7e36f469c6de"
+    },
+    {
+      "name": "PhonicsGame.ino.partitions.bin",
+      "offset": "0x8000",
+      "bytes": 3072,
+      "sha256": "ace02503447d0f470692e65fa76002f2d77a92dc81cd3813d8aa66718d716da9"
+    },
+    {
+      "name": "boot_app0.bin",
+      "offset": "0xe000",
+      "bytes": 8192,
+      "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"
+    },
+    {
+      "name": "PhonicsGame.ino.bin",
+      "offset": "0x10000",
+      "bytes": 463424,
+      "sha256": "1e9b3be44ef8c4041ddb89cd20663a6a27cb0eac8c7a275e61108c54a6e9cb74"
+    },
+    {
+      "name": "phonics-audio-pack.bin",
+      "offset": "0x610000",
+      "bytes": 950976,
+      "sha256": "563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72"
+    }
+  ]
+}

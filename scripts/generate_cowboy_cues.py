@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate offline cue candidates from Letterboard's approved Cowboy anchor.
+"""Generate offline cue candidates from the approved Cowboy anchor.
 
-This script never plays audio. It follows Letterboard's production clone path:
-one isolated utterance at a time, the approved Apple/Car/Dog anchor, Qwen3-TTS
-Base 8-bit, and the approved fixed Cowboy seed.
+This script never plays audio. It uses one isolated utterance at a time, the
+approved Apple/Car/Dog anchor, Qwen3-TTS Base 8-bit, and the approved fixed
+Cowboy seed. Set COWBOY_ANCHOR to the reviewed reference WAV before running it.
 """
 
 from __future__ import annotations
@@ -23,8 +23,8 @@ from scipy.io import wavfile
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "audio/cowboy-cues.json"
 OUTPUT = ROOT / "audio/generated/cowboy-cues/raw"
-LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
-ANCHOR = LETTERBOARD / "Tools/audio/raw/cowboy/word-voice-reference.wav"
+ANCHOR_SETTING = os.environ.get("COWBOY_ANCHOR")
+ANCHOR = Path(ANCHOR_SETTING).expanduser() if ANCHOR_SETTING else None
 ANCHOR_SHA256 = "3e9134770d92fb179601a32a5384c1a52715628faf455a585d163d13250c60d3"
 ANCHOR_TEXT = "Apple. Car. Dog."
 MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-8bit"
@@ -61,8 +61,10 @@ def main() -> None:
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
+    if ANCHOR is None or not ANCHOR.is_file():
+        raise SystemExit("Set COWBOY_ANCHOR to the approved Cowboy reference WAV")
     if sha256(ANCHOR) != ANCHOR_SHA256:
-        raise SystemExit("Letterboard Cowboy anchor hash does not match the approved artifact")
+        raise SystemExit("Cowboy anchor hash does not match the approved artifact")
 
     corpus = json.loads(CORPUS.read_text())
     cues: dict[str, str] = corpus["cues"]

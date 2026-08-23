@@ -4,10 +4,15 @@
 .arduino/cache/
 .tools/
 .venv/
+.env
+.env.*
+!.env.example
 backups/
 build/
+dist/
 audio/generated/cowboy-cues/
 previews/
 __pycache__/
 *.py[cod]
+*.log
 .DS_Store

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Convert Letterboard's Nunito faces into compact Arduino GFX fonts."""
+"""Convert reviewed Nunito faces into compact Arduino GFX fonts."""
 
 import os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-LETTERBOARD = Path(os.environ.get("LETTERBOARD_ROOT", ROOT.parent / "Letterboard"))
-SOURCE = LETTERBOARD / "android/app/src/main/res/font"
+FONT_SOURCE_SETTING = os.environ.get("FONT_SOURCE_DIR")
+SOURCE = Path(FONT_SOURCE_SETTING).expanduser() if FONT_SOURCE_SETTING else None
 
 
 def packed_glyph(font, character):
@@ -55,6 +55,8 @@ def emit(source, size, first, last, name, output):
 
 
 def main():
+    if SOURCE is None or not SOURCE.is_dir():
+        raise SystemExit("Set FONT_SOURCE_DIR to the folder containing the reviewed Nunito TTF files")
     output = ROOT / "firmware/PhonicsGame/fonts"
     emit(SOURCE / "nunito_black.ttf", 112, ord("a"), ord("z"),
          "NunitoBlack112", output / "NunitoBlack112.h")

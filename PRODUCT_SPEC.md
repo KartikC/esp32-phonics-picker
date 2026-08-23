@@ -7,10 +7,10 @@ Waveshare ESP32-S3-Touch-AMOLED-1.8 V2 board (CO5300 + CST820). The physical
 board reports touch at I2C `0x15`; this live probe overrides the older Amazon
 listing that described the original SH8601 + FT3168 revision.
 
-- Each round chooses one of Letterboard's 26 canonical lowercase phonics
-  sounds and one different lowercase distractor.
-- C and K may both be targets, but never oppose one another because Letterboard
-  intentionally gives them the same `/k/` recording.
+- Each round chooses one of the 26 canonical lowercase phonics sounds and one
+  different lowercase distractor.
+- C and K may both be targets, but never oppose one another because the
+  accepted corpus intentionally gives them the same `/k/` recording.
 - The answer side, distractor, prompt wording, and one of six bounded card
   layouts vary independently. Layout variation is subtle and never changes hit
   area size, overlaps cards, crowds an edge, or hints at the correct answer.
@@ -90,7 +90,7 @@ listing that described the original SH8601 + FT3168 revision.
   and 5 kHz low-pass; there are no resonance notches or presence boosts.
   Longer speech cues use leading-silence trim only, preserving internal
   cadence, followed by two-pass -21 LUFS / -4 dBTP normalization. Short
-  phonics masters retain Letterboard's relative dynamics and share one
+  phonics masters retain their reviewed relative dynamics and share one
   peak-safe -2.06 dB gain.
 - The raw `ffat` pack is SHA-256 verified, then prefetched into PSRAM. Playback
   runs asynchronously so it never blocks touch or rendering, and a new

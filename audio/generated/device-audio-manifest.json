@@ -9,7 +9,7 @@
     "cue_silence": "leading trim only; internal cadence preserved",
     "normalization": "two-pass linear loudnorm",
     "phonics_gain_db": -2.06,
-    "phonics_leveling": "Letterboard relative levels preserved; shared peak ceiling",
+    "phonics_leveling": "reviewed relative levels preserved; shared peak ceiling",
     "loudness_lufs": -21,
     "true_peak_dbtp": -4
   },
