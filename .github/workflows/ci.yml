@@ -20,7 +20,7 @@ jobs:
         run: ./scripts/test.sh --firmware
       - name: Preserve firmware images for reproducibility diagnosis
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: firmware-images-${{ runner.os }}
           path: |
