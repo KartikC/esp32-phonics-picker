@@ -195,8 +195,12 @@ def verify_build(build_dir: Path) -> None:
         data = path.read_bytes()
         if len(data) != artifact["bytes"]:
             fail(f"artifact byte count differs from BUILD_MANIFEST.json: {path.name}")
-        if sha256_bytes(data) != artifact["sha256"]:
-            fail(f"artifact SHA-256 differs from BUILD_MANIFEST.json: {path.name}")
+        actual_sha256 = sha256_bytes(data)
+        if actual_sha256 != artifact["sha256"]:
+            fail(
+                f"artifact SHA-256 differs from BUILD_MANIFEST.json: {path.name}; "
+                f"expected {artifact['sha256']}, got {actual_sha256}"
+            )
 
 
 def main() -> None:

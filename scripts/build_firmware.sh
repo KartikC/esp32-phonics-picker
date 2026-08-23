@@ -26,15 +26,16 @@ mkdir -p "$build_root"
 export SOURCE_DATE_EPOCH="$BUILD_SOURCE_DATE_EPOCH"
 export TZ=UTC
 export LC_ALL=C
-path_flags="-ffile-prefix-map=$project_root=. -fmacro-prefix-map=$project_root=."
+# Arduino-ESP32 normally embeds runtime.os (for example macosx or linux) in
+# chip-debug-report.cpp. Pin that value and repeat the fixed FQBN-derived
+# defines so the application image is identical across supported build hosts.
+reproducible_flags="-DARDUINO_HOST_OS=\"reproducible\" -DARDUINO_FQBN=\"$BOARD_FQBN\" -DESP32=ESP32 -DCORE_DEBUG_LEVEL=0 -DARDUINO_RUNNING_CORE=1 -DARDUINO_EVENT_RUNNING_CORE=1 -DBOARD_HAS_PSRAM -DARDUINO_USB_MODE=1 -DARDUINO_USB_CDC_ON_BOOT=1 -DARDUINO_USB_MSC_ON_BOOT=0 -DARDUINO_USB_DFU_ON_BOOT=0 -ffile-prefix-map=$project_root=. -fmacro-prefix-map=$project_root=."
 "$arduino_cli" \
   --config-file "$project_root/.arduino/arduino-cli.yaml" compile \
   --fqbn "$BOARD_FQBN" \
   --jobs "${BUILD_JOBS:-8}" \
   --build-path "$build_root" \
-  --build-property "compiler.c.extra_flags=$path_flags" \
-  --build-property "compiler.cpp.extra_flags=$path_flags" \
-  --build-property "compiler.S.extra_flags=$path_flags" \
+  --build-property "build.extra_flags=$reproducible_flags" \
   --library "$slim_root/GFX_Library_for_Arduino" \
   --library "$slim_root/Arduino_DriveBus" \
   --library "$slim_root/SensorLib" \
