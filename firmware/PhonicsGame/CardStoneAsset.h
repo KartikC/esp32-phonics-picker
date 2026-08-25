@@ -17,6 +17,9 @@ inline constexpr uint16_t kStoneSourceHeight = 113;
 inline constexpr uint32_t kStoneSourcePixelCount =
     static_cast<uint32_t>(kStoneSourceWidth) * kStoneSourceHeight;
 inline constexpr uint32_t kStonePackedBytes = (kStoneSourcePixelCount + 1) / 2;
+// Near-black blue-grey shadow selected as #040B11 and quantized to RGB565.
+// The former 0x0204 decoded as a conspicuous green strip on the AMOLED.
+inline constexpr uint16_t kStoneShadowColor = 0x0042;
 
 enum StoneRole : uint8_t {
   kStoneTransparent = 0,

@@ -21,7 +21,9 @@ PACK_HEADER = struct.Struct("<8sIIII8s")
 EXPECTED_VENDOR_COMMIT = "7ab8f957e22ea1ab811256359f4eddcaaf49ee91"
 EXPECTED_PACK_SHA256 = "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9"
 EXPECTED_STONE_SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
-EXPECTED_STONE_REVIEW_SHA256 = "0c5d721140e3288a7909bd1c52adf01ae48ff69929df651da13661d51c39e604"
+EXPECTED_STONE_REVIEW_SHA256 = "a6c5f49d04bd28dda05e58170ae68e1d1b1f99f8b51fda4f46566847419a5e46"
+EXPECTED_ATKINSON_SOURCE_SHA256 = "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745"
+EXPECTED_ATKINSON_CONTACT_SHA256 = "f7581b20245bc02a4b27528c525dcdfee38697adee9fdff41d852b1e727ef795"
 EXPECTED_AUDIO_COUNTS = {
     "phonics": 26,
     "speech": 16,
@@ -283,7 +285,7 @@ def verify_letter_card_asset() -> None:
     require(report_path)
     report = json.loads(report_path.read_text())
     if (report.get("status") != "passed" or
-            report.get("selected_direction") != "2A v4 stonewashed and centered" or
+            report.get("selected_direction") != "2A v5 stonewashed with Atkinson" or
             report.get("production_asset") is not True or
             report.get("openai_image_generation_used") is not False or
             report.get("new_generation_calls") != 0):
@@ -315,11 +317,11 @@ def verify_letter_card_asset() -> None:
     if (review_manifest.get("output", {}).get("sha256") !=
             EXPECTED_STONE_REVIEW_SHA256):
         fail("letter-card review manifest points to a different sheet")
-    glyph_reference = ROOT / review_manifest["glyph_reference_sheet"]
-    require(glyph_reference)
-    if sha256_file(glyph_reference) != review_manifest.get(
-            "glyph_reference_sheet_sha256"):
-        fail("letter-card glyph reference differs from its review manifest")
+    if (review_manifest.get("selected_font") !=
+            "Atkinson Hyperlegible Next ExtraBold 800" or
+            review_manifest.get("selected_font_source_sha256") !=
+            EXPECTED_ATKINSON_SOURCE_SHA256):
+        fail("letter-card review does not use the selected Atkinson face")
 
     expected_counts = {
         "transparent": 68,
@@ -340,6 +342,39 @@ def verify_letter_card_asset() -> None:
     palette = report.get("palette", [])
     if len(palette) != 26 or len(set(palette)) != 26:
         fail("letter-card palette must contain 26 unique fixed colors")
+
+
+def verify_selected_letter_font() -> None:
+    report_path = ROOT / "art/fonts/generated/atkinson_hyperlegible_next_report.json"
+    require(report_path)
+    report = json.loads(report_path.read_text())
+    if (report.get("status") != "passed" or
+            report.get("selected_font") != "Atkinson Hyperlegible Next" or
+            report.get("selected_weight") != "ExtraBold 800" or
+            report.get("nominal_pixel_size") != 112 or
+            report.get("glyph_range") != "a-z" or
+            report.get("source_sha256") != EXPECTED_ATKINSON_SOURCE_SHA256 or
+            report.get("selection_contact_sheet_sha256") !=
+            EXPECTED_ATKINSON_CONTACT_SHA256 or
+            report.get("card_size") != [138, 158] or
+            report.get("halo_radius") != 2 or
+            report.get("all_glyphs_fit") is not True):
+        fail("selected Atkinson letter-font report is invalid")
+    for path_key, hash_key in (
+        ("builder", "builder_sha256"),
+        ("selection_contact_sheet", "selection_contact_sheet_sha256"),
+        ("header", "header_sha256"),
+    ):
+        path = ROOT / report[path_key]
+        require(path)
+        if sha256_file(path) != report[hash_key]:
+            fail(f"selected letter font {path_key} differs from its report")
+    glyphs = report.get("glyphs", [])
+    if (len(glyphs) != 26 or
+            "".join(item.get("letter", "") for item in glyphs) !=
+            "abcdefghijklmnopqrstuvwxyz" or
+            not all(item.get("halo_fit") is True for item in glyphs)):
+        fail("selected Atkinson glyph roster or card fit is invalid")
 
 
 def verify_build(build_dir: Path) -> None:
@@ -402,7 +437,7 @@ def main() -> None:
     args = parser.parse_args()
     for relative in (
         "firmware/PhonicsGame/PhonicsGame.ino",
-        "firmware/PhonicsGame/fonts/NunitoBlack112.h",
+        "firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h",
         "firmware/PhonicsGame/fonts/NunitoBold28.h",
         "config/toolchain.env",
         "firmware/BUILD_MANIFEST.json",
@@ -415,6 +450,7 @@ def main() -> None:
     verify_audio()
     verify_creature_assets()
     verify_letter_card_asset()
+    verify_selected_letter_font()
     if args.build_dir:
         verify_build(args.build_dir.resolve())
     print("Repository payload verified")

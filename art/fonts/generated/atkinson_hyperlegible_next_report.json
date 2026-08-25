@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "selected_font": "Atkinson Hyperlegible Next",
+  "selected_weight": "ExtraBold 800",
+  "nominal_pixel_size": 112,
+  "glyph_range": "a-z",
+  "license": "SIL Open Font License 1.1",
+  "license_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/atkinsonhyperlegiblenext/OFL.txt",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/atkinsonhyperlegiblenext/AtkinsonHyperlegibleNext%5Bwght%5D.ttf",
+  "source_sha256": "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745",
+  "builder": "scripts/build_selected_letter_font.py",
+  "builder_sha256": "1c22e02c1ba2cc993d0c6bf3b14c05374cf36680e3602ae21b80f6b9295239a6",
+  "selection_contact_sheet": "art/generated/one_off/font_comparison_2026-08-25/atkinson_full_alphabet_contact_sheet.png",
+  "selection_contact_sheet_sha256": "f7581b20245bc02a4b27528c525dcdfee38697adee9fdff41d852b1e727ef795",
+  "header": "firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h",
+  "header_sha256": "18530ac78dbd2b366693e63e0ea69fd13556534b72ffa0afcbf456aac88e3c7d",
+  "bitmap_bytes": 13607,
+  "card_size": [
+    138,
+    158
+  ],
+  "halo_radius": 2,
+  "max_glyph_width": 101,
+  "max_glyph_height": 103,
+  "all_glyphs_fit": true,
+  "glyphs": [
+    {
+      "letter": "a",
+      "width": 63,
+      "height": 58,
+      "advance": 63,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "b",
+      "width": 69,
+      "height": 80,
+      "advance": 69,
+      "x_offset": 0,
+      "y_offset": -79,
+      "halo_fit": true
+    },
+    {
+      "letter": "c",
+      "width": 59,
+      "height": 59,
+      "advance": 59,
+      "x_offset": 0,
+      "y_offset": -58,
+      "halo_fit": true
+    },
+    {
+      "letter": "d",
+      "width": 69,
+      "height": 80,
+      "advance": 69,
+      "x_offset": 0,
+      "y_offset": -79,
+      "halo_fit": true
+    },
+    {
+      "letter": "e",
+      "width": 65,
+      "height": 60,
+      "advance": 65,
+      "x_offset": 0,
+      "y_offset": -59,
+      "halo_fit": true
+    },
+    {
+      "letter": "f",
+      "width": 44,
+      "height": 81,
+      "advance": 44,
+      "x_offset": 0,
+      "y_offset": -80,
+      "halo_fit": true
+    },
+    {
+      "letter": "g",
+      "width": 68,
+      "height": 80,
+      "advance": 68,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "h",
+      "width": 66,
+      "height": 79,
+      "advance": 66,
+      "x_offset": 0,
+      "y_offset": -79,
+      "halo_fit": true
+    },
+    {
+      "letter": "i",
+      "width": 37,
+      "height": 86,
+      "advance": 37,
+      "x_offset": 0,
+      "y_offset": -86,
+      "halo_fit": true
+    },
+    {
+      "letter": "j",
+      "width": 38,
+      "height": 103,
+      "advance": 30,
+      "x_offset": -8,
+      "y_offset": -85,
+      "halo_fit": true
+    },
+    {
+      "letter": "k",
+      "width": 67,
+      "height": 79,
+      "advance": 66,
+      "x_offset": 0,
+      "y_offset": -79,
+      "halo_fit": true
+    },
+    {
+      "letter": "l",
+      "width": 39,
+      "height": 79,
+      "advance": 39,
+      "x_offset": 0,
+      "y_offset": -79,
+      "halo_fit": true
+    },
+    {
+      "letter": "m",
+      "width": 101,
+      "height": 57,
+      "advance": 101,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "n",
+      "width": 66,
+      "height": 57,
+      "advance": 66,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "o",
+      "width": 66,
+      "height": 59,
+      "advance": 66,
+      "x_offset": 0,
+      "y_offset": -58,
+      "halo_fit": true
+    },
+    {
+      "letter": "p",
+      "width": 69,
+      "height": 76,
+      "advance": 69,
+      "x_offset": 0,
+      "y_offset": -58,
+      "halo_fit": true
+    },
+    {
+      "letter": "q",
+      "width": 77,
+      "height": 77,
+      "advance": 69,
+      "x_offset": 0,
+      "y_offset": -58,
+      "halo_fit": true
+    },
+    {
+      "letter": "r",
+      "width": 45,
+      "height": 57,
+      "advance": 45,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "s",
+      "width": 59,
+      "height": 58,
+      "advance": 59,
+      "x_offset": 0,
+      "y_offset": -57,
+      "halo_fit": true
+    },
+    {
+      "letter": "t",
+      "width": 45,
+      "height": 69,
+      "advance": 45,
+      "x_offset": 0,
+      "y_offset": -69,
+      "halo_fit": true
+    },
+    {
+      "letter": "u",
+      "width": 65,
+      "height": 57,
+      "advance": 65,
+      "x_offset": 0,
+      "y_offset": -56,
+      "halo_fit": true
+    },
+    {
+      "letter": "v",
+      "width": 63,
+      "height": 56,
+      "advance": 63,
+      "x_offset": 0,
+      "y_offset": -56,
+      "halo_fit": true
+    },
+    {
+      "letter": "w",
+      "width": 86,
+      "height": 55,
+      "advance": 86,
+      "x_offset": 0,
+      "y_offset": -55,
+      "halo_fit": true
+    },
+    {
+      "letter": "x",
+      "width": 63,
+      "height": 55,
+      "advance": 63,
+      "x_offset": 0,
+      "y_offset": -55,
+      "halo_fit": true
+    },
+    {
+      "letter": "y",
+      "width": 62,
+      "height": 74,
+      "advance": 62,
+      "x_offset": 0,
+      "y_offset": -56,
+      "halo_fit": true
+    },
+    {
+      "letter": "z",
+      "width": 59,
+      "height": 56,
+      "advance": 59,
+      "x_offset": 0,
+      "y_offset": -56,
+      "halo_fit": true
+    }
+  ]
+}

@@ -12,6 +12,8 @@ int main() {
   static_assert(kStoneSourceHeight == 113);
   static_assert(kStoneSourcePixelCount == 9944);
   static_assert(kStonePackedBytes == 4972);
+  static_assert(kStoneShadowColor == 0x0042);
+  static_assert(kStoneShadowColor != 0x0204);
   static_assert(sizeof(kStoneLetterColors) / sizeof(kStoneLetterColors[0]) == 26);
   static_assert(sizeof(kStoneRolePixelCounts) /
                     sizeof(kStoneRolePixelCounts[0]) == kStoneRoleCount);

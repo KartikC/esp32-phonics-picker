@@ -19,7 +19,7 @@
 #include "RewardAudioSelector.h"
 #include "RewardTransition.h"
 #include "../CreatureAssets/GeneratedCreatureVariations.h"
-#include "fonts/NunitoBlack112.h"
+#include "fonts/AtkinsonHyperlegibleNextExtraBold112.h"
 
 using namespace phonics_game;
 using namespace creature_variations;
@@ -430,7 +430,7 @@ void drawStoneCardBody(const CardRect& card, uint16_t baseColor,
       if (shadowX >= 0 && shadowX < LCD_WIDTH &&
           shadowY >= 0 && shadowY < LCD_HEIGHT) {
         framebuffer[static_cast<uint32_t>(shadowY) * LCD_WIDTH + shadowX] =
-            0x0204;
+            kStoneShadowColor;
       }
       const int16_t destinationX = card.x + localX;
       if (destinationX >= 0 && destinationX < LCD_WIDTH &&
@@ -542,11 +542,12 @@ void drawCard(const CardRect& card, char letter, bool pulsing) {
   const uint16_t haloColor = pack565(11, 42, 60);
   for (const auto& offset : halo) {
     drawCentered(label, card.x + card.w / 2 + offset[0],
-                 card.y + card.h / 2 + offset[1], &NunitoBlack112,
+                 card.y + card.h / 2 + offset[1],
+                 &AtkinsonHyperlegibleNextExtraBold112,
                  haloColor);
   }
   drawCentered(label, card.x + card.w / 2, card.y + card.h / 2,
-               &NunitoBlack112, kWhite);
+               &AtkinsonHyperlegibleNextExtraBold112, kWhite);
 }
 
 void drawReplayButton() {

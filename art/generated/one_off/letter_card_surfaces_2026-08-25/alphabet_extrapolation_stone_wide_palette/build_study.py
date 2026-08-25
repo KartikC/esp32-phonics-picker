@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from collections import deque
+import os
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
@@ -17,15 +17,11 @@ SOURCE = ROOT / (
     "art/generated/one_off/letter_card_surfaces_2026-08-25/retrodiffusion/"
     "option2_carved_tide_stone__82521.png"
 )
-REFERENCE_SHEET = ROOT / (
-    "art/generated/one_off/letter_card_surfaces_2026-08-25/"
-    "alphabet_extrapolation_stone_v2/alphabet_2a_stone_v2_contact_sheet.png"
-)
-OUTPUT = STUDY_DIR / "alphabet_2a_stonewashed_centered_contact_sheet.png"
+OUTPUT = STUDY_DIR / "alphabet_2a_stonewashed_atkinson_contact_sheet.png"
 MANIFEST = STUDY_DIR / "render_manifest.json"
 
 SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
-REFERENCE_SHA256 = "37bd3c8acf43572344c9c4eec5e67c7593da4f849c31bb4e4031c3b4e7e23e94"
+ATKINSON_SOURCE_SHA256 = "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745"
 SOURCE_BBOX = (20, 7, 108, 120)
 CARD_SIZE = (138, 158)
 SHEET_SIZE = (1136, 1310)
@@ -98,64 +94,20 @@ def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), size)
 
 
-def connected_components(mask: Image.Image) -> list[list[tuple[int, int]]]:
-    pixels = mask.load()
-    seen: set[tuple[int, int]] = set()
-    components: list[list[tuple[int, int]]] = []
-    for y in range(mask.height):
-        for x in range(mask.width):
-            if not pixels[x, y] or (x, y) in seen:
-                continue
-            component: list[tuple[int, int]] = []
-            queue = deque([(x, y)])
-            seen.add((x, y))
-            while queue:
-                px, py = queue.popleft()
-                component.append((px, py))
-                for nx, ny in ((px - 1, py), (px + 1, py), (px, py - 1), (px, py + 1)):
-                    if (0 <= nx < mask.width and 0 <= ny < mask.height and
-                            pixels[nx, ny] and (nx, ny) not in seen):
-                        seen.add((nx, ny))
-                        queue.append((nx, ny))
-            components.append(component)
-    return components
-
-
-def glyph_masks(reference: Image.Image, letter_index: int) -> tuple[Image.Image, Image.Image]:
-    row, column = divmod(letter_index, 6)
-    x0 = 47 + 176 * column
-    y0 = 135 + 232 * row
-    crop = reference.crop((x0, y0, x0 + CARD_SIZE[0], y0 + CARD_SIZE[1]))
-    white = Image.new("L", CARD_SIZE, 0)
-    white_pixels = white.load()
-    for y in range(CARD_SIZE[1]):
-        for x in range(CARD_SIZE[0]):
-            r, g, b = crop.getpixel((x, y))
-            if r >= 238 and g >= 246 and b >= 246:
-                white_pixels[x, y] = 255
-
+def glyph_masks(selected_font: ImageFont.FreeTypeFont,
+                letter_index: int) -> tuple[Image.Image, Image.Image]:
+    letter = chr(ord("a") + letter_index)
+    left, top, right, bottom = selected_font.getbbox(letter, anchor="ls")
+    width, height = right - left, bottom - top
+    native = Image.new("1", (width, height), 0)
+    ImageDraw.Draw(native).text(
+        (-left, -top), letter, font=selected_font, anchor="ls", fill=255
+    )
     glyph = Image.new("L", CARD_SIZE, 0)
-    glyph_pixels = glyph.load()
-    for component in connected_components(white):
-        xs = [point[0] for point in component]
-        ys = [point[1] for point in component]
-        # Letter bodies and detached i/j dots are large and interior. The RD
-        # mineral chips are small or touch the outside bevel.
-        if (len(component) >= 70 and min(xs) >= 8 and max(xs) <= 130 and
-                min(ys) >= 15 and max(ys) <= 153):
-            for x, y in component:
-                glyph_pixels[x, y] = 255
-    # The approved sheet had a small inherited layout offset. Recenter the
-    # visible glyph bounds exactly within the 138 x 158 runtime card frame.
-    bounds = glyph.getbbox()
-    if bounds is None:
-        raise RuntimeError(f"missing glyph mask for {chr(ord('a') + letter_index)}")
-    left, top, right, bottom = bounds
-    shift_x = (CARD_SIZE[0] - (right - left)) // 2 - left
-    shift_y = (CARD_SIZE[1] - (bottom - top)) // 2 - top
-    centered = Image.new("L", CARD_SIZE, 0)
-    centered.paste(glyph, (shift_x, shift_y))
-    glyph = centered
+    glyph.paste(native.convert("L"), (
+        (CARD_SIZE[0] - width) // 2,
+        (CARD_SIZE[1] - height) // 2,
+    ))
     outline = glyph.filter(ImageFilter.MaxFilter(5))
     outline = ImageChops.subtract(outline, glyph)
     return glyph, outline
@@ -198,7 +150,7 @@ def motif_mask(letter_index: int, offset: tuple[int, int]) -> Image.Image:
     return mask
 
 
-def render_card(role_image: Image.Image, reference: Image.Image,
+def render_card(role_image: Image.Image, selected_font: ImageFont.FreeTypeFont,
                 letter_index: int, base565: int) -> Image.Image:
     base = rgb_from_565(base565)
     main = mix(base, (0, 0, 0), 0.22)
@@ -231,7 +183,7 @@ def render_card(role_image: Image.Image, reference: Image.Image,
     card.paste((*light, 255), (0, 0, *CARD_SIZE), light_mask)
     card.paste((*dark, 255), (0, 0, *CARD_SIZE), dark_mask)
 
-    glyph, outline = glyph_masks(reference, letter_index)
+    glyph, outline = glyph_masks(selected_font, letter_index)
     card.paste((11, 42, 60, 255), (0, 0, *CARD_SIZE), outline)
     card.paste((247, 255, 255, 255), (0, 0, *CARD_SIZE), glyph)
     return card
@@ -240,8 +192,12 @@ def render_card(role_image: Image.Image, reference: Image.Image,
 def main() -> None:
     if sha256(SOURCE) != SOURCE_SHA256:
         raise SystemExit("RD 82521 source hash changed")
-    if sha256(REFERENCE_SHEET) != REFERENCE_SHA256:
-        raise SystemExit("approved 2A v2 glyph reference hash changed")
+    atkinson_source = Path(os.environ.get(
+        "ATKINSON_FONT_SOURCE",
+        "/tmp/phonics-font-study-2026-08-25/AtkinsonHyperlegibleNext.ttf",
+    )).expanduser()
+    if not atkinson_source.is_file() or sha256(atkinson_source) != ATKINSON_SOURCE_SHA256:
+        raise SystemExit("selected Atkinson Hyperlegible Next source is missing or changed")
     source = Image.open(SOURCE).convert("RGBA")
     if source.getbbox() != SOURCE_BBOX:
         raise SystemExit("RD 82521 alpha bounds changed")
@@ -252,14 +208,15 @@ def main() -> None:
         raise SystemExit("RD 82521 semantic palette changed")
 
     role_image = source.crop(SOURCE_BBOX).resize(CARD_SIZE, Image.Resampling.NEAREST)
-    reference = Image.open(REFERENCE_SHEET).convert("RGB")
+    selected_font = ImageFont.truetype(str(atkinson_source), 112)
+    selected_font.set_variation_by_axes([800])
     palette = stonewashed_palette()
 
     background = (4, 17, 27)
     cell_color = (12, 48, 66)
     sheet = Image.new("RGB", SHEET_SIZE, background)
     draw = ImageDraw.Draw(sheet)
-    draw.text((28, 18), "2A v4 - stonewashed and centered", font=font(28, True), fill=(255, 228, 151))
+    draw.text((28, 18), "2A v5 - stonewashed + Atkinson", font=font(28, True), fill=(255, 228, 151))
     draw.text(
         (28, 57),
         "Exact RD 82521 stone; 26 permanent tints stay inside one weathered clay, lichen, sea-glass and slate family.",
@@ -267,7 +224,7 @@ def main() -> None:
     )
     draw.text(
         (28, 85),
-        "Every card body and visible glyph is mathematically centered; cool mineral planes and shallow motifs stay fixed.",
+        "Atkinson Hyperlegible Next ExtraBold 800 is one-bit rasterized and centered; cool mineral planes stay fixed.",
         font=font(13), fill=(219, 237, 240),
     )
 
@@ -277,7 +234,7 @@ def main() -> None:
         cell_y = 126 + row * 232
         draw.rounded_rectangle((cell_x, cell_y, cell_x + 160, cell_y + 222),
                                radius=12, fill=cell_color)
-        card = render_card(role_image, reference, index, base565)
+        card = render_card(role_image, selected_font, index, base565)
         alpha = card.getchannel("A")
         shadow = Image.new("RGBA", CARD_SIZE, (4, 11, 17, 255))
         # Center the 138 px card body exactly in the 160 px review cell. The
@@ -294,22 +251,22 @@ def main() -> None:
     sheet.save(OUTPUT, optimize=True)
     manifest = {
         "schema_version": 1,
-        "purpose": "Review-only 2A stonewashed palette and centering correction; no production integration.",
+        "purpose": "Review-only combined 2A stonewashed cards with selected Atkinson letter face.",
         "production_asset": False,
         "openai_image_generation_used": False,
         "new_generation_calls": 0,
         "source_rd_png": str(SOURCE.relative_to(ROOT)),
         "source_rd_sha256": SOURCE_SHA256,
         "source_alpha_bbox": list(SOURCE_BBOX),
-        "glyph_reference_sheet": str(REFERENCE_SHEET.relative_to(ROOT)),
-        "glyph_reference_sheet_sha256": REFERENCE_SHA256,
+        "selected_font": "Atkinson Hyperlegible Next ExtraBold 800",
+        "selected_font_source_sha256": ATKINSON_SOURCE_SHA256,
         "palette_strategy": "hand-tuned low-saturation clay, lichen, sage, sea-glass, slate, heather, and ochre family",
         "fixed_elements": [
             "RD 82521 alpha silhouette and all eight semantic regions",
             "cool mineral planes, chips, cracks, and cyan glints",
             "letter-derived seed, 13 anchors, and four motif families",
-            "white glyph treatment extracted from the approved 2A v2 sheet",
-            "each visible glyph recentered from its own rendered bounds",
+            "Atkinson Hyperlegible Next ExtraBold 800 one-bit glyph treatment",
+            "each visible glyph centered from its own rendered bounds",
             "each 138-pixel card body centered in its 160-pixel review cell",
         ],
         "palette": [

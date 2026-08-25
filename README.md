@@ -128,7 +128,8 @@ The repository pins and includes everything needed for the installed result:
 - a fixed build epoch taken from the hardware-verified firmware commit, so the
   application binary is byte-reproducible across clean builds
 - the slim display, touch, and IMU sources used by the build
-- both generated Nunito bitmap-font headers
+- the generated Atkinson Hyperlegible Next ExtraBold 800 lowercase card font
+  and the Nunito adult-label bitmap font
 - all 86 accepted 16 kHz PCM assets (26 phonics, 16 speech, four bubble beds,
   eight species cues, and 32 offline celebration masters) and the packed flash
   image

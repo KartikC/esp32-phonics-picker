@@ -4,14 +4,14 @@
 from __future__ import annotations
 
 import argparse
-import os
 import struct
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT_SOURCE_SETTING = os.environ.get("FONT_SOURCE_DIR")
-FONT_ROOT = Path(FONT_SOURCE_SETTING).expanduser() if FONT_SOURCE_SETTING else None
+DEFAULT_FONT_SOURCE = Path(
+    "/tmp/phonics-font-study-2026-08-25/AtkinsonHyperlegibleNext.ttf"
+)
 WIDTH, HEIGHT = 368, 448
 COLORS_565 = [
     0x934A, 0x1B6A, 0x63C8, 0x93A3, 0x2B4A, 0x8B4A, 0x13A9,
@@ -41,7 +41,7 @@ def card(draw, letter, rect, font):
     x, y, w, h = rect
     base = rgb565(COLORS_565[ord(letter) - 97])
     fill = blend(base, (0, 0, 0), 205)
-    draw.rounded_rectangle((x + 3, y + 6, x + w + 3, y + h + 6), 20, fill=rgb565(0x0204))
+    draw.rounded_rectangle((x + 3, y + 6, x + w + 3, y + h + 6), 20, fill=rgb565(0x0042))
     draw.rounded_rectangle((x, y, x + w, y + h), 20, fill=fill,
                            outline=blend((255, 255, 255), base, 145), width=1)
     draw.line((x + 22, y + 11, x + w - 22, y + 11),
@@ -84,12 +84,15 @@ def battery_indicator(draw, percent):
         draw.ellipse((x - 3, center_y - 3, x + 3, center_y + 3), fill=color)
 
 
-def make_frame(left, right, layout, battery):
-    if FONT_ROOT is None or not FONT_ROOT.is_dir():
-        raise SystemExit("Set FONT_SOURCE_DIR to the folder containing the reviewed Nunito TTF files")
+def make_frame(left, right, layout, battery, font_source):
+    if not font_source.is_file():
+        raise SystemExit(
+            "Pass --font-source pointing to the reviewed Atkinson Hyperlegible Next TTF"
+        )
     image = Image.new("RGB", (WIDTH, HEIGHT), "black")
     draw = ImageDraw.Draw(image)
-    letter_font = ImageFont.truetype(str(FONT_ROOT / "nunito_black.ttf"), 112)
+    letter_font = ImageFont.truetype(str(font_source), 112)
+    letter_font.set_variation_by_axes([800])
     moon = rgb565(0xEF5C)
     replay_fill = blend(rgb565(0x1CBF), (0, 0, 0), 105)
     draw.ellipse((156, 32, 212, 88), fill=replay_fill, outline=moon)
@@ -117,12 +120,16 @@ def main():
     parser.add_argument("--right", default="m", choices=list("abcdefghijklmnopqrstuvwxyz"))
     parser.add_argument("--layout", type=int, default=0, choices=range(6))
     parser.add_argument("--battery", type=int, default=50, choices=range(101))
+    parser.add_argument("--font-source", type=Path, default=DEFAULT_FONT_SOURCE)
     parser.add_argument("--output", type=Path, default=ROOT / "previews/latest.png")
     parser.add_argument("--port")
     args = parser.parse_args()
     if args.left == args.right:
         raise SystemExit("preview choices must be different letters")
-    image = make_frame(args.left, args.right, args.layout, args.battery)
+    image = make_frame(
+        args.left, args.right, args.layout, args.battery,
+        args.font_source.expanduser().resolve(),
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     image.save(args.output)
     print(args.output)

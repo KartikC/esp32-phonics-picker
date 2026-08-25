@@ -19,14 +19,14 @@ SOURCE = ROOT / (
 REVIEW = ROOT / (
     "art/generated/one_off/letter_card_surfaces_2026-08-25/"
     "alphabet_extrapolation_stone_wide_palette/"
-    "alphabet_2a_stonewashed_centered_contact_sheet.png"
+    "alphabet_2a_stonewashed_atkinson_contact_sheet.png"
 )
 REVIEW_MANIFEST = REVIEW.with_name("render_manifest.json")
 HEADER = ROOT / "firmware/PhonicsGame/CardStoneAsset.h"
 REPORT = ROOT / "art/letter_cards/generated/stone_card_report.json"
 
 SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
-REVIEW_SHA256 = "0c5d721140e3288a7909bd1c52adf01ae48ff69929df651da13661d51c39e604"
+REVIEW_SHA256 = "a6c5f49d04bd28dda05e58170ae68e1d1b1f99f8b51fda4f46566847419a5e46"
 SOURCE_BBOX = (20, 7, 108, 120)
 
 ROLE_DEFINITIONS = (
@@ -131,6 +131,9 @@ inline constexpr uint16_t kStoneSourceHeight = 113;
 inline constexpr uint32_t kStoneSourcePixelCount =
     static_cast<uint32_t>(kStoneSourceWidth) * kStoneSourceHeight;
 inline constexpr uint32_t kStonePackedBytes = (kStoneSourcePixelCount + 1) / 2;
+// Near-black blue-grey shadow selected as #040B11 and quantized to RGB565.
+// The former 0x0204 decoded as a conspicuous green strip on the AMOLED.
+inline constexpr uint16_t kStoneShadowColor = 0x0042;
 
 enum StoneRole : uint8_t {{
   kStoneTransparent = 0,
@@ -179,7 +182,7 @@ def main() -> None:
     report = {
         "schema_version": 1,
         "status": "passed",
-        "selected_direction": "2A v4 stonewashed and centered",
+        "selected_direction": "2A v5 stonewashed with Atkinson",
         "production_asset": True,
         "builder": str(Path(__file__).resolve().relative_to(ROOT)),
         "builder_sha256": sha256(Path(__file__).resolve()),

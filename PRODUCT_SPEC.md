@@ -103,6 +103,9 @@ listing that described the original SH8601 + FT3168 revision.
 - Each letter-derived motif keeps 13 permanent anchors and one of four motif
   families. It is rendered as a shallow light/dark incision and clipped to the
   source stone's broad central plane, never painted over the bevel or cracks.
+- Card shadows use the fixed near-black blue-grey source target `#040B11`,
+  quantized to RGB565 `0x0042`. They must not use the former `0x0204`, which
+  decodes as a visibly green shadow along the stone's bottom-right silhouette.
 - Only the cards' bounded positions vary. Position variation must not alter a
   letter's color, texture, typeface, case, or white foreground treatment.
 - The onboard accelerometer translates both cards toward the same tilt target
@@ -118,9 +121,11 @@ listing that described the original SH8601 + FT3168 revision.
   pulse, card bodies and shadows remain on-screen, never overlap one another,
   and never enter the replay control's enlarged toddler hit target. The replay
   control stays fixed while the cards move, making it a dependable target.
-- Letters use a mathematically centered heavy rounded child-readable face with
-  a fixed deep-slate halo and white foreground. Texture contrast stays low so
-  the glyph is always the dominant shape.
+- Letters use Atkinson Hyperlegible Next ExtraBold 800 at a nominal 112 px,
+  one-bit rasterized for the device and mathematically centered from each
+  visible glyph's bounds. A fixed deep-slate halo and white foreground preserve
+  separation. All 26 lowercase glyphs plus the two-pixel halo fit inside the
+  138-by-158 card; texture contrast stays low so the glyph is dominant.
 - All speech and phonics are offline authored assets. There is no microphone,
   speech recognition, account, network dependency, or runtime synthesis.
 
