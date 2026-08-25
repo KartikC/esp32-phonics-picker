@@ -4,11 +4,11 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
-import os
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[5]
@@ -19,6 +19,7 @@ SOURCE = ROOT / (
 )
 OUTPUT = STUDY_DIR / "alphabet_2a_stonewashed_atkinson_contact_sheet.png"
 MANIFEST = STUDY_DIR / "render_manifest.json"
+PREVIEW_RENDERER = ROOT / "scripts/preview_on_device.py"
 
 SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
 ATKINSON_SOURCE_SHA256 = "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745"
@@ -47,21 +48,6 @@ def sha256(path: Path) -> str:
 def rgb_to_565(rgb: tuple[int, int, int]) -> int:
     r, g, b = rgb
     return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-
-
-def rgb_from_565(value: int) -> tuple[int, int, int]:
-    r = (value >> 11) & 0x1F
-    g = (value >> 5) & 0x3F
-    b = value & 0x1F
-    return (
-        round(r * 255 / 31),
-        round(g * 255 / 63),
-        round(b * 255 / 31),
-    )
-
-
-def mix(a: tuple[int, int, int], b: tuple[int, int, int], b_amount: float) -> tuple[int, int, int]:
-    return tuple(round(x * (1.0 - b_amount) + y * b_amount) for x, y in zip(a, b))
 
 
 def stonewashed_palette() -> list[int]:
@@ -94,110 +80,36 @@ def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), size)
 
 
-def glyph_masks(selected_font: ImageFont.FreeTypeFont,
-                letter_index: int) -> tuple[Image.Image, Image.Image]:
-    letter = chr(ord("a") + letter_index)
-    left, top, right, bottom = selected_font.getbbox(letter, anchor="ls")
-    width, height = right - left, bottom - top
-    native = Image.new("1", (width, height), 0)
-    ImageDraw.Draw(native).text(
-        (-left, -top), letter, font=selected_font, anchor="ls", fill=255
-    )
-    glyph = Image.new("L", CARD_SIZE, 0)
-    glyph.paste(native.convert("L"), (
-        (CARD_SIZE[0] - width) // 2,
-        (CARD_SIZE[1] - height) // 2,
-    ))
-    outline = glyph.filter(ImageFilter.MaxFilter(5))
-    outline = ImageChops.subtract(outline, glyph)
-    return glyph, outline
+def load_preview_renderer():
+    spec = importlib.util.spec_from_file_location("phonics_idle_renderer", PREVIEW_RENDERER)
+    if spec is None or spec.loader is None:
+        raise SystemExit("could not load the production idle renderer")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
-def letter_anchors(letter: str) -> list[tuple[int, int]]:
-    state = 0x9E3779B9 ^ ((ord(letter) - ord("a") + 1) * 0x45D9F3B)
-    anchors = []
-    for _ in range(13):
-        state = (state * 1664525 + 1013904223) & 0xFFFFFFFF
-        x = 17 + ((state >> 8) % (CARD_SIZE[0] - 34))
-        state = (state * 1664525 + 1013904223) & 0xFFFFFFFF
-        y = 18 + ((state >> 8) % (CARD_SIZE[1] - 36))
-        anchors.append((x, y))
-    return anchors
-
-
-def motif_mask(letter_index: int, offset: tuple[int, int]) -> Image.Image:
-    mask = Image.new("L", CARD_SIZE, 0)
-    draw = ImageDraw.Draw(mask)
-    ox, oy = offset
-    for index, (x, y) in enumerate(letter_anchors(chr(ord("a") + letter_index))):
-        x += ox
-        y += oy
-        family = letter_index % 4
-        if family == 0:
-            radius = 2 + index % 2
-            draw.ellipse((x - radius, y - radius, x + radius, y + radius), fill=255)
-            draw.ellipse((x + 4, y - 3, x + 5, y - 2), fill=255)
-        elif family == 1:
-            draw.line((x - 4, y + 3, x + 4, y - 3), fill=255, width=1)
-            draw.line((x - 2, y + 4, x + 5, y - 1), fill=255, width=1)
-        elif family == 2:
-            draw.line((x - 3, y, x + 3, y), fill=255, width=1)
-            draw.line((x, y - 3, x, y + 3), fill=255, width=1)
-            draw.point((x + 4, y + 3), fill=255)
-        else:
-            draw.rectangle((x - 2, y - 2, x + 2, y + 2), outline=255, width=1)
-            draw.point((x + 4, y - 3), fill=255)
-    return mask
-
-
-def render_card(role_image: Image.Image, selected_font: ImageFont.FreeTypeFont,
+def render_card(renderer, role_image: Image.Image,
                 letter_index: int, base565: int) -> Image.Image:
-    base = rgb_from_565(base565)
-    main = mix(base, (0, 0, 0), 0.22)
-    colors = {
-        "main_body": main,
-        "body_shadow": mix(main, (0, 0, 0), 0.22),
-        "deep_crevice": mix((11, 42, 60), main, 0.15),
-        "pale_mineral": mix((216, 238, 240), main, 0.26),
-        "deep_slate": mix((18, 74, 96), main, 0.23),
-        "mid_mineral": mix((145, 183, 190), main, 0.30),
-        "white_chip": (247, 255, 255),
-        "cyan_glint": mix((39, 211, 208), main, 0.05),
-    }
-    card = Image.new("RGBA", CARD_SIZE, (0, 0, 0, 0))
-    main_mask = Image.new("L", CARD_SIZE, 0)
-    for y in range(CARD_SIZE[1]):
-        for x in range(CARD_SIZE[0]):
-            rgba = role_image.getpixel((x, y))
-            if rgba[3] == 0:
-                continue
-            role = ROLE_COLORS[rgba[:3]]
-            card.putpixel((x, y), (*colors[role], 255))
-            if role == "main_body":
-                main_mask.putpixel((x, y), 255)
-
-    light = mix(main, colors["pale_mineral"], 0.10)
-    dark = mix(main, (0, 0, 0), 0.16)
-    light_mask = ImageChops.multiply(motif_mask(letter_index, (-1, -1)), main_mask)
-    dark_mask = ImageChops.multiply(motif_mask(letter_index, (0, 0)), main_mask)
-    card.paste((*light, 255), (0, 0, *CARD_SIZE), light_mask)
-    card.paste((*dark, 255), (0, 0, *CARD_SIZE), dark_mask)
-
-    glyph, outline = glyph_masks(selected_font, letter_index)
-    card.paste((11, 42, 60, 255), (0, 0, *CARD_SIZE), outline)
-    card.paste((247, 255, 255, 255), (0, 0, *CARD_SIZE), glyph)
-    return card
+    if renderer.COLORS_565[letter_index] != base565:
+        raise SystemExit("review palette differs from the firmware palette")
+    rendered = Image.new(
+        "RGBA", (CARD_SIZE[0] + 3, CARD_SIZE[1] + 6), (0, 0, 0, 0)
+    )
+    renderer.card(
+        rendered, chr(ord("a") + letter_index),
+        (0, 0, CARD_SIZE[0], CARD_SIZE[1]), role_image,
+    )
+    return rendered
 
 
 def main() -> None:
     if sha256(SOURCE) != SOURCE_SHA256:
         raise SystemExit("RD 82521 source hash changed")
-    atkinson_source = Path(os.environ.get(
-        "ATKINSON_FONT_SOURCE",
-        "/tmp/phonics-font-study-2026-08-25/AtkinsonHyperlegibleNext.ttf",
-    )).expanduser()
-    if not atkinson_source.is_file() or sha256(atkinson_source) != ATKINSON_SOURCE_SHA256:
-        raise SystemExit("selected Atkinson Hyperlegible Next source is missing or changed")
+    renderer = load_preview_renderer()
+    if (sha256(renderer.FONT_HEADER) != renderer.FONT_HEADER_SHA256 or
+            renderer.STONE_SOURCE_SHA256 != SOURCE_SHA256):
+        raise SystemExit("production card renderer inputs are missing or changed")
     source = Image.open(SOURCE).convert("RGBA")
     if source.getbbox() != SOURCE_BBOX:
         raise SystemExit("RD 82521 alpha bounds changed")
@@ -207,16 +119,14 @@ def main() -> None:
     if opaque_colors != set(ROLE_COLORS):
         raise SystemExit("RD 82521 semantic palette changed")
 
-    role_image = source.crop(SOURCE_BBOX).resize(CARD_SIZE, Image.Resampling.NEAREST)
-    selected_font = ImageFont.truetype(str(atkinson_source), 112)
-    selected_font.set_variation_by_axes([800])
+    role_image = source.crop(SOURCE_BBOX)
     palette = stonewashed_palette()
 
     background = (4, 17, 27)
     cell_color = (12, 48, 66)
     sheet = Image.new("RGB", SHEET_SIZE, background)
     draw = ImageDraw.Draw(sheet)
-    draw.text((28, 18), "2A v5 - stonewashed + Atkinson", font=font(28, True), fill=(255, 228, 151))
+    draw.text((28, 18), "2A v6 - tone-on-tone stonewash + Atkinson", font=font(28, True), fill=(255, 228, 151))
     draw.text(
         (28, 57),
         "Exact RD 82521 stone; 26 permanent tints stay inside one weathered clay, lichen, sea-glass and slate family.",
@@ -224,7 +134,7 @@ def main() -> None:
     )
     draw.text(
         (28, 85),
-        "Atkinson Hyperlegible Next ExtraBold 800 is one-bit rasterized and centered; cool mineral planes stay fixed.",
+        "Atkinson Hyperlegible Next ExtraBold 800 is centered; every mineral plane now follows the card tint with no cyan or navy artifacts.",
         font=font(13), fill=(219, 237, 240),
     )
 
@@ -234,12 +144,10 @@ def main() -> None:
         cell_y = 126 + row * 232
         draw.rounded_rectangle((cell_x, cell_y, cell_x + 160, cell_y + 222),
                                radius=12, fill=cell_color)
-        card = render_card(role_image, selected_font, index, base565)
+        card = render_card(renderer, role_image, index, base565)
         alpha = card.getchannel("A")
-        shadow = Image.new("RGBA", CARD_SIZE, (4, 11, 17, 255))
         # Center the 138 px card body exactly in the 160 px review cell. The
         # shadow retains the shipping three-by-six offset behind that center.
-        sheet.paste(shadow.convert("RGB"), (cell_x + 14, cell_y + 15), alpha)
         sheet.paste(card.convert("RGB"), (cell_x + 11, cell_y + 9), alpha)
         letter = chr(ord("a") + index)
         draw.text((cell_x + 9, cell_y + 184), f"{letter} | 0x{base565:04X}",
@@ -251,7 +159,7 @@ def main() -> None:
     sheet.save(OUTPUT, optimize=True)
     manifest = {
         "schema_version": 1,
-        "purpose": "Review-only combined 2A stonewashed cards with selected Atkinson letter face.",
+        "purpose": "Review-only combined 2A tone-on-tone stonewashed cards with selected Atkinson letter face.",
         "production_asset": False,
         "openai_image_generation_used": False,
         "new_generation_calls": 0,
@@ -260,12 +168,18 @@ def main() -> None:
         "source_alpha_bbox": list(SOURCE_BBOX),
         "selected_font": "Atkinson Hyperlegible Next ExtraBold 800",
         "selected_font_source_sha256": ATKINSON_SOURCE_SHA256,
+        "selected_font_header": str(renderer.FONT_HEADER.relative_to(ROOT)),
+        "selected_font_header_sha256": renderer.FONT_HEADER_SHA256,
+        "card_renderer": str(PREVIEW_RENDERER.relative_to(ROOT)),
+        "card_renderer_sha256": sha256(PREVIEW_RENDERER),
         "palette_strategy": "hand-tuned low-saturation clay, lichen, sage, sea-glass, slate, heather, and ochre family",
+        "role_color_policy": "all eight visible RD semantic regions are narrow lightness steps derived from each letter base; no fixed cyan or navy texture colors",
         "fixed_elements": [
             "RD 82521 alpha silhouette and all eight semantic regions",
-            "cool mineral planes, chips, cracks, and cyan glints",
+            "tone-on-tone mineral planes, chips, cracks, and glints",
             "letter-derived seed, 13 anchors, and four motif families",
-            "Atkinson Hyperlegible Next ExtraBold 800 one-bit glyph treatment",
+            "exact checked-in Atkinson ExtraBold 800 one-bit glyph bitmap",
+            "firmware integer sampling and motif raster order",
             "each visible glyph centered from its own rendered bounds",
             "each 138-pixel card body centered in its 160-pixel review cell",
         ],

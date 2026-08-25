@@ -21,7 +21,11 @@ PACK_HEADER = struct.Struct("<8sIIII8s")
 EXPECTED_VENDOR_COMMIT = "7ab8f957e22ea1ab811256359f4eddcaaf49ee91"
 EXPECTED_PACK_SHA256 = "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9"
 EXPECTED_STONE_SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
-EXPECTED_STONE_REVIEW_SHA256 = "a6c5f49d04bd28dda05e58170ae68e1d1b1f99f8b51fda4f46566847419a5e46"
+EXPECTED_STONE_REVIEW_SHA256 = "c59d70620c5f4b5eaeaac0c7c1715cd261c2ffb71fa886b2854a5d8c640444d6"
+EXPECTED_REPLAY_SOURCE_SHA256 = "33badbf1df0a9035a86e611eca44715dafbe1bf5c4b5390b0b20ea8d1f4dd97f"
+EXPECTED_REPLAY_METADATA_SHA256 = "98cdbddb1fb07d9abc9588888cfee6cd9a8436c9ce7ab22f0f8aaf290a6d2833"
+EXPECTED_REPLAY_PACKED_SHA256 = "580ea7cf5f1a563093ba1b8900754bee75372d800e3ec6399baca52d5c9e2569"
+EXPECTED_REPLAY_HEADER_SHA256 = "dae8475ec4bcf33bf35be5df1da838d8ca09833a1d3afbbccc4967dc28684509"
 EXPECTED_ATKINSON_SOURCE_SHA256 = "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745"
 EXPECTED_ATKINSON_CONTACT_SHA256 = "f7581b20245bc02a4b27528c525dcdfee38697adee9fdff41d852b1e727ef795"
 EXPECTED_AUDIO_COUNTS = {
@@ -285,7 +289,7 @@ def verify_letter_card_asset() -> None:
     require(report_path)
     report = json.loads(report_path.read_text())
     if (report.get("status") != "passed" or
-            report.get("selected_direction") != "2A v5 stonewashed with Atkinson" or
+            report.get("selected_direction") != "2A v6 tone-on-tone stonewash with Atkinson" or
             report.get("production_asset") is not True or
             report.get("openai_image_generation_used") is not False or
             report.get("new_generation_calls") != 0):
@@ -322,6 +326,21 @@ def verify_letter_card_asset() -> None:
             review_manifest.get("selected_font_source_sha256") !=
             EXPECTED_ATKINSON_SOURCE_SHA256):
         fail("letter-card review does not use the selected Atkinson face")
+    if review_manifest.get("role_color_policy") != (
+            "all eight visible RD semantic regions are narrow lightness steps "
+            "derived from each letter base; no fixed cyan or navy texture colors"):
+        fail("letter-card review does not use the tone-on-tone role policy")
+    if report.get("review_role_color_policy") != review_manifest.get(
+            "role_color_policy"):
+        fail("letter-card report does not pin the tone-on-tone role policy")
+    for path_key, hash_key in (
+        ("selected_font_header", "selected_font_header_sha256"),
+        ("card_renderer", "card_renderer_sha256"),
+    ):
+        path = ROOT / review_manifest[path_key]
+        require(path)
+        if sha256_file(path) != review_manifest[hash_key]:
+            fail(f"letter-card review {path_key} changed after rendering")
 
     expected_counts = {
         "transparent": 68,
@@ -375,6 +394,53 @@ def verify_selected_letter_font() -> None:
             "abcdefghijklmnopqrstuvwxyz" or
             not all(item.get("halo_fit") is True for item in glyphs)):
         fail("selected Atkinson glyph roster or card fit is invalid")
+
+
+def verify_replay_button_asset() -> None:
+    report_path = ROOT / "art/replay_button/generated/deep_loop_report.json"
+    require(report_path)
+    report = json.loads(report_path.read_text())
+    if (report.get("status") != "passed" or
+            report.get("selected_direction") != "3 - Deep loop" or
+            report.get("production_asset") is not True or
+            report.get("vendor") != "retrodiffusion" or
+            report.get("provider_model") != "rd_pro" or
+            report.get("prompt_style") != "rd_pro__simple" or
+            report.get("seed") != 82563 or
+            report.get("openai_image_generation_used") is not False or
+            report.get("new_generation_calls") != 0):
+        fail("selected Deep loop replay-button report is invalid")
+    if (report.get("source_sha256") != EXPECTED_REPLAY_SOURCE_SHA256 or
+            report.get("source_metadata_sha256") !=
+            EXPECTED_REPLAY_METADATA_SHA256 or
+            report.get("header_sha256") != EXPECTED_REPLAY_HEADER_SHA256):
+        fail("selected Deep loop replay-button identity changed")
+    for path_key, hash_key in (
+        ("builder", "builder_sha256"),
+        ("source", "source_sha256"),
+        ("source_metadata", "source_metadata_sha256"),
+        ("header", "header_sha256"),
+    ):
+        path = ROOT / report[path_key]
+        require(path)
+        if sha256_file(path) != report[hash_key]:
+            fail(f"replay-button {path_key} differs from its audited report")
+    if (report.get("source_size") != [64, 64] or
+            report.get("alpha_bbox") != [1, 1, 63, 63] or
+            report.get("opaque_pixels") != 3024 or
+            report.get("transparent_pixels") != 1072 or
+            report.get("connected_opaque_components") != 1 or
+            report.get("connected_play_glyph_components") != 1 or
+            report.get("play_glyph_bbox") != [24, 19, 46, 45] or
+            report.get("packed_bytes") != 2048 or
+            report.get("packed_sha256") != EXPECTED_REPLAY_PACKED_SHA256 or
+            report.get("palette_rgb565") != [
+                "0x0000", "0x00A4", "0x0947", "0x124C", "0x332F",
+                "0x5C74", "0x95B7", "0xDF7E", "0xF7FF",
+            ] or
+            report.get("role_pixel_counts") !=
+            [1072, 539, 2, 922, 590, 4, 1, 637, 329]):
+        fail("selected Deep loop replay-button packing contract changed")
 
 
 def verify_build(build_dir: Path) -> None:
@@ -437,6 +503,8 @@ def main() -> None:
     args = parser.parse_args()
     for relative in (
         "firmware/PhonicsGame/PhonicsGame.ino",
+        "firmware/PhonicsGame/CardStoneRendering.h",
+        "firmware/PhonicsGame/ReplayButtonAsset.h",
         "firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h",
         "firmware/PhonicsGame/fonts/NunitoBold28.h",
         "config/toolchain.env",
@@ -451,6 +519,7 @@ def main() -> None:
     verify_creature_assets()
     verify_letter_card_asset()
     verify_selected_letter_font()
+    verify_replay_button_asset()
     if args.build_dir:
         verify_build(args.build_dir.resolve())
     print("Repository payload verified")

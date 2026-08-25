@@ -12,12 +12,14 @@
 
 #include "AudioPlan.h"
 #include "CardStoneAsset.h"
+#include "CardStoneRendering.h"
 #include "CreatureRewardSelector.h"
 #include "GameEngine.h"
 #include "LayoutGeometry.h"
 #include "MaintenanceMuteController.h"
 #include "RewardAudioSelector.h"
 #include "RewardTransition.h"
+#include "ReplayButtonAsset.h"
 #include "../CreatureAssets/GeneratedCreatureVariations.h"
 #include "fonts/AtkinsonHyperlegibleNextExtraBold112.h"
 
@@ -63,7 +65,6 @@ RewardAudioSelector rewardAudioSelector(1);
 CreatureRewardPlan activeReward{};
 MaintenanceMuteController maintenanceMute;
 
-constexpr uint16_t kMoonlight = 0xEF5C;
 constexpr uint16_t kWhite = 0xFFFF;
 constexpr uint8_t kDisplayBrightness = 190;
 constexpr uint8_t kPowerButtonPin = 4;
@@ -391,25 +392,8 @@ uint8_t stoneRoleForLocalPixel(const CardRect& card,
 
 void drawStoneCardBody(const CardRect& card, uint16_t baseColor,
                        bool pulsing) {
-  // These blends are the RGB565 equivalent of the approved v4 contact-sheet
-  // treatment. Only the two broad body planes receive the letter's full tint;
-  // the remaining six mineral roles keep the source stone's cool identity.
-  const uint16_t mainBody = blend565(
-      baseColor, 0x0000, pulsing ? 215 : 199);
-  uint16_t roleColors[kStoneRoleCount] = {};
-  roleColors[kStoneMainBody] = mainBody;
-  roleColors[kStoneBodyShadow] = blend565(mainBody, 0x0000, 199);
-  roleColors[kStoneDeepCrevice] =
-      blend565(pack565(11, 42, 60), mainBody, 217);
-  roleColors[kStonePaleMineral] =
-      blend565(pack565(216, 238, 240), mainBody, 189);
-  roleColors[kStoneDeepSlate] =
-      blend565(pack565(18, 74, 96), mainBody, 196);
-  roleColors[kStoneMidMineral] =
-      blend565(pack565(145, 183, 190), mainBody, 178);
-  roleColors[kStoneWhiteChip] = pack565(247, 255, 255);
-  roleColors[kStoneCyanGlint] =
-      blend565(pack565(39, 211, 208), mainBody, 242);
+  const StoneRolePalette roleColors =
+      makeStoneRolePalette(baseColor, pulsing);
 
   uint16_t* framebuffer = gfx->getFramebuffer();
   // The shadow offset is positive in both axes. Writing it immediately before
@@ -513,11 +497,12 @@ void drawLetterTexture(const CardRect& card, char letter, uint16_t baseColor,
   // identical in every round and across restarts.
   uint32_t state = 0x9E3779B9u ^
                    (static_cast<uint32_t>(letter - 'a' + 1) * 0x45D9F3Bu);
-  const uint16_t mainBody = blend565(
-      baseColor, 0x0000, pulsing ? 215 : 199);
-  const uint16_t lightIncision = blend565(
-      mainBody, pack565(216, 238, 240), 230);
-  const uint16_t darkIncision = blend565(mainBody, 0x0000, 214);
+  const StoneRolePalette roleColors =
+      makeStoneRolePalette(baseColor, pulsing);
+  const uint16_t mainBody = roleColors[kStoneMainBody];
+  const uint16_t lightIncision = stoneBlend565(
+      mainBody, roleColors[kStonePaleMineral], 230);
+  const uint16_t darkIncision = stoneBlend565(mainBody, 0x0000, 214);
   const uint8_t family = static_cast<uint8_t>((letter - 'a') % 4);
   for (uint8_t i = 0; i < 13; ++i) {
     state = state * 1664525u + 1013904223u;
@@ -551,28 +536,28 @@ void drawCard(const CardRect& card, char letter, bool pulsing) {
 }
 
 void drawReplayButton() {
-  gfx->fillCircle(kReplayCenterX, kReplayCenterY, kReplayVisualRadius,
-                  blend565(0x1CBF, 0x0000, 105));
-  gfx->drawCircle(kReplayCenterX, kReplayCenterY, kReplayVisualRadius,
-                  kMoonlight);
-  gfx->drawCircle(kReplayCenterX, kReplayCenterY,
-                  kReplayVisualRadius - 1, blend565(kWhite, 0x1CBF, 165));
-  if (usbDataConnected && maintenanceMute.muted()) {
-    // The mute indicator replaces the replay glyph only while a USB data host
-    // is present; unplugging returns the child-facing screen to its usual UI.
-    gfx->fillRect(kReplayCenterX - 12, kReplayCenterY - 5, 6, 10, kWhite);
-    gfx->fillTriangle(kReplayCenterX - 6, kReplayCenterY - 9,
-                      kReplayCenterX - 6, kReplayCenterY + 9,
-                      kReplayCenterX + 2, kReplayCenterY + 5, kWhite);
-    const uint16_t slash = 0xFBAE;
-    gfx->drawLine(kReplayCenterX - 14, kReplayCenterY - 14,
-                  kReplayCenterX + 14, kReplayCenterY + 14, slash);
-    gfx->drawLine(kReplayCenterX - 13, kReplayCenterY - 14,
-                  kReplayCenterX + 15, kReplayCenterY + 14, slash);
-  } else {
-    gfx->fillTriangle(kReplayCenterX - 8, kReplayCenterY - 11,
-                      kReplayCenterX - 8, kReplayCenterY + 11,
-                      kReplayCenterX + 11, kReplayCenterY, kWhite);
+  const bool muted = usbDataConnected && maintenanceMute.muted();
+  constexpr int16_t originX =
+      kReplayCenterX - static_cast<int16_t>(kReplayButtonWidth / 2);
+  constexpr int16_t originY =
+      kReplayCenterY - static_cast<int16_t>(kReplayButtonHeight / 2);
+  uint16_t* framebuffer = gfx->getFramebuffer();
+  for (uint16_t localY = 0; localY < kReplayButtonHeight; ++localY) {
+    for (uint16_t localX = 0; localX < kReplayButtonWidth; ++localX) {
+      const uint8_t role = replayButtonRoleAt(localX, localY);
+      if (role == kReplayButtonTransparent) continue;
+      framebuffer[static_cast<uint32_t>(originY + localY) * LCD_WIDTH +
+                  originX + localX] = kReplayButtonPalette[role];
+    }
+  }
+  if (muted) {
+    // A simple two-pixel warm-red slash preserves the selected Deep loop art
+    // and makes the USB-only maintenance state legible at a glance.
+    const uint16_t slash = pack565(232, 72, 72);
+    gfx->drawLine(kReplayCenterX - 22, kReplayCenterY - 22,
+                  kReplayCenterX + 22, kReplayCenterY + 22, slash);
+    gfx->drawLine(kReplayCenterX - 21, kReplayCenterY - 22,
+                  kReplayCenterX + 23, kReplayCenterY + 22, slash);
   }
 }
 

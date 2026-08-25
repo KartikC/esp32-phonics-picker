@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "purpose": "Review-only combined 2A stonewashed cards with selected Atkinson letter face.",
+  "purpose": "Review-only combined 2A tone-on-tone stonewashed cards with selected Atkinson letter face.",
   "production_asset": false,
   "openai_image_generation_used": false,
   "new_generation_calls": 0,
@@ -14,12 +14,18 @@
   ],
   "selected_font": "Atkinson Hyperlegible Next ExtraBold 800",
   "selected_font_source_sha256": "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745",
+  "selected_font_header": "firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h",
+  "selected_font_header_sha256": "18530ac78dbd2b366693e63e0ea69fd13556534b72ffa0afcbf456aac88e3c7d",
+  "card_renderer": "scripts/preview_on_device.py",
+  "card_renderer_sha256": "a6e4bff512084ce2aefaefffe62b9ed02c83a5282c267e61675204908b0ee3c1",
   "palette_strategy": "hand-tuned low-saturation clay, lichen, sage, sea-glass, slate, heather, and ochre family",
+  "role_color_policy": "all eight visible RD semantic regions are narrow lightness steps derived from each letter base; no fixed cyan or navy texture colors",
   "fixed_elements": [
     "RD 82521 alpha silhouette and all eight semantic regions",
-    "cool mineral planes, chips, cracks, and cyan glints",
+    "tone-on-tone mineral planes, chips, cracks, and glints",
     "letter-derived seed, 13 anchors, and four motif families",
-    "Atkinson Hyperlegible Next ExtraBold 800 one-bit glyph treatment",
+    "exact checked-in Atkinson ExtraBold 800 one-bit glyph bitmap",
+    "firmware integer sampling and motif raster order",
     "each visible glyph centered from its own rendered bounds",
     "each 138-pixel card body centered in its 160-pixel review cell"
   ],
@@ -157,7 +163,7 @@
   ],
   "output": {
     "path": "art/generated/one_off/letter_card_surfaces_2026-08-25/alphabet_extrapolation_stone_wide_palette/alphabet_2a_stonewashed_atkinson_contact_sheet.png",
-    "sha256": "a6c5f49d04bd28dda05e58170ae68e1d1b1f99f8b51fda4f46566847419a5e46",
+    "sha256": "c59d70620c5f4b5eaeaac0c7c1715cd261c2ffb71fa886b2854a5d8c640444d6",
     "size": [
       1136,
       1310

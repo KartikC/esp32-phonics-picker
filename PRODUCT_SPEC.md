@@ -15,10 +15,13 @@ listing that described the original SH8601 + FT3168 revision.
   layouts vary independently. Layout variation is subtle and never changes hit
   area size, overlaps cards, crowds an edge, or hints at the correct answer.
 - During an active round, the screen contains exactly two letter cards and one
-  fixed replay control near the top. There is no printed "listen", "pick one",
-  score, or instructional
-  chrome. The replay control repeats the exact current prompt and sound without
-  changing the round, and restarts the current idle-nudge deadline.
+  fixed replay control near the top. The control is the untouched native 64x64
+  Retro Diffusion `rd_pro` Deep loop from seed `82563`, centered at `(184, 60)`
+  with its 62x62 opaque silhouette inside the existing 42-pixel-radius toddler
+  hit target. It is never resized or cropped. There is no printed "listen",
+  "pick one", score, or instructional chrome. The replay control repeats the
+  exact current prompt and sound without changing the round, and restarts the
+  current idle-nudge deadline.
 - The only parent-facing status mark is a centered row of three-pixel-radius
   dots at the extreme top edge: three dim green dots mean high/full (60-100%),
   two dim yellow dots mean medium (25-59%), and one dim red dot means low
@@ -97,9 +100,11 @@ listing that described the original SH8601 + FT3168 revision.
 - Every card uses the exact selected Retro Diffusion `rd_pro` seed `82521`
   carved tide-stone silhouette. Its irregular chips, cracks, asymmetrical
   bevel, and eight semantic source regions are retained in one compact packed
-  map. Only the broad body and shadow planes receive the letter tint; cool
-  crevices, mineral planes, white chips, and cyan glints remain substantially
-  palette-independent so all 26 cards read as the same weathered material.
+  map. Every visible region is a narrow lightness step derived from the
+  letter's stonewashed base color. No fixed cyan glint or navy crack color may
+  appear: the source geometry remains, but its texture is tone-on-tone so all
+  26 cards read as the same subtle weathered material without green specks or
+  blue line artifacts.
 - Each letter-derived motif keeps 13 permanent anchors and one of four motif
   families. It is rendered as a shallow light/dark incision and clipped to the
   source stone's broad central plane, never painted over the bevel or cracks.
@@ -165,11 +170,12 @@ listing that described the original SH8601 + FT3168 revision.
   anywhere in the replay control's complete 42-pixel-radius hit target within
   500 ms toggles mute. A lone tap becomes replay after that window. With no
   data host, every replay tap is immediate and the gesture cannot enter mute.
-- While muted, the replay glyph becomes a crossed-speaker indicator. That icon
-  is never shown without the data host. Mute is not persisted and clears after
-  1.8 seconds of sustained data disconnect. Standby and maintenance mute share
-  the same fail-safe codec mute and speaker-amplifier gate; waking never
-  overrides an active maintenance mute.
+- While muted, a two-pixel warm-red diagonal slash crosses the otherwise
+  unchanged Deep loop control. That mark is never shown without the data host.
+  Mute is not persisted and clears after 1.8 seconds of sustained data
+  disconnect. Standby and maintenance mute share the same fail-safe codec mute
+  and speaker-amplifier gate; waking never overrides an active maintenance
+  mute.
 
 - Playback uses the onboard ES8311 and NS4150B speaker amplifier at managed
   logical volume 90. On this board that is ES8311 `DAC_REG32 = 0xBC`, 5 dB

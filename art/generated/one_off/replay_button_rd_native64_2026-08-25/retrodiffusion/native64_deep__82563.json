@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "native64_deep",
+  "label": "3 - Deep loop",
+  "seed": 82563,
+  "task_id": "23e1d07d-ba78-4c95-ad3a-0c811de280a8",
+  "prompt": "A single complete 64 by 64 low-resolution game UI replay button for a toddler phonics game. One centered circular ocean-current control filling most of the native 64 by 64 transparent canvas while keeping every outline pixel and the entire circle visible. Flat front view, perfect circular alignment, broad clean pixel clusters, dark navy contour, deep teal and moon-pale cyan palette. One large solid white right-facing triangular play symbol is perfectly centered and remains the dominant shape. One calm clockwise tidal loop is integrated inside the rim to communicate replay. Transparent empty background. No crop, clipping, text, animal, face, scenery, loose bubbles, cast shadow, detached pixels, checkerboard, colored square, glow, second button, pause bars, stop square, speaker, music note, hand, photographic rendering, antialiasing, or one-pixel noise. Dark navy rim, deep ocean-blue face, one chunky two-tone teal and pale-cyan current loop, heavier on the lower-left arc with a calm upper-right taper. No shine, foam, pearl, bevel, or extra ring.",
+  "prompt_style": "rd_pro__simple",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    64,
+    64
+  ],
+  "source_mode": "RGBA",
+  "alpha_bbox": [
+    1,
+    1,
+    63,
+    63
+  ],
+  "corner_transparency_gate_passed": true,
+  "postprocess": "none; PNG bytes are the untouched Retro Diffusion task result",
+  "png_sha256": "33badbf1df0a9035a86e611eca44715dafbe1bf5c4b5390b0b20ea8d1f4dd97f",
+  "generated_at": "2026-08-25T16:36:37Z",
+  "png": "art/generated/one_off/replay_button_rd_native64_2026-08-25/retrodiffusion/native64_deep__82563.png"
+}

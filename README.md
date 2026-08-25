@@ -87,14 +87,15 @@ agents are in [AGENTS.md](AGENTS.md).
    small centered name at the bottom identifies the creature during its
    appearance.
 
-The round never prints or otherwise reveals the answer. The fixed play button
-at the top repeats the exact current prompt. Gently tilting the board lets both
-cards drift together without changing their touch targets or which answer is
-correct.
+The round never prints or otherwise reveals the answer. The fixed ocean-current
+**Deep loop** play button at the top repeats the exact current prompt. Gently
+tilting the board lets both cards drift together without changing their touch
+targets or which answer is correct.
 
 For bench work with a USB data cable attached, double-tap inside the visible
-play circle to mute or unmute; a crossed-speaker icon shows mute. A charge-only
-cable cannot enable this gesture, and disconnecting data clears mute.
+play circle to mute or unmute; a warm-red slash across the control shows mute.
+A charge-only cable cannot enable this gesture, and disconnecting data clears
+mute.
 
 The tiny dots at the top are parent-facing battery status:
 
@@ -124,7 +125,10 @@ The repository pins and includes everything needed for the installed result:
 - Arduino-ESP32 core 3.3.11
 - Waveshare source commit `7ab8f957e22ea1ab811256359f4eddcaaf49ee91`
 - the selected Retro Diffusion `82521` carved tide-stone source, its audited
-  four-bit semantic runtime map, and the approved 26-color stonewashed palette
+  four-bit semantic runtime map, approved 26-color stonewashed palette, and
+  tone-on-tone mineral-role policy
+- the selected untouched native 64x64 Retro Diffusion `82563` Deep loop replay
+  button, its exact indexed runtime map, source hash, and generation provenance
 - a fixed build epoch taken from the hardware-verified firmware commit, so the
   application binary is byte-reproducible across clean builds
 - the slim display, touch, and IMU sources used by the build

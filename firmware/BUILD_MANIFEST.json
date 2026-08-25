@@ -28,8 +28,8 @@
     {
       "name": "PhonicsGame.ino.bin",
       "offset": "0x10000",
-      "bytes": 1520256,
-      "sha256": "373805b980ce954db88f35b4284b1908950f573020ead0f762f6300e022c896b"
+      "bytes": 1522400,
+      "sha256": "5ef2432dabd32cbf80850ce183891ec8d2b5c8438881f6f18316325706945e79"
     },
     {
       "name": "phonics-audio-pack.bin",

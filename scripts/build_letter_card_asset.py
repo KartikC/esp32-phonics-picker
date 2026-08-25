@@ -26,7 +26,7 @@ HEADER = ROOT / "firmware/PhonicsGame/CardStoneAsset.h"
 REPORT = ROOT / "art/letter_cards/generated/stone_card_report.json"
 
 SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
-REVIEW_SHA256 = "a6c5f49d04bd28dda05e58170ae68e1d1b1f99f8b51fda4f46566847419a5e46"
+REVIEW_SHA256 = "c59d70620c5f4b5eaeaac0c7c1715cd261c2ffb71fa886b2854a5d8c640444d6"
 SOURCE_BBOX = (20, 7, 108, 120)
 
 ROLE_DEFINITIONS = (
@@ -68,6 +68,13 @@ def validate_review() -> dict:
         fail("approved review palette changed")
     if manifest.get("openai_image_generation_used") is not False:
         fail("approved review provenance is invalid")
+    for path_key, hash_key in (
+        ("selected_font_header", "selected_font_header_sha256"),
+        ("card_renderer", "card_renderer_sha256"),
+    ):
+        path = ROOT / manifest[path_key]
+        if not path.is_file() or sha256(path) != manifest[hash_key]:
+            fail(f"approved review {path_key} changed after rendering")
     return manifest
 
 
@@ -148,7 +155,7 @@ enum StoneRole : uint8_t {{
   kStoneRoleCount = 9,
 }};
 
-// Permanent a-z learning anchors selected in the approved stonewashed v4
+// Permanent a-z learning anchors selected in the approved tone-on-tone v6
 // contact sheet. Never regenerate or reorder this table.
 inline constexpr uint16_t kStoneLetterColors[26] = {{
 {format_values(color_values, 7)}
@@ -182,7 +189,7 @@ def main() -> None:
     report = {
         "schema_version": 1,
         "status": "passed",
-        "selected_direction": "2A v5 stonewashed with Atkinson",
+        "selected_direction": "2A v6 tone-on-tone stonewash with Atkinson",
         "production_asset": True,
         "builder": str(Path(__file__).resolve().relative_to(ROOT)),
         "builder_sha256": sha256(Path(__file__).resolve()),
@@ -204,6 +211,7 @@ def main() -> None:
         "header_sha256": sha256(HEADER),
         "palette": [f"0x{value:04X}" for value in LETTER_COLORS],
         "review_palette_strategy": review_manifest["palette_strategy"],
+        "review_role_color_policy": review_manifest["role_color_policy"],
     }
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=2) + "\n")

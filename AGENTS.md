@@ -40,6 +40,9 @@ preflight checks and uses the offsets above.
 
 - interaction and visual behavior: `PRODUCT_SPEC.md`
 - app firmware: `firmware/PhonicsGame/`
+- selected replay control: `firmware/PhonicsGame/ReplayButtonAsset.h` generated
+  from the audited source recorded in
+  `art/replay_button/generated/deep_loop_report.json`
 - reviewed creature runtime assets: `firmware/CreatureAssets/` generated from
   `creatures/variation/variation_manifest.json`
 - accepted audio: `audio/generated/device-pcm/`
@@ -60,16 +63,18 @@ external authoring sources and can change the accepted experience.
 Run `./scripts/test.sh --firmware` after source changes. For a physical install,
 also run `scripts/verify_device.py` and manually confirm:
 
-- an active round shows only two lowercase cards, the fixed play button, and
-  tiny battery dots on a black background;
+- an active round shows only two tone-on-tone lowercase stone cards, the fixed
+  Deep loop play button, and tiny battery dots on a black background; no bright
+  green specks or palette-independent blue lines appear on either card;
 - replay is audible;
 - a correct reward audibly plays praise, then bubbles, then the matching
   creature gesture; the creature is slightly louder than the bubble bed;
 - both cards respond to tilt;
 - a wrong tap retains the round and a correct tap shows one large water-creature
   reward before advancing;
-- with USB data attached, a replay-circle double tap mutes with a crossed
-  speaker indicator, a second double tap unmutes, and disconnect clears mute;
+- with USB data attached, a replay-circle double tap mutes with a warm-red
+  slash across the control, a second double tap unmutes, and disconnect clears
+  mute;
 - short PWR press/release sleeps and wakes to the same round.
 
 Never report a hardware deployment as verified from compilation alone.

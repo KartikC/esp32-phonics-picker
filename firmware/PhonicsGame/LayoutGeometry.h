@@ -42,7 +42,7 @@ constexpr int16_t kCardShadowX = 3;
 constexpr int16_t kCardShadowY = 6;
 constexpr int16_t kReplayCenterX = kScreenWidth / 2;
 constexpr int16_t kReplayCenterY = 60;
-constexpr int16_t kReplayVisualRadius = 28;
+constexpr int16_t kReplayVisualRadius = 32;
 constexpr int16_t kReplayHitRadius = 42;
 
 constexpr CardRect makeCardRect(bool left, uint8_t layoutVariant,

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "selected_direction": "3 - Deep loop",
+  "production_asset": true,
+  "vendor": "retrodiffusion",
+  "provider_model": "rd_pro",
+  "prompt_style": "rd_pro__simple",
+  "seed": 82563,
+  "task_id": "23e1d07d-ba78-4c95-ad3a-0c811de280a8",
+  "provider_reported_balance_cost": 0.18,
+  "openai_image_generation_used": false,
+  "new_generation_calls": 0,
+  "postprocess": "none before deterministic indexed packing",
+  "builder": "scripts/build_replay_button_asset.py",
+  "builder_sha256": "18474fd0af5e1b63b0c6fc0798e7ba32a57cd2285f755f206068d25c6bdc6307",
+  "source": "art/generated/one_off/replay_button_rd_native64_2026-08-25/retrodiffusion/native64_deep__82563.png",
+  "source_sha256": "33badbf1df0a9035a86e611eca44715dafbe1bf5c4b5390b0b20ea8d1f4dd97f",
+  "source_metadata": "art/generated/one_off/replay_button_rd_native64_2026-08-25/retrodiffusion/native64_deep__82563.json",
+  "source_metadata_sha256": "98cdbddb1fb07d9abc9588888cfee6cd9a8436c9ce7ab22f0f8aaf290a6d2833",
+  "source_size": [
+    64,
+    64
+  ],
+  "alpha_bbox": [
+    1,
+    1,
+    63,
+    63
+  ],
+  "opaque_pixels": 3024,
+  "transparent_pixels": 1072,
+  "connected_opaque_components": 1,
+  "connected_play_glyph_components": 1,
+  "play_glyph_bbox": [
+    24,
+    19,
+    46,
+    45
+  ],
+  "packed_bytes": 2048,
+  "packed_sha256": "580ea7cf5f1a563093ba1b8900754bee75372d800e3ec6399baca52d5c9e2569",
+  "header": "firmware/PhonicsGame/ReplayButtonAsset.h",
+  "header_sha256": "dae8475ec4bcf33bf35be5df1da838d8ca09833a1d3afbbccc4967dc28684509",
+  "palette_rgb565": [
+    "0x0000",
+    "0x00A4",
+    "0x0947",
+    "0x124C",
+    "0x332F",
+    "0x5C74",
+    "0x95B7",
+    "0xDF7E",
+    "0xF7FF"
+  ],
+  "role_pixel_counts": [
+    1072,
+    539,
+    2,
+    922,
+    590,
+    4,
+    1,
+    637,
+    329
+  ]
+}

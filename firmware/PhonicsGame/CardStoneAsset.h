@@ -34,7 +34,7 @@ enum StoneRole : uint8_t {
   kStoneRoleCount = 9,
 };
 
-// Permanent a-z learning anchors selected in the approved stonewashed v4
+// Permanent a-z learning anchors selected in the approved tone-on-tone v6
 // contact sheet. Never regenerate or reorder this table.
 inline constexpr uint16_t kStoneLetterColors[26] = {
     0x8B0A, 0x5BCD, 0x732F, 0x7BC9, 0x536F, 0x830D, 0x5BAB,
