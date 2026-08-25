@@ -123,6 +123,8 @@ The repository pins and includes everything needed for the installed result:
 - Arduino CLI 1.5.1, downloaded with an official SHA-256 check
 - Arduino-ESP32 core 3.3.11
 - Waveshare source commit `7ab8f957e22ea1ab811256359f4eddcaaf49ee91`
+- the selected Retro Diffusion `82521` carved tide-stone source, its audited
+  four-bit semantic runtime map, and the approved 26-color stonewashed palette
 - a fixed build epoch taken from the hardware-verified firmware commit, so the
   application binary is byte-reproducible across clean builds
 - the slim display, touch, and IMU sources used by the build

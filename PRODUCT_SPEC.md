@@ -89,9 +89,20 @@ listing that described the original SH8601 + FT3168 revision.
   no gradient, tint, or decorative field. The animated blue-green water exists
   only inside the correct-answer reward transition. Its seabed remains quiet
   and contains no stationary decorative circles.
-- Each lowercase letter has a permanent visual identity: one fixed card color
-  and one fixed subtle motif. These mappings are learning anchors and must
-  never be shuffled, regenerated per round, or reassigned in a later release.
+- Each lowercase letter has a permanent visual identity: one fixed stonewashed
+  card color and one fixed subtle motif. The 26 unique RGB565 colors stay
+  inside a weathered clay, lichen, sage, sea-glass, slate, heather, and ochre
+  family. These mappings are learning anchors and must never be shuffled,
+  regenerated per round, or reassigned in a later release.
+- Every card uses the exact selected Retro Diffusion `rd_pro` seed `82521`
+  carved tide-stone silhouette. Its irregular chips, cracks, asymmetrical
+  bevel, and eight semantic source regions are retained in one compact packed
+  map. Only the broad body and shadow planes receive the letter tint; cool
+  crevices, mineral planes, white chips, and cyan glints remain substantially
+  palette-independent so all 26 cards read as the same weathered material.
+- Each letter-derived motif keeps 13 permanent anchors and one of four motif
+  families. It is rendered as a shallow light/dark incision and clipped to the
+  source stone's broad central plane, never painted over the bevel or cracks.
 - Only the cards' bounded positions vary. Position variation must not alter a
   letter's color, texture, typeface, case, or white foreground treatment.
 - The onboard accelerometer translates both cards toward the same tilt target
@@ -107,8 +118,9 @@ listing that described the original SH8601 + FT3168 revision.
   pulse, card bodies and shadows remain on-screen, never overlap one another,
   and never enter the replay control's enlarged toddler hit target. The replay
   control stays fixed while the cards move, making it a dependable target.
-- Letters use a heavy rounded child-readable face with a dark halo. Texture
-  contrast stays low so the glyph is always the dominant shape.
+- Letters use a mathematically centered heavy rounded child-readable face with
+  a fixed deep-slate halo and white foreground. Texture contrast stays low so
+  the glyph is always the dominant shape.
 - All speech and phonics are offline authored assets. There is no microphone,
   speech recognition, account, network dependency, or runtime synthesis.
 

@@ -11,6 +11,7 @@
 #include "esp_sleep.h"
 
 #include "AudioPlan.h"
+#include "CardStoneAsset.h"
 #include "CreatureRewardSelector.h"
 #include "GameEngine.h"
 #include "LayoutGeometry.h"
@@ -80,15 +81,6 @@ constexpr uint32_t kTouchSafetyPollMs = 64;
 // so standby must wake briefly to poll it. Fifty milliseconds preserves the
 // existing debounce cadence while clock-gating both CPU cores between polls.
 constexpr uint64_t kStandbyPollUs = 50000;
-// Permanent a-z identities. Never randomize or reorder this table: the color
-// is part of the child's visual memory of each letter.
-constexpr uint16_t kLetterColors[26] = {
-    0x934A, 0x1B6A, 0x63C8, 0x93A3, 0x2B4A, 0x8B4A, 0x13A9,
-    0x8364, 0x3B88, 0x9345, 0x238B, 0x7323, 0x538A, 0x9325,
-    0x1387, 0x6B68, 0x7B23, 0x2B8B, 0x9328, 0x1B85, 0x8B66,
-    0x43AA, 0x9323, 0x138A, 0x7B46, 0x6B43,
-};
-
 bool touchWasDown = false;
 volatile bool touchInterruptPending = false;
 bool touchInterruptGateAvailable = false;
@@ -385,12 +377,148 @@ void drawCentered(const char* text, int16_t centerX, int16_t centerY,
   gfx->print(text);
 }
 
-void drawLetterTexture(const CardRect& card, char letter, uint16_t baseColor) {
+uint8_t stoneRoleForLocalPixel(const CardRect& card,
+                               int16_t localX, int16_t localY) {
+  if (localX < 0 || localY < 0 || localX >= card.w || localY >= card.h) {
+    return kStoneTransparent;
+  }
+  const uint16_t sourceX = static_cast<uint16_t>(
+      static_cast<uint32_t>(localX) * kStoneSourceWidth / card.w);
+  const uint16_t sourceY = static_cast<uint16_t>(
+      static_cast<uint32_t>(localY) * kStoneSourceHeight / card.h);
+  return stoneRoleAt(sourceX, sourceY);
+}
+
+void drawStoneCardBody(const CardRect& card, uint16_t baseColor,
+                       bool pulsing) {
+  // These blends are the RGB565 equivalent of the approved v4 contact-sheet
+  // treatment. Only the two broad body planes receive the letter's full tint;
+  // the remaining six mineral roles keep the source stone's cool identity.
+  const uint16_t mainBody = blend565(
+      baseColor, 0x0000, pulsing ? 215 : 199);
+  uint16_t roleColors[kStoneRoleCount] = {};
+  roleColors[kStoneMainBody] = mainBody;
+  roleColors[kStoneBodyShadow] = blend565(mainBody, 0x0000, 199);
+  roleColors[kStoneDeepCrevice] =
+      blend565(pack565(11, 42, 60), mainBody, 217);
+  roleColors[kStonePaleMineral] =
+      blend565(pack565(216, 238, 240), mainBody, 189);
+  roleColors[kStoneDeepSlate] =
+      blend565(pack565(18, 74, 96), mainBody, 196);
+  roleColors[kStoneMidMineral] =
+      blend565(pack565(145, 183, 190), mainBody, 178);
+  roleColors[kStoneWhiteChip] = pack565(247, 255, 255);
+  roleColors[kStoneCyanGlint] =
+      blend565(pack565(39, 211, 208), mainBody, 242);
+
+  uint16_t* framebuffer = gfx->getFramebuffer();
+  // The shadow offset is positive in both axes. Writing it immediately before
+  // each source pixel is safe in top-to-bottom order: later opaque body pixels
+  // cover the shadow, while the irregular perimeter and chipped notches retain
+  // the exact silhouette. This halves semantic-map lookups during tilt redraws.
+  for (int16_t localY = 0; localY < card.h; ++localY) {
+    const int16_t destinationY = card.y + localY;
+    const uint16_t sourceY = static_cast<uint16_t>(
+        static_cast<uint32_t>(localY) * kStoneSourceHeight / card.h);
+    for (int16_t localX = 0; localX < card.w; ++localX) {
+      const uint16_t sourceX = static_cast<uint16_t>(
+          static_cast<uint32_t>(localX) * kStoneSourceWidth / card.w);
+      const uint8_t role = stoneRoleAt(sourceX, sourceY);
+      if (role == kStoneTransparent) continue;
+      const int16_t shadowX = card.x + kCardShadowX + localX;
+      const int16_t shadowY = card.y + kCardShadowY + localY;
+      if (shadowX >= 0 && shadowX < LCD_WIDTH &&
+          shadowY >= 0 && shadowY < LCD_HEIGHT) {
+        framebuffer[static_cast<uint32_t>(shadowY) * LCD_WIDTH + shadowX] =
+            0x0204;
+      }
+      const int16_t destinationX = card.x + localX;
+      if (destinationX >= 0 && destinationX < LCD_WIDTH &&
+          destinationY >= 0 && destinationY < LCD_HEIGHT) {
+        framebuffer[static_cast<uint32_t>(destinationY) * LCD_WIDTH +
+                    destinationX] = roleColors[role];
+      }
+    }
+  }
+}
+
+void drawStoneMotifPixel(const CardRect& card, int16_t x, int16_t y,
+                         uint16_t color) {
+  const int16_t localX = x - card.x;
+  const int16_t localY = y - card.y;
+  if (stoneRoleForLocalPixel(card, localX, localY) != kStoneMainBody) return;
+  if (x < 0 || x >= LCD_WIDTH || y < 0 || y >= LCD_HEIGHT) return;
+  gfx->getFramebuffer()[static_cast<uint32_t>(y) * LCD_WIDTH + x] = color;
+}
+
+void drawStoneMotifLine(const CardRect& card, int16_t x0, int16_t y0,
+                        int16_t x1, int16_t y1, uint16_t color) {
+  int16_t dx = abs(x1 - x0);
+  const int16_t stepX = x0 < x1 ? 1 : -1;
+  const int16_t dy = -abs(y1 - y0);
+  const int16_t stepY = y0 < y1 ? 1 : -1;
+  int16_t error = dx + dy;
+  while (true) {
+    drawStoneMotifPixel(card, x0, y0, color);
+    if (x0 == x1 && y0 == y1) break;
+    const int16_t doubled = error * 2;
+    if (doubled >= dy) {
+      error += dy;
+      x0 += stepX;
+    }
+    if (doubled <= dx) {
+      error += dx;
+      y0 += stepY;
+    }
+  }
+}
+
+void drawStoneMotifShape(const CardRect& card, uint8_t family, uint8_t index,
+                         int16_t x, int16_t y, uint16_t color) {
+  switch (family) {
+    case 0: {
+      const int16_t radius = 2 + (index % 2);
+      for (int16_t dy = -radius; dy <= radius; ++dy) {
+        for (int16_t dx = -radius; dx <= radius; ++dx) {
+          if (dx * dx + dy * dy <= radius * radius) {
+            drawStoneMotifPixel(card, x + dx, y + dy, color);
+          }
+        }
+      }
+      drawStoneMotifPixel(card, x + 4, y - 3, color);
+      break;
+    }
+    case 1:
+      drawStoneMotifLine(card, x - 4, y + 3, x + 4, y - 3, color);
+      drawStoneMotifLine(card, x - 2, y + 4, x + 5, y - 1, color);
+      break;
+    case 2:
+      drawStoneMotifLine(card, x - 3, y, x + 3, y, color);
+      drawStoneMotifLine(card, x, y - 3, x, y + 3, color);
+      drawStoneMotifPixel(card, x + 4, y + 3, color);
+      break;
+    default:
+      drawStoneMotifLine(card, x - 2, y - 2, x + 2, y - 2, color);
+      drawStoneMotifLine(card, x + 2, y - 2, x + 2, y + 2, color);
+      drawStoneMotifLine(card, x + 2, y + 2, x - 2, y + 2, color);
+      drawStoneMotifLine(card, x - 2, y + 2, x - 2, y - 2, color);
+      drawStoneMotifPixel(card, x + 4, y - 3, color);
+      break;
+  }
+}
+
+void drawLetterTexture(const CardRect& card, char letter, uint16_t baseColor,
+                       bool pulsing) {
   // The seed and motif depend only on the letter, so the visual anchor is
   // identical in every round and across restarts.
   uint32_t state = 0x9E3779B9u ^
                    (static_cast<uint32_t>(letter - 'a' + 1) * 0x45D9F3Bu);
-  const uint16_t texture = blend565(kWhite, baseColor, 34);
+  const uint16_t mainBody = blend565(
+      baseColor, 0x0000, pulsing ? 215 : 199);
+  const uint16_t lightIncision = blend565(
+      mainBody, pack565(216, 238, 240), 230);
+  const uint16_t darkIncision = blend565(mainBody, 0x0000, 214);
+  const uint8_t family = static_cast<uint8_t>((letter - 'a') % 4);
   for (uint8_t i = 0; i < 13; ++i) {
     state = state * 1664525u + 1013904223u;
     const int16_t x = card.x + 17 +
@@ -398,42 +526,24 @@ void drawLetterTexture(const CardRect& card, char letter, uint16_t baseColor) {
     state = state * 1664525u + 1013904223u;
     const int16_t y = card.y + 18 +
                       static_cast<int16_t>((state >> 8) % (card.h - 36));
-    switch ((letter - 'a') % 4) {
-      case 0:
-        gfx->fillCircle(x, y, 2 + (i % 2), texture);
-        break;
-      case 1:
-        gfx->drawLine(x - 4, y + 3, x + 4, y - 3, texture);
-        break;
-      case 2:
-        gfx->drawLine(x - 3, y, x + 3, y, texture);
-        gfx->drawLine(x, y - 3, x, y + 3, texture);
-        break;
-      default:
-        gfx->drawRect(x - 2, y - 2, 5, 5, texture);
-        break;
-    }
+    drawStoneMotifShape(card, family, i, x - 1, y - 1, lightIncision);
+    drawStoneMotifShape(card, family, i, x, y, darkIncision);
   }
 }
 
 void drawCard(const CardRect& card, char letter, bool pulsing) {
-  const uint16_t color = kLetterColors[letter - 'a'];
-  gfx->fillRoundRect(card.x + 3, card.y + 6, card.w, card.h, 20, 0x0204);
-  gfx->fillRoundRect(card.x, card.y, card.w, card.h, 20,
-                     blend565(color, 0x0000, pulsing ? 225 : 205));
-  gfx->drawRoundRect(card.x, card.y, card.w, card.h, 20,
-                     pulsing ? kWhite : blend565(kWhite, color, 145));
-  gfx->drawFastHLine(card.x + 22, card.y + 11, card.w - 44,
-                     blend565(kWhite, color, 165));
-  drawLetterTexture(card, letter, color);
+  const uint16_t color = kStoneLetterColors[letter - 'a'];
+  drawStoneCardBody(card, color, pulsing);
+  drawLetterTexture(card, letter, color, pulsing);
 
   char label[] = {letter, '\0'};
   // Four-pass dark halo preserves the silhouette without burdening motion redraws.
   constexpr int8_t halo[][2] = {{-2, 0}, {2, 0}, {0, -2}, {0, 2}};
+  const uint16_t haloColor = pack565(11, 42, 60);
   for (const auto& offset : halo) {
     drawCentered(label, card.x + card.w / 2 + offset[0],
                  card.y + card.h / 2 + offset[1], &NunitoBlack112,
-                 blend565(0x0000, color, 165));
+                 haloColor);
   }
   drawCentered(label, card.x + card.w / 2, card.y + card.h / 2,
                &NunitoBlack112, kWhite);

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "purpose": "Review-only 2A stonewashed palette and centering correction; no production integration.",
+  "production_asset": false,
+  "openai_image_generation_used": false,
+  "new_generation_calls": 0,
+  "source_rd_png": "art/generated/one_off/letter_card_surfaces_2026-08-25/retrodiffusion/option2_carved_tide_stone__82521.png",
+  "source_rd_sha256": "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df",
+  "source_alpha_bbox": [
+    20,
+    7,
+    108,
+    120
+  ],
+  "glyph_reference_sheet": "art/generated/one_off/letter_card_surfaces_2026-08-25/alphabet_extrapolation_stone_v2/alphabet_2a_stone_v2_contact_sheet.png",
+  "glyph_reference_sheet_sha256": "37bd3c8acf43572344c9c4eec5e67c7593da4f849c31bb4e4031c3b4e7e23e94",
+  "palette_strategy": "hand-tuned low-saturation clay, lichen, sage, sea-glass, slate, heather, and ochre family",
+  "fixed_elements": [
+    "RD 82521 alpha silhouette and all eight semantic regions",
+    "cool mineral planes, chips, cracks, and cyan glints",
+    "letter-derived seed, 13 anchors, and four motif families",
+    "white glyph treatment extracted from the approved 2A v2 sheet",
+    "each visible glyph recentered from its own rendered bounds",
+    "each 138-pixel card body centered in its 160-pixel review cell"
+  ],
+  "palette": [
+    {
+      "letter": "a",
+      "base_rgb565": "0x8B0A",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "b",
+      "base_rgb565": "0x5BCD",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "c",
+      "base_rgb565": "0x732F",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "d",
+      "base_rgb565": "0x7BC9",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "e",
+      "base_rgb565": "0x536F",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "f",
+      "base_rgb565": "0x830D",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "g",
+      "base_rgb565": "0x5BAB",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "h",
+      "base_rgb565": "0x6B10",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "i",
+      "base_rgb565": "0x8B89",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "j",
+      "base_rgb565": "0x53CE",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "k",
+      "base_rgb565": "0x7AEE",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "l",
+      "base_rgb565": "0x6BA9",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "m",
+      "base_rgb565": "0x5B70",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "n",
+      "base_rgb565": "0x8AEA",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "o",
+      "base_rgb565": "0x53AB",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "p",
+      "base_rgb565": "0x62F0",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "q",
+      "base_rgb565": "0x83A9",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "r",
+      "base_rgb565": "0x53AF",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "s",
+      "base_rgb565": "0x82ED",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "t",
+      "base_rgb565": "0x5BCA",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "u",
+      "base_rgb565": "0x72F0",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "v",
+      "base_rgb565": "0x8B09",
+      "motif_family": "diagonal rakes"
+    },
+    {
+      "letter": "w",
+      "base_rgb565": "0x5BAD",
+      "motif_family": "cross sparks"
+    },
+    {
+      "letter": "x",
+      "base_rgb565": "0x72EF",
+      "motif_family": "square chips"
+    },
+    {
+      "letter": "y",
+      "base_rgb565": "0x73C9",
+      "motif_family": "clustered dots"
+    },
+    {
+      "letter": "z",
+      "base_rgb565": "0x5370",
+      "motif_family": "diagonal rakes"
+    }
+  ],
+  "output": {
+    "path": "art/generated/one_off/letter_card_surfaces_2026-08-25/alphabet_extrapolation_stone_wide_palette/alphabet_2a_stonewashed_centered_contact_sheet.png",
+    "sha256": "0c5d721140e3288a7909bd1c52adf01ae48ff69929df651da13661d51c39e604",
+    "size": [
+      1136,
+      1310
+    ]
+  }
+}

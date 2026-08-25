@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "option2_carved_tide_stone",
+  "seed": 82521,
+  "prompt": "Production-ready low-resolution pixel-art water-creature sprite for a tiny portrait AMOLED. Original design with a strong readable silhouette, restrained interior detail, crisp opaque pixel edges, one dark outline, medium shading, and luminous ocean accents. Strictly one subject on a genuinely transparent background. Inspired only by the general readability and underwater adventure mood of polished side-view diving games; do not reproduce any existing game's creature design, sprite, composition, or exact palette. A slightly dimensional carved tide-stone card: chunky two-step rounded bevel, dark outer contour, shallow recessed center field, restrained top-left edge light, and a darker lower edge. Only a few broad pixel chisel marks near the rim; the center remains clean and quiet. Solid friendly object, not photorealistic.",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    20,
+    7,
+    108,
+    120
+  ],
+  "generated_at": "2026-08-25T15:16:55Z",
+  "option": 2,
+  "label": "2A - carved tide stone",
+  "purpose": "One-off letter-card surface direction study; not a production asset."
+}

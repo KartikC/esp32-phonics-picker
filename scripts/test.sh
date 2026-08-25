@@ -29,6 +29,7 @@ test_dir=$(mktemp -d "${TMPDIR:-/tmp}/phonics-tests.XXXXXX")
 trap 'rm -rf "$test_dir"' EXIT
 for test_source in \
   tests/game_engine_test.cpp \
+  tests/card_stone_asset_test.cpp \
   tests/creature_reward_selector_test.cpp \
   tests/reward_audio_selector_test.cpp \
   tests/mute_controller_test.cpp \

@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PACK_HEADER = struct.Struct("<8sIIII8s")
 EXPECTED_VENDOR_COMMIT = "7ab8f957e22ea1ab811256359f4eddcaaf49ee91"
 EXPECTED_PACK_SHA256 = "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9"
+EXPECTED_STONE_SOURCE_SHA256 = "80bb7f65419280532000c5399e159334f607a9087b67dbf31adc53e62da9b0df"
+EXPECTED_STONE_REVIEW_SHA256 = "0c5d721140e3288a7909bd1c52adf01ae48ff69929df651da13661d51c39e604"
 EXPECTED_AUDIO_COUNTS = {
     "phonics": 26,
     "speech": 16,
@@ -276,6 +278,70 @@ def verify_creature_assets() -> None:
             fail(f"creature frame gate failed: {asset['id']}")
 
 
+def verify_letter_card_asset() -> None:
+    report_path = ROOT / "art/letter_cards/generated/stone_card_report.json"
+    require(report_path)
+    report = json.loads(report_path.read_text())
+    if (report.get("status") != "passed" or
+            report.get("selected_direction") != "2A v4 stonewashed and centered" or
+            report.get("production_asset") is not True or
+            report.get("openai_image_generation_used") is not False or
+            report.get("new_generation_calls") != 0):
+        fail("selected letter-card production report is invalid")
+    if report.get("source_sha256") != EXPECTED_STONE_SOURCE_SHA256:
+        fail("selected letter-card source identity changed")
+    if report.get("review_contact_sheet_sha256") != EXPECTED_STONE_REVIEW_SHA256:
+        fail("selected letter-card visual review identity changed")
+
+    for path_key, hash_key in (
+        ("builder", "builder_sha256"),
+        ("source", "source_sha256"),
+        ("review_contact_sheet", "review_contact_sheet_sha256"),
+        ("header", "header_sha256"),
+    ):
+        path = ROOT / report[path_key]
+        require(path)
+        if sha256_file(path) != report[hash_key]:
+            fail(f"letter-card {path_key} differs from its audited report")
+
+    review_manifest_path = (
+        ROOT / "art/generated/one_off/letter_card_surfaces_2026-08-25/"
+        "alphabet_extrapolation_stone_wide_palette/render_manifest.json"
+    )
+    require(review_manifest_path)
+    if sha256_file(review_manifest_path) != report.get("review_manifest_sha256"):
+        fail("letter-card review manifest differs from its audited report")
+    review_manifest = json.loads(review_manifest_path.read_text())
+    if (review_manifest.get("output", {}).get("sha256") !=
+            EXPECTED_STONE_REVIEW_SHA256):
+        fail("letter-card review manifest points to a different sheet")
+    glyph_reference = ROOT / review_manifest["glyph_reference_sheet"]
+    require(glyph_reference)
+    if sha256_file(glyph_reference) != review_manifest.get(
+            "glyph_reference_sheet_sha256"):
+        fail("letter-card glyph reference differs from its review manifest")
+
+    expected_counts = {
+        "transparent": 68,
+        "main_body": 7066,
+        "body_shadow": 853,
+        "deep_crevice": 647,
+        "pale_mineral": 517,
+        "deep_slate": 501,
+        "mid_mineral": 237,
+        "white_chip": 28,
+        "cyan_glint": 27,
+    }
+    if (report.get("semantic_dimensions") != [88, 113] or
+            report.get("semantic_role_counts") != expected_counts or
+            report.get("packed_bytes") != 4972 or
+            sum(expected_counts.values()) != 88 * 113):
+        fail("letter-card semantic packing contract changed")
+    palette = report.get("palette", [])
+    if len(palette) != 26 or len(set(palette)) != 26:
+        fail("letter-card palette must contain 26 unique fixed colors")
+
+
 def verify_build(build_dir: Path) -> None:
     required = [
         "PhonicsGame.ino.bin",
@@ -348,6 +414,7 @@ def main() -> None:
     verify_build_contract()
     verify_audio()
     verify_creature_assets()
+    verify_letter_card_asset()
     if args.build_dir:
         verify_build(args.build_dir.resolve())
     print("Repository payload verified")
