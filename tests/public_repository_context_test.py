@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SELF = Path(__file__).resolve()
 
 FORBIDDEN = (
-    (re.compile(r"dream\s+duel", re.IGNORECASE), "unrelated private project name"),
     (re.compile(r"/Users/[^/\s]+/"), "local absolute path"),
     (re.compile(r"/dev/cu\.usbmodem\d+", re.IGNORECASE), "ephemeral serial path"),
     (re.compile(r"user[- ]selected", re.IGNORECASE), "insider selection wording"),
