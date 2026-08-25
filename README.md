@@ -41,6 +41,28 @@ the intended serial port before the agent flashes it. A useful prompt is:
 > Read AGENTS.md and deploy this project to my connected Waveshare V2 board.
 > Show me the detected port and ask me to confirm it before flashing.
 
+### Use this repository for another V2 project
+
+This repository also preserves the reusable board and workflow knowledge for
+building a different application on the same exact V2 hardware. Start with the
+portable open Agent Skill at
+[`develop-waveshare-s3-amoled-v2`](.agents/skills/develop-waveshare-s3-amoled-v2/SKILL.md)
+and the public
+[exact-board development guide](docs/WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md).
+They explain what can be reused, how to build a fast development/release split,
+and which partition, resource, product, and verification decisions must be new
+for the other application.
+
+Do not use this game's flash script for another product: the Phonics Picker
+audio pack at `0x610000` and its five-region bundle are application contracts,
+not board defaults. A useful agent prompt is:
+
+> Read `.agents/skills/develop-waveshare-s3-amoled-v2/SKILL.md` and the linked
+> exact-board guide. Build a separate application for my rear-labeled V2 board,
+> reusing only board-level integration and workflow patterns. Define a new
+> partition/resource contract, flash manifest, diagnostics, and verification
+> plan; do not inherit or install the Phonics Picker audio pack.
+
 ## Materials
 
 Required:
@@ -233,6 +255,12 @@ build manifest, selected card/font/replay reports and hashes, and every required
 deployment input.
 
 ## Development
+
+The measured bottlenecks, fast development/release design, prioritized backlog,
+and iteration budgets are preserved in the living
+[development speed strategy](docs/DEVELOPMENT_SPEED_STRATEGY.md). It clearly
+marks proposed work; the command below remains the current supported source
+verification path.
 
 ```sh
 ./scripts/test.sh --firmware
