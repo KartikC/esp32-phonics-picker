@@ -35,17 +35,20 @@ not modify a system-wide Arduino installation.
 ./scripts/test.sh --firmware
 ```
 
-Expected final lines include `Repository payload verified`, `Game engine tests
-passed`, and `Firmware build verified`. The build uses:
+Expected final lines include `Repository payload verified`,
+`game_engine_test passed`, `creature_reward_selector_test passed`,
+`reward_audio_selector_test passed`, `mute_controller_test passed`, and
+`Firmware build verified`. The build uses:
 
 ```text
 esp32:esp32:esp32s3:FlashSize=16M,PartitionScheme=app3M_fat9M_16MB,PSRAM=opi,CDCOnBoot=cdc
 ```
 
 The accepted audio image has SHA-256
-`563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72`.
+`bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9`.
 The verifier checks that value, every individual WAV hash and format, every
-packed offset, the generated C++ index, and the firmware partition table.
+packed offset, the generated C++ index, all 32 offline reward masters, and the
+firmware partition table.
 The build also pins `SOURCE_DATE_EPOCH` to the hardware-verified firmware source
 commit so Arduino's compile-time diagnostic strings do not change the binary.
 
@@ -94,10 +97,44 @@ python3 -m pip install -r requirements.txt
 python3 scripts/verify_device.py --port /dev/cu.usbmodemXXXX
 ```
 
-A pass requires 8 MB PSRAM, ready audio, volume 100, a ready IMU, two distinct
-choices, no preview frame, and an awake game. Then complete the five manual UI
-checks listed in [AGENTS.md](../AGENTS.md); serial output cannot prove visible
-pixels, touch alignment, motion direction, or audible quality.
+A pass requires 8 MB PSRAM, ready audio, volume 90, a ready IMU, two distinct
+choices, no preview frame, an awake game, and a working CST820 interrupt gate.
+It proves audio wake/playback followed by the guarded idle power-down, plays
+two complete single-stream rewards, checks nonrepeating four-way bubble selection
+and the species-to-cue mapping, checks
+the reduced idle touch and awake PWR polling cadences, temporarily mutes audio,
+forces one timed common and one timed rare reward, then renders all eight
+species in both common and authored-rare modes without moving the rarity
+counters. It also checks the translucent-species palette restrictions and
+leaves the board unmuted with `audio_power=idle`. Complete every manual UI
+check listed in
+[AGENTS.md](../AGENTS.md); serial output cannot prove reward appearance,
+double-tap/disconnect behavior, visible pixels, touch alignment, motion
+direction, or audible quality.
+
+For a camera or slow live-preview inspection, send `HOLD_REWARD` or
+`HOLD_RARE`; the device freezes the exact full-water runtime renderer until
+`GAME` is sent, without advancing the game or either rarity counter.
+`HOLD_CREATURE 0` through `HOLD_CREATURE 7` and
+`HOLD_RARE_CREATURE 0` through `HOLD_RARE_CREATURE 7` select an exact base or
+rare-modified species for side-by-side review; the ordinal order is the order
+recorded in `creatures/variation/variation_manifest.json`.
+
+For motion review over the USB data connection, `ANIMATE_CREATURE 0` through
+`ANIMATE_CREATURE 7` and `ANIMATE_RARE_CREATURE 0` through
+`ANIMATE_RARE_CREATURE 7` continuously loop the selected normal or
+rare-modified species through the exact production reward renderer. These
+commands are intended for tethered camera inspection and do not advance the
+game or rarity counters. Send `GAME` to stop the loop and redraw the active
+round.
+
+For deterministic catalog capture, send
+`ANIMATE_VARIANT CREATURE PALETTE PATTERN RARE SEED`. Creature ordinals are
+`0..7`; pattern ordinals `0..3` are solid, spots, stripes, and mottle. Rare must
+be `0` for common textures or `1` with pattern `0` for the species-authored
+rare treatment. The USB-only command rejects Plum deep and every palette that
+automatic production play excludes for that species. It continuously animates
+the exact requested combination until another preview command or `GAME`.
 
 ## Troubleshooting
 

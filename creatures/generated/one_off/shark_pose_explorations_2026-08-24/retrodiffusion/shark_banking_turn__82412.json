@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "shark_banking_turn",
+  "seed": 82412,
+  "prompt": "Production-ready low-resolution pixel-art water-creature sprite for a tiny portrait AMOLED. Original design with a strong readable silhouette, restrained interior detail, crisp opaque pixel edges, one dark outline, medium shading, and luminous ocean accents. Strictly one subject on a genuinely transparent background. Inspired only by the general readability and underwater adventure mood of polished side-view diving games; do not reproduce any existing game's creature design, sprite, composition, or exact palette. One original blue reef shark game sprite, complete animal in a strongly foreshortened three-quarter banking turn as if sweeping around the viewer. The head is in the lower-right foreground, the visible top plane of the body curves in a broad C shape toward the upper-left forked tail, the near pectoral fin sweeps toward the camera, the far fin remains partly visible, and the dorsal fin anchors the curved silhouette. The shark nearly fills the 128 by 128 canvas in both width and height while retaining a four-pixel transparent safety margin. Slate-blue back, pale belly, tiny natural eye, calm closed mouth. Clearly not a flat side view or profile. Child-safe, natural, not a mascot, not aggressive, no exposed teeth. Broad chunky color clusters and very low interior detail. No bubbles, fish, ground, scenery, text, border, shadow, cropped anatomy, detached pixels, or multiple views.",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    5,
+    6,
+    120,
+    120
+  ],
+  "generated_at": "2026-08-24T23:16:50Z"
+}

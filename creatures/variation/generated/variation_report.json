@@ -1,0 +1,2403 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "builder": "scripts/build_creature_variations.py",
+  "builder_sha256": "2c5aac2a0f66726de5c2147d4cbb42d9cb680369f41e7321d46beb0c52a27f69",
+  "style": "Evolutionary 16-bit",
+  "manifest_sha256": "6f6a3e66a2679b6af3a3dd428b5b5978f648e037f1e788a52f2df2256faa4c4f",
+  "semantic_role_count": 16,
+  "palette_count": 6,
+  "palette_ids": [
+    "tide_slate",
+    "kelp_green",
+    "coral_rust",
+    "plum_deep",
+    "sand_gold",
+    "moon_pale"
+  ],
+  "header": "firmware/CreatureAssets/GeneratedCreatureVariations.h",
+  "header_sha256": "25819482f645bedbf92c0fafa80984755a9699fab1fb7f10a928b5e291666df7",
+  "palette_comparison": "creatures/variation/generated/palette_comparison.png",
+  "palette_comparison_sha256": "15c49c5b3c32ee0540fb4dd840ed9470db0b4c2da90bb6ae455b8bd8c5c9e01a",
+  "animation_comparison": "creatures/variation/generated/animation_comparison.png",
+  "animation_comparison_sha256": "cf6ff55e563f11f2cd1288b2370e28ba141e015571eb6aea4c8b4b23c26bed65",
+  "protection_proof": "creatures/variation/generated/protection_proof.png",
+  "protection_proof_sha256": "43f3c5283749baa487a71a1496275a92855e9c0f8248f243619293d9b8712c3f",
+  "stage3_pattern_comparison": "creatures/variation/generated/stage3_pattern_comparison.png",
+  "stage3_pattern_comparison_sha256": "bc13e3ce281e3244fe46d8f44c4688788ce5f0406d3590586b1c031cb569a776",
+  "stage4_rare_comparison": "creatures/variation/generated/stage4_rare_comparison.png",
+  "stage4_rare_comparison_sha256": "4a7b850b189b6c4ad55c71b65969eed0d3d233eaad64359113f4d9454f1fd8cf",
+  "total_semantic_bytes": 160960,
+  "total_mask_bytes": 40240,
+  "total_rare_bytes": 80480,
+  "total_anchor_bytes": 643840,
+  "assets": [
+    {
+      "id": "moon_jelly",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/moon_jelly__4501.png",
+      "source_sha256": "b20b8369ff60c641a31743a5fedaf621c412e3ed903ce392b6087be56a23bf16",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        88,
+        120
+      ],
+      "display_size": [
+        264,
+        360
+      ],
+      "base_rarity": "basic",
+      "animation": "jelly_pulse",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 4,
+      "connected_component_count": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "bell rim",
+        "oral arms",
+        "tentacles"
+      ],
+      "opaque_pixels": [
+        6227,
+        6089,
+        6056,
+        6181
+      ],
+      "pattern_safe_pixels": [
+        1729,
+        1661,
+        1678,
+        1729
+      ],
+      "rare_safe_pixels": [
+        1729,
+        1661,
+        1678,
+        1729
+      ],
+      "protected_pixels": [
+        4498,
+        4428,
+        4378,
+        4452
+      ],
+      "probe_changed_safe_pixels": [
+        321,
+        312,
+        312,
+        328
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          353,
+          338,
+          346,
+          353
+        ],
+        "stripes": [
+          409,
+          392,
+          398,
+          409
+        ],
+        "mottle": [
+          641,
+          615,
+          620,
+          641
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "celestial_bell",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 143,
+        "retained_pixels": 140,
+        "clipped_pixels": 3,
+        "retention_percent": 97.9,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "ellipse",
+            "code": 3,
+            "authored_pixels": 30,
+            "retained_pixels": 30,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "ellipse",
+            "code": 2,
+            "authored_pixels": 24,
+            "retained_pixels": 24,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "ellipse",
+            "code": 3,
+            "authored_pixels": 37,
+            "retained_pixels": 34,
+            "clipped_pixels": 3,
+            "retention_percent": 91.9
+          },
+          {
+            "index": 3,
+            "shape": "ellipse",
+            "code": 2,
+            "authored_pixels": 26,
+            "retained_pixels": 26,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 4,
+            "shape": "ellipse",
+            "code": 3,
+            "authored_pixels": 26,
+            "retained_pixels": 26,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        140,
+        132,
+        133,
+        140
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "reef_shark",
+      "source": "creatures/animation/source/reef_shark_banking_82412.png",
+      "source_sha256": "0042e78252174923e339f3bf0f29d1b083bd26d9a0eddc0a4e80c91629e58c7c",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        120,
+        124
+      ],
+      "display_size": [
+        360,
+        372
+      ],
+      "base_rarity": "rare",
+      "animation": "reviewed_chomp",
+      "authored_animation": {
+        "manifest": "creatures/animation/shark_chomp_manifest.json",
+        "manifest_sha256": "0cc499e0eb167f6685292c3a56b300bb62462fbb461b65e4e1a5b5e8ae7153b7",
+        "report": "creatures/animation/reviewed/reef_shark_chomp_82412/review_report.json",
+        "report_sha256": "dcb35e88ab3713a9957c878baa985002235a30f57e6af7b90cfae0f599992358",
+        "provider_balance_cost": 0.25,
+        "provider_model": "rd_fast",
+        "reviewed_spritesheet": "creatures/animation/reviewed/reef_shark_chomp_82412/reviewed_spritesheet.png",
+        "reviewed_spritesheet_sha256": "78a3f778aa1cf943e41b01081e87ede44b70e4229086a74edfbcb820745c4f7a"
+      },
+      "unique_semantic_frame_count": 3,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true,
+        "selected_82412_source_hash_is_fixed": true,
+        "reviewed_provider_gates_passed": true,
+        "fixed_banking_registration_is_120_by_124": true,
+        "seven_pixel_eye_is_fixed": true,
+        "gills_are_fixed": true,
+        "authored_changes_bounded_to_mouth_roi": true,
+        "authored_changes_avoid_pattern_and_rare_regions": true,
+        "toothless_mouth_adds_no_glint_pixels": true,
+        "half_frames_are_identical": true,
+        "authored_chomp_opacity_within_five_percent": true,
+        "authored_chomp_is_one_connected_silhouette": true,
+        "authored_closed_half_open_half_schedule": true,
+        "dark_cavity_grows_closed_half_open_half": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "tail",
+        "fins",
+        "belly",
+        "eye",
+        "nostril",
+        "mouth",
+        "gills"
+      ],
+      "opaque_pixels": [
+        6487,
+        6486,
+        6480,
+        6486
+      ],
+      "pattern_safe_pixels": [
+        1867,
+        1867,
+        1867,
+        1867
+      ],
+      "rare_safe_pixels": [
+        1867,
+        1867,
+        1867,
+        1867
+      ],
+      "protected_pixels": [
+        4620,
+        4619,
+        4613,
+        4619
+      ],
+      "probe_changed_safe_pixels": [
+        344,
+        356,
+        347,
+        352
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          358,
+          358,
+          358,
+          358
+        ],
+        "stripes": [
+          429,
+          429,
+          429,
+          429
+        ],
+        "mottle": [
+          690,
+          690,
+          690,
+          690
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "ancestral_bands",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 121,
+        "retained_pixels": 121,
+        "clipped_pixels": 0,
+        "retention_percent": 100.0,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 33,
+            "retained_pixels": 33,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 44,
+            "retained_pixels": 44,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 44,
+            "retained_pixels": 44,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        121,
+        121,
+        121,
+        121
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "giant_octopus",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/giant_octopus__4503.png",
+      "source_sha256": "72d66e9121bce605f952e8b86447755e47cde8a7e25fdae3f62aa91df5df7540",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        96,
+        112
+      ],
+      "display_size": [
+        288,
+        336
+      ],
+      "base_rarity": "medium",
+      "animation": "octopus_sway",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 3,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true,
+        "authored_eye_is_exactly_seven_pixels": true,
+        "authored_eye_stays_small_and_with_mantle": true,
+        "former_eye_shadow_is_uniform_mantle_shadow": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "eye",
+        "mouth",
+        "arm roots",
+        "suckers",
+        "arm tips"
+      ],
+      "opaque_pixels": [
+        4994,
+        4994,
+        4994,
+        4994
+      ],
+      "pattern_safe_pixels": [
+        754,
+        754,
+        754,
+        754
+      ],
+      "rare_safe_pixels": [
+        754,
+        754,
+        754,
+        754
+      ],
+      "protected_pixels": [
+        4240,
+        4240,
+        4240,
+        4240
+      ],
+      "probe_changed_safe_pixels": [
+        137,
+        140,
+        134,
+        145
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          159,
+          159,
+          159,
+          159
+        ],
+        "stripes": [
+          172,
+          172,
+          172,
+          172
+        ],
+        "mottle": [
+          267,
+          267,
+          267,
+          267
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "mantle_rings",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 161,
+        "retained_pixels": 161,
+        "clipped_pixels": 0,
+        "retention_percent": 100.0,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "ellipse_outline",
+            "code": 3,
+            "authored_pixels": 108,
+            "retained_pixels": 108,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "ellipse_outline",
+            "code": 2,
+            "authored_pixels": 32,
+            "retained_pixels": 32,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "ellipse",
+            "code": 3,
+            "authored_pixels": 24,
+            "retained_pixels": 24,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        161,
+        161,
+        161,
+        161
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "seahorse",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/seahorse__4504.png",
+      "source_sha256": "710cd67c1ad30d345c88213b1116a78b13c416bda6f43b50e1900bf06f138ea1",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        80,
+        112
+      ],
+      "display_size": [
+        240,
+        336
+      ],
+      "base_rarity": "basic",
+      "animation": "seahorse_bob",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 3,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "crest",
+        "eye",
+        "snout",
+        "fin",
+        "belly",
+        "curled tail"
+      ],
+      "opaque_pixels": [
+        3181,
+        3181,
+        3181,
+        3181
+      ],
+      "pattern_safe_pixels": [
+        251,
+        251,
+        251,
+        251
+      ],
+      "rare_safe_pixels": [
+        251,
+        251,
+        251,
+        251
+      ],
+      "protected_pixels": [
+        2930,
+        2930,
+        2930,
+        2930
+      ],
+      "probe_changed_safe_pixels": [
+        46,
+        48,
+        49,
+        47
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          43,
+          43,
+          43,
+          43
+        ],
+        "stripes": [
+          51,
+          51,
+          51,
+          51
+        ],
+        "mottle": [
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "royal_diamonds",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 57,
+        "retained_pixels": 56,
+        "clipped_pixels": 1,
+        "retention_percent": 98.2,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 16,
+            "retained_pixels": 16,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 20,
+            "retained_pixels": 20,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 21,
+            "retained_pixels": 20,
+            "clipped_pixels": 1,
+            "retention_percent": 95.2
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        56,
+        56,
+        56,
+        56
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "glass_squid",
+      "source": "creatures/rare_concepts/generated/raw/glass_squid__4514.png",
+      "source_sha256": "7a9df7e4d5473baa3993855b8a4aa86bf1caa69208429d36fd9d24028e667765",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        80,
+        112
+      ],
+      "display_size": [
+        240,
+        336
+      ],
+      "base_rarity": "basic",
+      "animation": "glass_squid_pulse",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 4,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "mantle edge",
+        "eyes",
+        "oral arms",
+        "tentacles",
+        "internal organs"
+      ],
+      "opaque_pixels": [
+        3648,
+        3566,
+        3542,
+        3596
+      ],
+      "pattern_safe_pixels": [
+        445,
+        382,
+        413,
+        445
+      ],
+      "rare_safe_pixels": [
+        1254,
+        1191,
+        1175,
+        1207
+      ],
+      "protected_pixels": [
+        3203,
+        3184,
+        3129,
+        3151
+      ],
+      "probe_changed_safe_pixels": [
+        86,
+        74,
+        78,
+        89
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          106,
+          83,
+          103,
+          106
+        ],
+        "stripes": [
+          104,
+          89,
+          96,
+          104
+        ],
+        "mottle": [
+          168,
+          150,
+          155,
+          168
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "prismatic_panes",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 158,
+        "retained_pixels": 157,
+        "clipped_pixels": 1,
+        "retention_percent": 99.4,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 44,
+            "retained_pixels": 43,
+            "clipped_pixels": 1,
+            "retention_percent": 97.7
+          },
+          {
+            "index": 1,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 70,
+            "retained_pixels": 70,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 48,
+            "retained_pixels": 48,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        157,
+        157,
+        146,
+        146
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "anglerfish",
+      "source": "creatures/rare_concepts/generated/raw/anglerfish__4515.png",
+      "source_sha256": "ea6d9d7a67f31c4c5f38e66e297b4a195e1bc500bf0b1b04e3eb45d611fe05f2",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        112,
+        72
+      ],
+      "display_size": [
+        336,
+        216
+      ],
+      "base_rarity": "rare",
+      "animation": "anglerfish_hover",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 3,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true,
+        "fixed_glow_luminance_order": true,
+        "fixed_glow_frame_schedule": true
+      },
+      "pulsing_glow": {
+        "role": 14,
+        "dim": "#7B4B2A",
+        "medium": "#D89A63",
+        "bright": "#F1E6B5"
+      },
+      "glow_frame_luminances": [
+        82.8222,
+        163.2102,
+        228.80079999999998,
+        163.2102
+      ],
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "tail",
+        "fins",
+        "eye",
+        "mouth",
+        "gill",
+        "lure stalk",
+        "lure bulb"
+      ],
+      "opaque_pixels": [
+        3637,
+        3637,
+        3637,
+        3637
+      ],
+      "pattern_safe_pixels": [
+        967,
+        967,
+        967,
+        967
+      ],
+      "rare_safe_pixels": [
+        967,
+        967,
+        967,
+        967
+      ],
+      "protected_pixels": [
+        2670,
+        2670,
+        2670,
+        2670
+      ],
+      "probe_changed_safe_pixels": [
+        183,
+        186,
+        183,
+        181
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          190,
+          190,
+          190,
+          190
+        ],
+        "stripes": [
+          219,
+          219,
+          219,
+          219
+        ],
+        "mottle": [
+          341,
+          341,
+          341,
+          341
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "abyssal_constellation",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 80,
+        "retained_pixels": 79,
+        "clipped_pixels": 1,
+        "retention_percent": 98.8,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 27,
+            "retained_pixels": 27,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 25,
+            "retained_pixels": 25,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 16,
+            "retained_pixels": 15,
+            "clipped_pixels": 1,
+            "retention_percent": 93.8
+          },
+          {
+            "index": 3,
+            "shape": "polygon",
+            "code": 3,
+            "authored_pixels": 25,
+            "retained_pixels": 25,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        79,
+        79,
+        79,
+        79
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "sea_angel",
+      "source": "creatures/rare_concepts/generated/raw/sea_angel__4519.png",
+      "source_sha256": "2554b1c81a344bf29b484237f893d09eb21642cfddaceb4e2b93bae4b6f3bdac",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        88,
+        96
+      ],
+      "display_size": [
+        352,
+        384
+      ],
+      "base_rarity": "medium",
+      "animation": "sea_angel_wingbeat",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 3,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        5
+      ],
+      "celebration_sparkles": false,
+      "protected_anatomy": [
+        "outer contour",
+        "head tentacles",
+        "wing edges",
+        "tail tip",
+        "internal glow"
+      ],
+      "opaque_pixels": [
+        2828,
+        2828,
+        2828,
+        2828
+      ],
+      "pattern_safe_pixels": [
+        632,
+        632,
+        632,
+        632
+      ],
+      "rare_safe_pixels": [
+        632,
+        632,
+        632,
+        632
+      ],
+      "protected_pixels": [
+        2196,
+        2196,
+        2196,
+        2196
+      ],
+      "probe_changed_safe_pixels": [
+        117,
+        122,
+        118,
+        118
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          109,
+          109,
+          109,
+          109
+        ],
+        "stripes": [
+          145,
+          145,
+          145,
+          145
+        ],
+        "mottle": [
+          216,
+          216,
+          216,
+          216
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "halo_wings",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 48,
+        "retained_pixels": 48,
+        "clipped_pixels": 0,
+        "retention_percent": 100.0,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 14,
+            "retained_pixels": 14,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 14,
+            "retained_pixels": 14,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 14,
+            "retained_pixels": 14,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 3,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 14,
+            "retained_pixels": 14,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    },
+    {
+      "id": "gulper_eel",
+      "source": "creatures/rare_concepts/generated/raw/gulper_eel__4521.png",
+      "source_sha256": "e526613ca563bcbd39f0d1bfb133bad453bd7d8cad877972f2a947e0a7988f73",
+      "source_size": [
+        128,
+        128
+      ],
+      "logical_size": [
+        112,
+        88
+      ],
+      "display_size": [
+        336,
+        264
+      ],
+      "base_rarity": "rare",
+      "animation": "eel_undulate",
+      "authored_animation": null,
+      "unique_semantic_frame_count": 4,
+      "connected_component_count": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "animation_audit": {
+        "silhouette_component_count_does_not_increase": true,
+        "new_species_is_single_connected_component": true
+      },
+      "pulsing_glow": null,
+      "glow_frame_luminances": null,
+      "automatic_palette_indices": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "celebration_sparkles": true,
+      "protected_anatomy": [
+        "outer contour",
+        "pouch head",
+        "eye",
+        "mouth",
+        "tail tip",
+        "bioluminescent tip"
+      ],
+      "opaque_pixels": [
+        4403,
+        4403,
+        4403,
+        4403
+      ],
+      "pattern_safe_pixels": [
+        1151,
+        1151,
+        1151,
+        1151
+      ],
+      "rare_safe_pixels": [
+        1151,
+        1151,
+        1151,
+        1151
+      ],
+      "protected_pixels": [
+        3252,
+        3252,
+        3252,
+        3252
+      ],
+      "probe_changed_safe_pixels": [
+        221,
+        216,
+        217,
+        214
+      ],
+      "probe_changed_protected_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage3_changed_safe_pixels": {
+        "spots": [
+          206,
+          206,
+          206,
+          206
+        ],
+        "stripes": [
+          270,
+          270,
+          270,
+          270
+        ],
+        "mottle": [
+          481,
+          481,
+          481,
+          481
+        ]
+      },
+      "stage3_changed_protected_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "stage3_animation_mismatch_pixels": {
+        "spots": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "stripes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mottle": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rare_treatment": "ghost_current",
+      "stage4_authored_overlay_retention": {
+        "authored_pixels": 57,
+        "retained_pixels": 57,
+        "clipped_pixels": 0,
+        "retention_percent": 100.0,
+        "minimum_retention_percent": 90,
+        "minimum_primitive_visible_pixels": 8,
+        "overall_retention_gate": true,
+        "primitive_retention_gate": true,
+        "gate_passed": true,
+        "primitives": [
+          {
+            "index": 0,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 19,
+            "retained_pixels": 19,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 1,
+            "shape": "line",
+            "code": 2,
+            "authored_pixels": 19,
+            "retained_pixels": 19,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          },
+          {
+            "index": 2,
+            "shape": "line",
+            "code": 3,
+            "authored_pixels": 19,
+            "retained_pixels": 19,
+            "clipped_pixels": 0,
+            "retention_percent": 100.0
+          }
+        ]
+      },
+      "stage4_changed_rare_safe_pixels": [
+        57,
+        57,
+        57,
+        57
+      ],
+      "stage4_minimum_visible_pixels": 24,
+      "stage4_changed_outside_rare_safe_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "stage4_animation_mismatch_pixels": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "frame_checks": [
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        },
+        {
+          "semantic_pack_roundtrip": true,
+          "mask_pack_roundtrip": true,
+          "rare_pack_roundtrip": true,
+          "semantic_anchor_alignment": true,
+          "safe_anchor_alignment": true,
+          "rare_safe_anchor_alignment": true,
+          "rare_anchor_alignment": true,
+          "safe_mask_subset_of_creature": true,
+          "rare_overlay_subset_of_rare_safe_mask": true,
+          "protected_anatomy_unchanged": true,
+          "probe_exercises_safe_region": true,
+          "all_stage3_patterns_exercise_safe_region": true,
+          "all_stage3_patterns_preserve_protected_anatomy": true,
+          "all_stage3_patterns_follow_canonical_animation": true,
+          "stage4_rare_exercises_authored_region": true,
+          "stage4_rare_stays_inside_authored_region": true,
+          "stage4_rare_follows_canonical_animation": true,
+          "stage4_authored_motif_retained": true
+        }
+      ]
+    }
+  ]
+}

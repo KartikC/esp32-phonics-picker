@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "shark_head_on",
+  "seed": 82401,
+  "prompt": "Production-ready low-resolution pixel-art water-creature sprite for a tiny portrait AMOLED. Original design with a strong readable silhouette, restrained interior detail, crisp opaque pixel edges, one dark outline, medium shading, and luminous ocean accents. Strictly one subject on a genuinely transparent background. Inspired only by the general readability and underwater adventure mood of polished side-view diving games; do not reproduce any existing game's creature design, sprite, composition, or exact palette. One original blue reef shark game sprite, complete animal swimming almost directly toward the viewer from slightly above in a dramatic head-first three-quarter pose. Strong foreshortening: broad rounded snout and head closest to camera, streamlined body narrowing away behind it, dorsal fin and forked tail still clearly readable, both compact pectoral fins visible with natural perspective asymmetry. The shark nearly fills the 128 by 128 canvas in both width and height while retaining a four-pixel transparent safety margin. Slate-blue back, pale belly, tiny natural eyes, calm closed mouth. Clearly not a side view or profile. Child-safe, natural, not a mascot, not aggressive, no exposed teeth. Broad chunky color clusters and very low interior detail. No bubbles, fish, ground, scenery, text, border, shadow, cropped anatomy, detached pixels, or multiple views.",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    2,
+    13,
+    126,
+    111
+  ],
+  "generated_at": "2026-08-24T23:16:59Z"
+}

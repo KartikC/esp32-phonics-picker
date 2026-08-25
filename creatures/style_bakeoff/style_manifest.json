@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "source_size": [128, 128],
+  "render_scale": 3,
+  "animals": [
+    {
+      "id": "moon_jelly",
+      "label": "Moon jelly",
+      "seed": 4501,
+      "logical_size": [88, 120],
+      "prompt": "one original moon jellyfish, complete animal, centered vertical side-view game sprite, broad bell and a few thick connected tentacle groups, natural anatomy, no face"
+    },
+    {
+      "id": "reef_shark",
+      "label": "Reef shark",
+      "seed": 4502,
+      "logical_size": [112, 64],
+      "prompt": "one original reef shark, complete animal in strict side view facing right, streamlined body, clear forked tail, dorsal and pectoral fins, natural calm anatomy"
+    },
+    {
+      "id": "giant_octopus",
+      "label": "Giant octopus",
+      "seed": 4503,
+      "logical_size": [96, 112],
+      "prompt": "one original giant octopus, complete animal in strict side view, broad mantle, one clear eye and eight thick connected curling arms forming one readable silhouette, natural anatomy"
+    },
+    {
+      "id": "seahorse",
+      "label": "Seahorse",
+      "seed": 4504,
+      "logical_size": [80, 112],
+      "prompt": "one original seahorse, complete animal in strict side view facing right, horse-like head, upright curved torso, small fins and a clearly curled tail, natural anatomy"
+    }
+  ],
+  "styles": [
+    {
+      "id": "01_luminous_modern",
+      "label": "1 · Luminous modern",
+      "vendor": "pixellab",
+      "palette": ["#00000000", "#061521", "#0B3042", "#155A70", "#268CA0", "#45C8C5", "#A9EBDE", "#F5FFFF", "#405B86", "#6C78C9", "#A85BC4", "#E06C91", "#F2B56D", "#F0E59A", "#597C86", "#B8D1D2"],
+      "brief": "polished modern pixel art with a strong silhouette, broad clustered volume shading, a crisp deep-navy outline, cool cyan rim light, restrained biological accent colors, approximately twelve useful colors, readable on a low-resolution handheld screen"
+    },
+    {
+      "id": "02_evolutionary_16bit",
+      "label": "2 · Evolutionary 16-bit",
+      "vendor": "retrodiffusion",
+      "palette": ["#00000000", "#09131C", "#142B3B", "#28516A", "#47768A", "#76A0A5", "#BDD0BE", "#F1E6B5", "#7C4662", "#B5685E", "#D99A63", "#5D6A46", "#849B65", "#C7C58A", "#394058", "#E8EEF0"],
+      "brief": "authentic early-1990s 16-bit side-scrolling action-game sprite discipline, chunky one-to-two-pixel dark contour, six-to-eight dominant colors, flat cel-shaded bands, slightly prehistoric shape language, exaggerated readable anatomy, almost no tiny texture"
+    },
+    {
+      "id": "03_reef_hybrid",
+      "label": "3 · Reef hybrid",
+      "vendor": "pixellab",
+      "palette": ["#00000000", "#071620", "#0D3443", "#185969", "#2E7F82", "#54ACA0", "#9DD0B0", "#E6E4B1", "#315A78", "#4B87A0", "#D17A68", "#E7A45F", "#B64F73", "#743E69", "#8AA0A0", "#F4F6DD"],
+      "brief": "original reef-adventure pixel art balancing a chunky 16-bit silhouette with modern biological color, one dark outline, three broad shading bands, a few warm coral accents, no gradients and no microtexture"
+    },
+    {
+      "id": "04_amoled_minimal",
+      "label": "4 · AMOLED minimal",
+      "vendor": "retrodiffusion",
+      "palette": ["#00000000", "#02070C", "#071923", "#0E3B4A", "#1A6D79", "#39D4CC", "#D7FAEE", "#713E79", "#C35E9D", "#E8B86D", "#27424D", "#739095", "#EEF5E8", "#182432", "#4B566A", "#FFFFFF"],
+      "brief": "ultra-low-detail AMOLED pixel sprite using near-black negative space, one heavy silhouette contour, only five dominant colors, one luminous cyan or magenta accent, broad solid clusters, no texture, no tiny highlights"
+    }
+  ],
+  "shared_constraints": "single isolated animal only on a genuinely transparent background, entire silhouette visible with generous canvas safety, crisp opaque pixel edges, strict side view, no scenery, water, bubbles, plants, rocks, prey, shadow, text, label, logo, border, frame, multiple views, sprite sheet, detached particles, cute mascot face, gore, or reference-game character"
+}

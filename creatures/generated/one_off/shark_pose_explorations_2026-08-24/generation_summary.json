@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "purpose": "One-off non-profile shark pose explorations; not production assets.",
+  "vendor": "retrodiffusion",
+  "prompt_style": "rd_pro__simple",
+  "sample_count": 4,
+  "retrodiffusion_reported_balance_cost_total": 0.72,
+  "samples": [
+    {
+      "asset_id": "shark_banking_turn",
+      "seed": 82411,
+      "alpha_bbox": [
+        2,
+        3,
+        127,
+        121
+      ],
+      "reported_balance_cost": 0.18,
+      "model": "rd_pro",
+      "png": "creatures/generated/one_off/shark_pose_explorations_2026-08-24/retrodiffusion/shark_banking_turn__82411.png"
+    },
+    {
+      "asset_id": "shark_banking_turn",
+      "seed": 82412,
+      "alpha_bbox": [
+        5,
+        6,
+        120,
+        120
+      ],
+      "reported_balance_cost": 0.18,
+      "model": "rd_pro",
+      "png": "creatures/generated/one_off/shark_pose_explorations_2026-08-24/retrodiffusion/shark_banking_turn__82412.png"
+    },
+    {
+      "asset_id": "shark_head_on",
+      "seed": 82401,
+      "alpha_bbox": [
+        2,
+        13,
+        126,
+        111
+      ],
+      "reported_balance_cost": 0.18,
+      "model": "rd_pro",
+      "png": "creatures/generated/one_off/shark_pose_explorations_2026-08-24/retrodiffusion/shark_head_on__82401.png"
+    },
+    {
+      "asset_id": "shark_head_on",
+      "seed": 82402,
+      "alpha_bbox": [
+        3,
+        3,
+        126,
+        113
+      ],
+      "reported_balance_cost": 0.18,
+      "model": "rd_pro",
+      "png": "creatures/generated/one_off/shark_pose_explorations_2026-08-24/retrodiffusion/shark_head_on__82402.png"
+    }
+  ]
+}

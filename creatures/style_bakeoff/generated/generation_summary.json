@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "sample_count": 16,
+  "expected_sample_count": 16,
+  "retrodiffusion_reported_balance_cost_total": 1.44,
+  "note": "Retro Diffusion reports balance-cost units, not a USD value. PixelLab reports generation count when available.",
+  "samples": [
+    {
+      "style_id": "01_luminous_modern",
+      "vendor": "pixellab",
+      "animal_id": "giant_octopus",
+      "seed": 4503,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "01_luminous_modern",
+      "vendor": "pixellab",
+      "animal_id": "moon_jelly",
+      "seed": 4501,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "01_luminous_modern",
+      "vendor": "pixellab",
+      "animal_id": "reef_shark",
+      "seed": 4502,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "01_luminous_modern",
+      "vendor": "pixellab",
+      "animal_id": "seahorse",
+      "seed": 4504,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "02_evolutionary_16bit",
+      "vendor": "retrodiffusion",
+      "animal_id": "giant_octopus",
+      "seed": 4503,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "02_evolutionary_16bit",
+      "vendor": "retrodiffusion",
+      "animal_id": "moon_jelly",
+      "seed": 4501,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "02_evolutionary_16bit",
+      "vendor": "retrodiffusion",
+      "animal_id": "reef_shark",
+      "seed": 4502,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "02_evolutionary_16bit",
+      "vendor": "retrodiffusion",
+      "animal_id": "seahorse",
+      "seed": 4504,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "03_reef_hybrid",
+      "vendor": "pixellab",
+      "animal_id": "giant_octopus",
+      "seed": 4503,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "03_reef_hybrid",
+      "vendor": "pixellab",
+      "animal_id": "moon_jelly",
+      "seed": 4501,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "03_reef_hybrid",
+      "vendor": "pixellab",
+      "animal_id": "reef_shark",
+      "seed": 4502,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "03_reef_hybrid",
+      "vendor": "pixellab",
+      "animal_id": "seahorse",
+      "seed": 4504,
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "style_id": "04_amoled_minimal",
+      "vendor": "retrodiffusion",
+      "animal_id": "giant_octopus",
+      "seed": 4503,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "04_amoled_minimal",
+      "vendor": "retrodiffusion",
+      "animal_id": "moon_jelly",
+      "seed": 4501,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "04_amoled_minimal",
+      "vendor": "retrodiffusion",
+      "animal_id": "reef_shark",
+      "seed": 4502,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "style_id": "04_amoled_minimal",
+      "vendor": "retrodiffusion",
+      "animal_id": "seahorse",
+      "seed": 4504,
+      "reported_balance_cost": 0.18,
+      "usage": null
+    }
+  ]
+}

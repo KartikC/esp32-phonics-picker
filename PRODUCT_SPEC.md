@@ -14,8 +14,9 @@ listing that described the original SH8601 + FT3168 revision.
 - The answer side, distractor, prompt wording, and one of six bounded card
   layouts vary independently. Layout variation is subtle and never changes hit
   area size, overlaps cards, crowds an edge, or hints at the correct answer.
-- The screen contains exactly two letter cards and one fixed replay control near
-  the top. There is no printed "listen", "pick one", score, or instructional
+- During an active round, the screen contains exactly two letter cards and one
+  fixed replay control near the top. There is no printed "listen", "pick one",
+  score, or instructional
   chrome. The replay control repeats the exact current prompt and sound without
   changing the round, and restarts the current idle-nudge deadline.
 - The only parent-facing status mark is a centered row of three-pixel-radius
@@ -29,14 +30,65 @@ listing that described the original SH8601 + FT3168 revision.
   seconds, then remain quiet indefinitely. A tap resets the current deadline.
 - A wrong choice keeps the round in place, has no rewarding animation, and uses
   one of three calm low-energy responses.
-- A correct choice gets one small 1.1-second colored card pulse and one of four
-  brief praise lines, then advances. There are no scores, stars, streaks,
-  applause, badges, failure screens, or ads.
+- A correct choice gets one of four brief praise lines and a 2.96-second reward
+  transition: the correct card confirms for 400 ms, water rises from 400-640
+  ms, and one large animated creature is visible from 640-2840 ms. The
+  full-water hold lasts through 2560 ms, water recedes from 2560-2840 ms, and a
+  fully black 120 ms beat precedes the next round at 2960 ms. The 2200 ms
+  creature window is 19.6% longer than the previous 1840 ms window. Choice and
+  replay input stay locked for that complete transition.
+- Correct-answer audio follows those same visual boundaries. Praise begins at
+  0 ms, one of four independently randomized bubble beds begins at 400 ms,
+  and the selected species' cue begins at 640 ms. The bubble therefore leads
+  the creature by 240 ms and the two effects overlap through the middle of the
+  reward. The shark uses the reviewed rounded pressure pulse and disturbed
+  bubbles that follows its chomp; the other seven cues remain species-specific.
+  Immediate bubble repeats are excluded. Audio ends by 2680 ms, preserving a
+  quiet 280 ms tail before the next round.
+- While the creature is visible from 640-2840 ms, its animal name is shown on
+  one tiny, centered line at the bottom. It remains adult-legible and
+  unobtrusive, is not a score or rarity label, and is absent during the water
+  rise, terminal black beat, and choice round.
+- Every correct answer earns one of exactly eight creatures: moon jelly, reef
+  shark, giant octopus, seahorse, glass squid, anglerfish, sea angel, or gulper
+  eel (displayed as "Deep-sea eel"). Base species selection uses 8:3:1 weights
+  for three tiers: basic contains moon jelly, seahorse, and glass squid; medium
+  contains giant octopus and sea angel; rare contains reef shark, anglerfish,
+  and gulper eel. The reward selector owns a separate random stream, never
+  changes the phonics round sequence, and avoids immediate species and palette
+  repeats.
+- Base species tier is independent of the authored rare-treatment roll: a
+  rare-tier species can receive a normal treatment, and a basic-tier species
+  can receive its authored rare treatment. Most normal rewards vary one of five
+  approved non-purple color ramps; translucent glass squid and sea angel are
+  limited to Tide slate, Kelp green, and Moon pale. Normal rewards also vary a
+  solid/spotted/striped/mottled pattern-safe body treatment. Every creature
+  keeps its four-frame base animation under both normal and rare modifications,
+  with protected anatomy unchanged. The anglerfish lure follows a warm
+  dim/medium/bright/medium pulse;
+  the screen-filling reef shark uses the selected `82412` three-quarter banking
+  pose and a reviewed Retro Diffusion sprite-sheet bite: exact closed source,
+  half-open, clearly open, and the identical half-open recovery. Its body, eye,
+  and gills stay registered while a synchronized short lunge adds activity.
+- Authored rare-treatment rewards use the selected creature's species-specific
+  treatment and, where that species permits it, restrained sparkles. Sea angel
+  explicitly keeps its clean translucent silhouette with no generic sparkles.
+  Rare treatments do not add a score or gameplay advantage. In a clean run, correct
+  answers 1-5 have 1/64 hidden
+  odds, answers 6-9 have 1/32 odds, answers 10-11 have 1/16 odds, and answer
+  12 is guaranteed rare. A
+  separate 18-correct pity counter survives mistakes, so errors cannot make a
+  rare unreachable. A wrong answer resets only clean progress. Neither counter
+  nor rarity is printed on the child-facing screen.
+- There are no visible scores, stars, streak counters, applause, badges,
+  failure screens, or ads.
 - Every visible frame is composed off-screen and transferred only when complete.
   Clearing, texture drawing, glyph drawing, and animation intermediates must
   never be exposed directly on the AMOLED.
-- Unused AMOLED canvas is pure black (`#000000`), with no gradient, tint, or
-  decorative field. Color is reserved for the learning objects.
+- Unused AMOLED canvas during the choice round is pure black (`#000000`), with
+  no gradient, tint, or decorative field. The animated blue-green water exists
+  only inside the correct-answer reward transition. Its seabed remains quiet
+  and contains no stationary decorative circles.
 - Each lowercase letter has a permanent visual identity: one fixed card color
   and one fixed subtle motif. These mappings are learning anchors and must
   never be shuffled, regenerated per round, or reassigned in a later release.
@@ -62,9 +114,10 @@ listing that described the original SH8601 + FT3168 revision.
 
 ## Power behavior
 
-- A short press-and-release of the physical PWR button toggles logical standby.
-  Standby turns the AMOLED fully off, mutes the codec, disables the speaker amp,
-  and pauses the current round, nudge deadline, and celebration deadline.
+- A short press-and-release of the physical PWR button toggles standby.
+  Standby turns the AMOLED fully off, powers down the codec and I2S path,
+  disables the speaker amp and accelerometer, and pauses the current round,
+  nudge deadline, and celebration deadline.
 - Wake restores the retained complete frame before brightness, quietly primes
   the audio path, resumes the same round and remaining deadlines, and requires
   a zero-finger touch sample before accepting another choice.
@@ -73,16 +126,47 @@ listing that described the original SH8601 + FT3168 revision.
   Hold PWR for 6 seconds to hard-off; from hard-off, click PWR once to start.
   USB charging remains available while the board is hard-off.
   BOOT/GPIO0 is not used as a power key because it is a boot strap.
-- This is a polled logical standby rather than ESP deep sleep: PWR is exposed
-  through XCA9554 P4, not a native RTC wake GPIO.
+- On battery or charge-only USB, standby uses 50 ms timer-woken ESP light-sleep
+  intervals and polls PWR between them. PWR is exposed through XCA9554 P4, not
+  a native ESP wake GPIO, so an indefinite PWR-woken sleep is not possible
+  without a hardware change. With a real USB data host attached, standby keeps
+  the processor awake and polls normally because native USB Serial/JTAG is not
+  guaranteed to survive light sleep; the display, IMU, codec, I2S, and amplifier
+  remain powered down. See `docs/POWER_AUDIT.md` for the schematic constraint,
+  research basis, measurement plan, and awake-mode audit.
+- While awake, the PWR expander is sampled every 20 ms. Idle touch reads are
+  gated by the CST820 interrupt, with the original 8 ms cadence retained from
+  contact through release and a 64 ms missed-edge safety poll. If interrupt
+  setup fails, firmware deliberately returns to continuous polling rather than
+  risking an unresponsive screen. These optimizations must not change touch or
+  PWR semantics.
 
 ## Audio playback
 
+- A maintenance mute exists only while a real USB data host is attached, as
+  reported by USB CDC host traffic rather than charger voltage. Double-tapping
+  anywhere in the replay control's complete 42-pixel-radius hit target within
+  500 ms toggles mute. A lone tap becomes replay after that window. With no
+  data host, every replay tap is immediate and the gesture cannot enter mute.
+- While muted, the replay glyph becomes a crossed-speaker indicator. That icon
+  is never shown without the data host. Mute is not persisted and clears after
+  1.8 seconds of sustained data disconnect. Standby and maintenance mute share
+  the same fail-safe codec mute and speaker-amplifier gate; waking never
+  overrides an active maintenance mute.
+
 - Playback uses the onboard ES8311 and NS4150B speaker amplifier at managed
-  logical volume 100. On this board that is ES8311 `DAC_REG32 = 0xC6`
-  (+3.5 dB), 10 dB above the earlier logical-80 setting. The authored -4 dBTP
-  ceiling retains roughly 0.5 dB of digital headroom. This is not the legacy
-  Arduino helper's unsafe linear-register interpretation.
+  logical volume 90. On this board that is ES8311 `DAC_REG32 = 0xBC`, 5 dB
+  below the former logical-100 setting. The reduction supplies approximately
+  5.5 dB above the authored -4 dBTP speech peaks for the DAC and tiny speaker,
+  while preserving all authored category relationships. This is not the
+  legacy Arduino helper's unsafe linear-register interpretation.
+- Playback allocates only the I2S transmit path. After the final authored 40 ms
+  silence plus a 750 ms idle guard, firmware mutes and powers down the codec,
+  gates the speaker amplifier, and disables I2S transmit. A later cue restores
+  the path while muted, preloads silence, enables the amplifier, waits 10 ms,
+  and unmutes before queuing its first PCM frame. This power transition is
+  transparent to replay, wrong-answer, praise, next-round, standby, and
+  maintenance-mute behavior.
 - Codec initialization matches the current Waveshare V2 managed path, including
   a deterministic reset, 16 kHz DAC OSR `0x20`, and the complete reference and
   system-register sequence.
@@ -92,9 +176,24 @@ listing that described the original SH8601 + FT3168 revision.
   cadence, followed by two-pass -21 LUFS / -4 dBTP normalization. Short
   phonics masters retain their reviewed relative dynamics and share one
   peak-safe -2.06 dB gain.
+- Reward effects use the same speaker filter and PCM path. Bubble beds are
+  authored around -28 LUFS with a -9 dBTP ceiling; every creature master gets
+  one shared +1.5 dB lift, with sparse transient cues left uncompressed to
+  preserve their character. The accepted speech and phonics masters are not
+  renormalized. All 32 deployed bubble-by-creature celebration masters must be
+  byte-exact offline integer sums with zero clipped samples before a pack is
+  accepted. Praise is balanced as `(bubble + creature) modulo 4`, so every
+  species still reaches all four phrases while bubble randomness remains in
+  its independent, no-immediate-repeat domain.
 - The raw `ffat` pack is SHA-256 verified, then prefetched into PSRAM. Playback
   runs asynchronously so it never blocks touch or rendering, and a new
-  interaction cancels stale speech.
+  interaction cancels stale speech. Every three-part celebration is authored
+  offline as one complete 2.64-second PCM asset with praise at 0 ms, bubbles at
+  400 ms, and the creature gesture at 640 ms. Before reward drawing starts,
+  firmware copies that single selected asset into a fixed 84,480-byte internal-
+  DRAM buffer. It then uses the same contiguous one-asset 16-bit streamer as
+  clean speech and phonics: no runtime summation and no PSRAM access competes
+  with the animated framebuffer during celebration playback.
 - Real-hardware microphone captures are comparative evidence, not a substitute
   for listening on the unit. Speech recognition may catch gross failures, but
   human listening remains the final perceptual gate.

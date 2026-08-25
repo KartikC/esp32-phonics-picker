@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "status": "audition only; not part of the canonical firmware audio pack",
+  "processing": {
+    "target_loudness_lufs": -28,
+    "target_true_peak_dbtp": -9,
+    "highpass_hz": 300,
+    "lowpass_hz": 5000,
+    "sample_rate": 16000,
+    "channels": 1,
+    "codec": "PCM signed 16-bit little-endian",
+    "duration_seconds": 2.0
+  },
+  "asset_count": 6,
+  "assets": [
+    {
+      "id": "bubbles-cascade__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/bubbles-cascade__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "dba47d97e79af5a16050715716c5b96ece123d767fff72cafd130990b7a1d931",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -35.64,
+        "band_true_peak_dbtp": -21.16
+      },
+      "device_preview": {
+        "path": "device-preview/bubbles-cascade__elevenlabs-sound-effects-v2.wav",
+        "sha256": "309ee6c789252da13a51da024f3d76ee9bed5f37a55fe3f64b5dfd3529edecf8",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.0,
+        "true_peak_dbtp": -13.52
+      }
+    },
+    {
+      "id": "bubbles-even__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/bubbles-even__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "b6f470a5074068918199c473f8165f96f436cd7fbcb72307e3d0b57796ed6feb",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -30.65,
+        "band_true_peak_dbtp": -10.74
+      },
+      "device_preview": {
+        "path": "device-preview/bubbles-even__elevenlabs-sound-effects-v2.wav",
+        "sha256": "2afcd5c42163c55dd998677e8d065faabe161a09b6dc4aa7691db6768eda1ce2",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.92,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "bubbles-large-last__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/bubbles-large-last__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "da59bbfdd242fa5f90dc5cb2379cbd2bdcbcfb9970a6ae660d32c04821149061",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -42.67,
+        "band_true_peak_dbtp": -22.84
+      },
+      "device_preview": {
+        "path": "device-preview/bubbles-large-last__elevenlabs-sound-effects-v2.wav",
+        "sha256": "caaa02cff256caa29f36a7ae6a1d8b28876c576d984efa8f06a46ce54fc1ba5d",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.82,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "shark-glide-chomp__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/shark-glide-chomp__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "09b271532f6eb6d08ea2ae17a9fda3af88ce07cdc90e3cb594982b4ec27c3db6",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -28.98,
+        "band_true_peak_dbtp": -1.72
+      },
+      "device_preview": {
+        "path": "device-preview/shark-glide-chomp__elevenlabs-sound-effects-v2.wav",
+        "sha256": "2912b48e60bbdd272bebe2673c1701d2c48e798c744f59dc2d7a25c1346ba757",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -36.28,
+        "true_peak_dbtp": -9.23
+      }
+    },
+    {
+      "id": "shark-pressure-pulse__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/shark-pressure-pulse__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "b8949d656c352f34a299ab6b5c295116ebab4615842292db83abbd21c4d10e7c",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -26.53,
+        "band_true_peak_dbtp": -6.64
+      },
+      "device_preview": {
+        "path": "device-preview/shark-pressure-pulse__elevenlabs-sound-effects-v2.wav",
+        "sha256": "35488bdd2a517a7dd6bc505612fd59d1888d726e0d7756db96129bc74be19134",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.9,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "shark-suction-wake__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/shark-suction-wake__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "b008355f79d9206091cb637d99dd01c2b8fd0d0d78c3076706022f3cf37b83c3",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -40.09,
+        "band_true_peak_dbtp": -19.82
+      },
+      "device_preview": {
+        "path": "device-preview/shark-suction-wake__elevenlabs-sound-effects-v2.wav",
+        "sha256": "b4e585d983b849ca04135f8a536384036970c5be246b57d883030f91822498ba",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -29.27,
+        "true_peak_dbtp": -9.0
+      }
+    }
+  ],
+  "audition_reels": {
+    "bubble_variants": {
+      "path": "bubble-variants-reel.wav",
+      "order": [
+        "selected-bubbles-reference",
+        "bubbles-even__elevenlabs-sound-effects-v2",
+        "bubbles-large-last__elevenlabs-sound-effects-v2",
+        "bubbles-cascade__elevenlabs-sound-effects-v2"
+      ],
+      "gap_seconds": 0.5,
+      "sha256": "a3e144747ecee87d8420e0a55a3553ef679450fd377f06bbf89758f55b3d9f81",
+      "codec": "pcm_s16le",
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 9.5,
+      "bytes": 304044
+    },
+    "shark_chomp_variants": {
+      "path": "shark-chomp-variants-reel.wav",
+      "order": [
+        "original-shark-reference",
+        "shark-pressure-pulse__elevenlabs-sound-effects-v2",
+        "shark-glide-chomp__elevenlabs-sound-effects-v2",
+        "shark-suction-wake__elevenlabs-sound-effects-v2"
+      ],
+      "gap_seconds": 0.5,
+      "sha256": "0d35843fc047e67fd92876cc44a18476f9e34d0313ed5465fe2ba7e94d744d2b",
+      "codec": "pcm_s16le",
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 9.5,
+      "bytes": 304044
+    }
+  }
+}

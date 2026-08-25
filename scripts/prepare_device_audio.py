@@ -13,6 +13,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 
@@ -174,6 +175,10 @@ def main() -> None:
     MANIFEST.write_text(json.dumps(report, indent=2) + "\n")
     print(f"Prepared {len(assets)} assets ({report['total_bytes']} bytes)")
     print(f"Wrote {MANIFEST}")
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts/prepare_reward_sfx.py")],
+        check=True,
+    )
 
 
 if __name__ == "__main__":

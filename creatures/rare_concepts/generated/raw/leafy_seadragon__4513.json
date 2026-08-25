@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "preview_only_not_runtime",
+  "style_id": "02_evolutionary_16bit",
+  "vendor": "retrodiffusion",
+  "animal_id": "leafy_seadragon",
+  "seed": 4513,
+  "prompt": "Production-ready original low-resolution pixel-art sea-animal game sprite. Subject: one original leafy seadragon, complete animal in strict side view facing right, long horse-like snout, gently curved narrow body, curled tail, a limited number of large connected leaf-shaped appendages that read clearly at low resolution, elegant natural anatomy. Visual direction: authentic early-1990s 16-bit side-scrolling action-game sprite discipline, chunky one-to-two-pixel dark contour, six-to-eight dominant colors, flat cel-shaded bands, slightly prehistoric shape language, exaggerated readable anatomy, almost no tiny texture. It will be normalized to a coarse logical grid and enlarged exactly 3x on a 368 by 448 portrait AMOLED, so prioritize large coherent pixel clusters and instant silhouette recognition at arm's length. Constraints: single isolated animal only on a genuinely transparent background, entire silhouette visible with generous canvas safety, crisp opaque pixel edges, strict side view unless the animal is naturally vertical, no scenery, water, bubbles, plants, rocks, prey, shadow, text, label, logo, border, frame, multiple views, sprite sheet, detached particles, cute mascot face, gore, exposed teeth, or reference-game character. Use broad aesthetic principles only; do not reproduce any existing commercial game's sprite, character, composition, or exact palette.",
+  "response": {
+    "model": "rd_pro",
+    "balance_cost": 0.18
+  },
+  "alpha_bbox": [
+    3,
+    7,
+    125,
+    122
+  ],
+  "generated_at": "2026-08-24T16:47:06Z"
+}

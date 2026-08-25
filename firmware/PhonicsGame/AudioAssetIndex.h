@@ -4,10 +4,10 @@
 
 namespace phonics_game {
 struct PackedAudioAsset { const char* id; uint32_t offset; uint32_t length; };
-constexpr const char* kAudioPackSha256 = "563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72";
-constexpr uint8_t kAudioPackSha256Bytes[32] = {0x56, 0x39, 0x43, 0x40, 0x24, 0x70, 0xea, 0xda, 0x01, 0x50, 0xe7, 0x47, 0x20, 0x08, 0x6d, 0x33, 0xef, 0x99, 0x21, 0xd8, 0xb0, 0x7e, 0x58, 0xe1, 0x42, 0x47, 0xf1, 0x8e, 0x91, 0x75, 0xea, 0x72};
-constexpr uint32_t kAudioPackBytes = 950976u;
-constexpr uint16_t kPackedAudioAssetCount = 42;
+constexpr const char* kAudioPackSha256 = "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9";
+constexpr uint8_t kAudioPackSha256Bytes[32] = {0xbf, 0x72, 0x49, 0xdf, 0x09, 0xe7, 0x58, 0xb9, 0x6c, 0x03, 0x7b, 0x91, 0x7a, 0xfb, 0x63, 0x3d, 0x79, 0x6e, 0x40, 0x9e, 0xcb, 0x6a, 0xd6, 0xda, 0x60, 0xcd, 0xac, 0x45, 0xd0, 0xf1, 0x6b, 0xe9};
+constexpr uint32_t kAudioPackBytes = 4422336u;
+constexpr uint16_t kPackedAudioAssetCount = 86;
 constexpr PackedAudioAsset kPackedAudioAssets[] = {
   {"cowboy_a", 32u, 26624u},
   {"cowboy_b", 26656u, 15018u},
@@ -51,6 +51,50 @@ constexpr PackedAudioAsset kPackedAudioAssets[] = {
   {"praise_great_work", 892282u, 20918u},
   {"praise_you_got_it", 913200u, 21970u},
   {"praise_thats_it", 935170u, 15806u},
+  {"sfx_bubble_round", 950976u, 64000u},
+  {"sfx_bubble_even", 1014976u, 64000u},
+  {"sfx_bubble_hollow", 1078976u, 64000u},
+  {"sfx_bubble_cascade", 1142976u, 64000u},
+  {"sfx_creature_moon_jelly", 1206976u, 64000u},
+  {"sfx_creature_reef_shark", 1270976u, 64000u},
+  {"sfx_creature_giant_octopus", 1334976u, 64000u},
+  {"sfx_creature_seahorse", 1398976u, 64000u},
+  {"sfx_creature_glass_squid", 1462976u, 64000u},
+  {"sfx_creature_anglerfish", 1526976u, 64000u},
+  {"sfx_creature_sea_angel", 1590976u, 64000u},
+  {"sfx_creature_gulper_eel", 1654976u, 64000u},
+  {"reward_mix_b0_c0", 1718976u, 84480u},
+  {"reward_mix_b0_c1", 1803456u, 84480u},
+  {"reward_mix_b0_c2", 1887936u, 84480u},
+  {"reward_mix_b0_c3", 1972416u, 84480u},
+  {"reward_mix_b0_c4", 2056896u, 84480u},
+  {"reward_mix_b0_c5", 2141376u, 84480u},
+  {"reward_mix_b0_c6", 2225856u, 84480u},
+  {"reward_mix_b0_c7", 2310336u, 84480u},
+  {"reward_mix_b1_c0", 2394816u, 84480u},
+  {"reward_mix_b1_c1", 2479296u, 84480u},
+  {"reward_mix_b1_c2", 2563776u, 84480u},
+  {"reward_mix_b1_c3", 2648256u, 84480u},
+  {"reward_mix_b1_c4", 2732736u, 84480u},
+  {"reward_mix_b1_c5", 2817216u, 84480u},
+  {"reward_mix_b1_c6", 2901696u, 84480u},
+  {"reward_mix_b1_c7", 2986176u, 84480u},
+  {"reward_mix_b2_c0", 3070656u, 84480u},
+  {"reward_mix_b2_c1", 3155136u, 84480u},
+  {"reward_mix_b2_c2", 3239616u, 84480u},
+  {"reward_mix_b2_c3", 3324096u, 84480u},
+  {"reward_mix_b2_c4", 3408576u, 84480u},
+  {"reward_mix_b2_c5", 3493056u, 84480u},
+  {"reward_mix_b2_c6", 3577536u, 84480u},
+  {"reward_mix_b2_c7", 3662016u, 84480u},
+  {"reward_mix_b3_c0", 3746496u, 84480u},
+  {"reward_mix_b3_c1", 3830976u, 84480u},
+  {"reward_mix_b3_c2", 3915456u, 84480u},
+  {"reward_mix_b3_c3", 3999936u, 84480u},
+  {"reward_mix_b3_c4", 4084416u, 84480u},
+  {"reward_mix_b3_c5", 4168896u, 84480u},
+  {"reward_mix_b3_c6", 4253376u, 84480u},
+  {"reward_mix_b3_c7", 4337856u, 84480u},
 };
 inline const PackedAudioAsset* findPackedAudioAsset(const char* id) {
   for (const auto& asset : kPackedAudioAssets) {

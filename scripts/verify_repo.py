@@ -13,14 +13,29 @@ import sys
 import wave
 from pathlib import Path
 
+from verify_creature_contract import load_creature_contract
+from verify_reward_audio_mix import build_report as build_reward_mix_report
+
 ROOT = Path(__file__).resolve().parents[1]
 PACK_HEADER = struct.Struct("<8sIIII8s")
 EXPECTED_VENDOR_COMMIT = "7ab8f957e22ea1ab811256359f4eddcaaf49ee91"
-EXPECTED_PACK_SHA256 = "563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72"
+EXPECTED_PACK_SHA256 = "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9"
+EXPECTED_AUDIO_COUNTS = {
+    "phonics": 26,
+    "speech": 16,
+    "reward_bubble": 4,
+    "reward_creature": 8,
+    "reward_mix": 32,
+}
+EXPECTED_AUDIO_ASSET_COUNT = sum(EXPECTED_AUDIO_COUNTS.values())
 
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    return sha256_bytes(path.read_bytes())
 
 
 def fail(message: str) -> None:
@@ -93,10 +108,18 @@ def verify_audio() -> None:
     pack_manifest = json.loads(pack_manifest_path.read_text())
     assets = device_manifest["assets"]
     packed_assets = pack_manifest["assets"]
-    if len(assets) != 42 or device_manifest["asset_count"] != 42:
-        fail("device manifest must contain exactly 42 audio assets")
-    if len(packed_assets) != 42 or pack_manifest["asset_count"] != 42:
-        fail("pack manifest must contain exactly 42 audio assets")
+    if (len(assets) != EXPECTED_AUDIO_ASSET_COUNT or
+            device_manifest["asset_count"] != EXPECTED_AUDIO_ASSET_COUNT):
+        fail(f"device manifest must contain exactly {EXPECTED_AUDIO_ASSET_COUNT} audio assets")
+    actual_counts = {
+        kind: sum(asset.get("kind") == kind for asset in assets)
+        for kind in EXPECTED_AUDIO_COUNTS
+    }
+    if actual_counts != EXPECTED_AUDIO_COUNTS:
+        fail(f"device audio category counts are invalid: {actual_counts}")
+    if (len(packed_assets) != EXPECTED_AUDIO_ASSET_COUNT or
+            pack_manifest["asset_count"] != EXPECTED_AUDIO_ASSET_COUNT):
+        fail(f"pack manifest must contain exactly {EXPECTED_AUDIO_ASSET_COUNT} audio assets")
 
     pack = pack_path.read_bytes()
     pack_sha = sha256_bytes(pack)
@@ -111,7 +134,7 @@ def verify_audio() -> None:
 
     magic, version, count, sample_rate, payload_bytes, reserved = PACK_HEADER.unpack_from(pack)
     if (magic, version, count, sample_rate, reserved) != (
-        b"PHONICS1", 1, 42, 16000, b"\0" * 8
+        b"PHONICS1", 1, EXPECTED_AUDIO_ASSET_COUNT, 16000, b"\0" * 8
     ):
         fail("audio pack header is invalid")
     if payload_bytes != len(pack) - PACK_HEADER.size:
@@ -150,6 +173,107 @@ def verify_audio() -> None:
         marker = f'{{"{entry["id"]}", {entry["offset"]}u, {entry["length"]}u}}'
         if marker not in index:
             fail(f"firmware audio index is missing or differs for {entry['id']}")
+
+    mix_report_path = ROOT / "audio/generated/reward-audio-mix-report.json"
+    require(mix_report_path)
+    checked_mix_report = json.loads(mix_report_path.read_text())
+    generated_mix_report = build_reward_mix_report()
+    if checked_mix_report != generated_mix_report:
+        fail("reward audio mix report differs from the accepted WAVs")
+    if (checked_mix_report.get("status") != "passed" or
+            checked_mix_report.get("combination_count") != 32 or
+            checked_mix_report.get("runtime_layer_count") != 1 or
+            checked_mix_report.get("byte_exact_composite_count") != 32 or
+            checked_mix_report.get("unclamped_clipped_sample_count") != 0):
+        fail("reward audio mix safety gate failed")
+
+
+def verify_creature_assets() -> None:
+    manifest_path = ROOT / "creatures/variation/variation_manifest.json"
+    report_path = ROOT / "creatures/variation/generated/variation_report.json"
+    require(manifest_path)
+    require(report_path)
+    contract = load_creature_contract(ROOT)
+    report = json.loads(report_path.read_text())
+    if report.get("status") != "passed" or report.get("schema_version") != 1:
+        fail("creature variation report is not passing")
+    builder = report.get("builder")
+    if builder != "scripts/build_creature_variations.py":
+        fail("creature variation report has an unexpected builder")
+    builder_path = ROOT / builder
+    require(builder_path)
+    if sha256_file(builder_path) != report.get("builder_sha256"):
+        fail("creature variation builder differs from its audited report")
+    if sha256_file(manifest_path) != report.get("manifest_sha256"):
+        fail("creature variation manifest differs from its audited report")
+    if report.get("header") != "firmware/CreatureAssets/GeneratedCreatureVariations.h":
+        fail("creature report does not point to the shared runtime header")
+
+    hashed_outputs = (
+        (report["header"], report["header_sha256"]),
+        (report["palette_comparison"], report["palette_comparison_sha256"]),
+        (
+            report["animation_comparison"],
+            report["animation_comparison_sha256"],
+        ),
+        (report["protection_proof"], report["protection_proof_sha256"]),
+        (
+            report["stage3_pattern_comparison"],
+            report["stage3_pattern_comparison_sha256"],
+        ),
+        (
+            report["stage4_rare_comparison"],
+            report["stage4_rare_comparison_sha256"],
+        ),
+    )
+    for relative, expected_hash in hashed_outputs:
+        path = ROOT / relative
+        require(path)
+        if sha256_file(path) != expected_hash:
+            fail(f"creature artifact hash mismatch: {relative}")
+
+    assets = report.get("assets", [])
+    if (
+        tuple(asset.get("id") for asset in assets) != contract.creature_ids
+        or report.get("palette_ids") != list(contract.palette_ids)
+    ):
+        fail("creature report species count or palette ordinal contract changed")
+    for asset in assets:
+        source = ROOT / asset["source"]
+        require(source)
+        if sha256_file(source) != asset["source_sha256"]:
+            fail(f"creature source hash mismatch: {asset['id']}")
+        authored = asset.get("authored_animation")
+        if authored:
+            for path_key, hash_key in (
+                ("manifest", "manifest_sha256"),
+                ("report", "report_sha256"),
+                ("reviewed_spritesheet", "reviewed_spritesheet_sha256"),
+            ):
+                path = ROOT / authored[path_key]
+                require(path)
+                if sha256_file(path) != authored[hash_key]:
+                    fail(
+                        "creature authored animation hash mismatch: "
+                        f"{asset['id']} {path_key}"
+                    )
+        if any(asset["probe_changed_protected_pixels"]):
+            fail(f"creature probe changed protected anatomy: {asset['id']}")
+        if any(
+            any(values)
+            for values in asset["stage3_changed_protected_pixels"].values()
+        ):
+            fail(f"creature pattern changed protected anatomy: {asset['id']}")
+        if any(asset["stage4_changed_outside_rare_safe_pixels"]):
+            fail(
+                "creature rare treatment escaped its authored region: "
+                f"{asset['id']}"
+            )
+        frame_checks = asset.get("frame_checks", [])
+        if len(frame_checks) != contract.frame_count or not all(
+            all(check.values()) for check in frame_checks
+        ):
+            fail(f"creature frame gate failed: {asset['id']}")
 
 
 def verify_build(build_dir: Path) -> None:
@@ -223,6 +347,7 @@ def main() -> None:
     verify_vendor()
     verify_build_contract()
     verify_audio()
+    verify_creature_assets()
     if args.build_dir:
         verify_build(args.build_dir.resolve())
     print("Repository payload verified")

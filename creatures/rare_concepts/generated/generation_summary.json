@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "status": "preview_only_not_runtime",
+  "sample_count": 10,
+  "retrodiffusion_reported_balance_cost_total": 1.8,
+  "note": "Retro Diffusion reports balance-cost units, not a USD value.",
+  "samples": [
+    {
+      "animal_id": "vampire_squid",
+      "seed": 4511,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        6,
+        6,
+        125,
+        121
+      ]
+    },
+    {
+      "animal_id": "dumbo_octopus",
+      "seed": 4512,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        5,
+        11,
+        123,
+        117
+      ]
+    },
+    {
+      "animal_id": "leafy_seadragon",
+      "seed": 4513,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        3,
+        7,
+        125,
+        122
+      ]
+    },
+    {
+      "animal_id": "glass_squid",
+      "seed": 4514,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        32,
+        3,
+        96,
+        125
+      ]
+    },
+    {
+      "animal_id": "anglerfish",
+      "seed": 4515,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        4,
+        20,
+        125,
+        98
+      ]
+    },
+    {
+      "animal_id": "barreleye",
+      "seed": 4516,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        7,
+        38,
+        121,
+        90
+      ]
+    },
+    {
+      "animal_id": "gulper_eel",
+      "seed": 4521,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        2,
+        19,
+        125,
+        109
+      ]
+    },
+    {
+      "animal_id": "blanket_octopus",
+      "seed": 4518,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        0,
+        8,
+        128,
+        128
+      ]
+    },
+    {
+      "animal_id": "sea_angel",
+      "seed": 4519,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        19,
+        21,
+        107,
+        109
+      ]
+    },
+    {
+      "animal_id": "siphonophore",
+      "seed": 4520,
+      "reported_balance_cost": 0.18,
+      "alpha_bbox": [
+        38,
+        0,
+        90,
+        128
+      ]
+    }
+  ]
+}

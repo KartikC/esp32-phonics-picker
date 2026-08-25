@@ -160,6 +160,19 @@ void es8311_register_dump(es8311_handle_t dev);
 esp_err_t es8311_voice_mute(es8311_handle_t dev, bool enable);
 
 /**
+ * @brief Put every ES8311 audio path and clock into its power-down state
+ *
+ * This follows the suspend sequence used by Espressif's esp_codec_dev driver.
+ * Re-run es8311_init() before using the codec again.
+ *
+ * @param dev ES8311 handle
+ * @return
+ *     - ESP_OK success
+ *     - Else I2C read/write error
+ */
+esp_err_t es8311_power_down(es8311_handle_t dev);
+
+/**
  * @brief Set Microphone gain
  *
  * @param dev ES8311 handle

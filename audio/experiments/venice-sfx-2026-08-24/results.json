@@ -1,0 +1,329 @@
+{
+  "version": 1,
+  "status": "audition only; not part of the canonical firmware audio pack",
+  "processing": {
+    "target_loudness_lufs": -28,
+    "target_true_peak_dbtp": -9,
+    "highpass_hz": 300,
+    "lowpass_hz": 5000,
+    "sample_rate": 16000,
+    "channels": 1,
+    "codec": "PCM signed 16-bit little-endian",
+    "duration_seconds": 2.0
+  },
+  "asset_count": 11,
+  "assets": [
+    {
+      "id": "anglerfish__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/anglerfish__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "b23d2eed46e474280959fcf884f2882a792c159c311d4f31397afe71d7c61f2a",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -44.88,
+        "band_true_peak_dbtp": -12.91
+      },
+      "device_preview": {
+        "path": "device-preview/anglerfish__elevenlabs-sound-effects-v2.wav",
+        "sha256": "8dd8b24183140950ee50cd48e8e2cc8997961cb1032f23ebec015be4b183e5a7",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -41.0,
+        "true_peak_dbtp": -9.38
+      }
+    },
+    {
+      "id": "giant-octopus__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/giant-octopus__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "285ded7a02b03b0e4c1ce3c640f0524403754932235e77a539e15751ec82f804",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -41.65,
+        "band_true_peak_dbtp": -22.27
+      },
+      "device_preview": {
+        "path": "device-preview/giant-octopus__elevenlabs-sound-effects-v2.wav",
+        "sha256": "dd4a38ecbc47393775d97458b882d188be16cff42cfd6ccbd128e82dd3014eb0",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.35,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "glass-squid__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/glass-squid__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "1b4ea37a7476d77b25553beb090311dd078c77dd8bcc21a5e3774f57c1080536",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -37.97,
+        "band_true_peak_dbtp": -18.3
+      },
+      "device_preview": {
+        "path": "device-preview/glass-squid__elevenlabs-sound-effects-v2.wav",
+        "sha256": "dd24c0204c1047f90c80bc8e39ae0ed4bc78cc9d1ac25a194e7eb1df28a3e205",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.65,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "gulper-eel__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/gulper-eel__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "77937b027fbd81b57e1456a03008b8f790db8fd0b56983b00b7440b56b9c8d9f",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -28.15,
+        "band_true_peak_dbtp": -10.61
+      },
+      "device_preview": {
+        "path": "device-preview/gulper-eel__elevenlabs-sound-effects-v2.wav",
+        "sha256": "267f246943419433a47ae80071c8a292ebb38c691ae85a415b512706da88362c",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -27.98,
+        "true_peak_dbtp": -10.46
+      }
+    },
+    {
+      "id": "moon-jelly__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/moon-jelly__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "efb0f41cdcb3ca1d5b4eb415713a9ee24b1ffefef99637c45d7280d395da0277",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -23.03,
+        "band_true_peak_dbtp": -2.42
+      },
+      "device_preview": {
+        "path": "device-preview/moon-jelly__elevenlabs-sound-effects-v2.wav",
+        "sha256": "6ff28a7f0b99c9f7c2fcdfb8ee04ad49db0de6fe6cb6409756e2f4d5f805cb8a",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -29.6,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "reef-shark__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/reef-shark__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "e4f6a53a865d8f94f471fdc8688d71a0341d24e805781b06d2560fe1a6c962b5",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -38.68,
+        "band_true_peak_dbtp": -25.23
+      },
+      "device_preview": {
+        "path": "device-preview/reef-shark__elevenlabs-sound-effects-v2.wav",
+        "sha256": "c7da628fad1643b524a5144bead65987e8e94f14f1436713f110fb23ada31f7d",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.55,
+        "true_peak_dbtp": -14.55
+      }
+    },
+    {
+      "id": "sea-angel__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/sea-angel__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "05659fa61f1884a83ec62fab1e77bca77f678985b0af36ba9e671a22abefd0dc",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -32.2,
+        "band_true_peak_dbtp": -10.91
+      },
+      "device_preview": {
+        "path": "device-preview/sea-angel__elevenlabs-sound-effects-v2.wav",
+        "sha256": "7fc2832cb6c38254aa81c57673de0dbf31044ae952651a18bbd463afb45c5a62",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -30.3,
+        "true_peak_dbtp": -9.0
+      }
+    },
+    {
+      "id": "seahorse__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/seahorse__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "96cfdc32a35601a5906301b75e7e0ffc9802a84b5879d88b57e916ade85c7ed4",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -53.37,
+        "band_true_peak_dbtp": -24.46
+      },
+      "device_preview": {
+        "path": "device-preview/seahorse__elevenlabs-sound-effects-v2.wav",
+        "sha256": "908e0290889864fbd8138906fd6d87382344d04abb105f47f86aeb391a50d696",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -38.27,
+        "true_peak_dbtp": -9.97
+      }
+    },
+    {
+      "id": "shared-bubbles__elevenlabs-sound-effects-v2",
+      "raw": {
+        "path": "raw/shared-bubbles__elevenlabs-sound-effects-v2.mp3",
+        "sha256": "d9b45313bfb55e115644c438431e4d5893d36f45319dc6e4784c535df90e1078",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.0,
+        "bytes": 33062,
+        "band_loudness_lufs": -29.56,
+        "band_true_peak_dbtp": -17.4
+      },
+      "device_preview": {
+        "path": "device-preview/shared-bubbles__elevenlabs-sound-effects-v2.wav",
+        "sha256": "e67f0ff9b10d28208eee20df4937dcc0abc6f02505cc9029d56ace4ce1e1ce8d",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -27.99,
+        "true_peak_dbtp": -15.83
+      }
+    },
+    {
+      "id": "shared-bubbles__mmaudio-v2-text-to-audio",
+      "raw": {
+        "path": "raw/shared-bubbles__mmaudio-v2-text-to-audio.mp3",
+        "sha256": "cacbb033ba48a76d345e566d44e345078df6b5a0e33ca86b2b2a1582b5e777ec",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 1,
+        "duration_seconds": 2.020136,
+        "bytes": 29824,
+        "band_loudness_lufs": -24.8,
+        "band_true_peak_dbtp": -4.79
+      },
+      "device_preview": {
+        "path": "device-preview/shared-bubbles__mmaudio-v2-text-to-audio.wav",
+        "sha256": "50d4e9b7c499271355000b5d2ae9aa1b99be723d38470e108fcc93a44e22ea9c",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -29.03,
+        "true_peak_dbtp": -8.95
+      }
+    },
+    {
+      "id": "shared-bubbles__sonilo-v1-1-sound-effects",
+      "raw": {
+        "path": "raw/shared-bubbles__sonilo-v1-1-sound-effects.mp3",
+        "sha256": "ea892209cbf9bdaa588b87fd44774bf587e0ef9cad51b16b78a985ffd0b29447",
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "duration_seconds": 2.043356,
+        "bytes": 84680,
+        "band_loudness_lufs": -17.22,
+        "band_true_peak_dbtp": -2.71
+      },
+      "device_preview": {
+        "path": "device-preview/shared-bubbles__sonilo-v1-1-sound-effects.wav",
+        "sha256": "b0ee06a68c848761d76d93687c4e1707a5d4ed91fcad055ff806031f6d509fed",
+        "codec": "pcm_s16le",
+        "sample_rate": 16000,
+        "channels": 1,
+        "duration_seconds": 2.0,
+        "bytes": 64078,
+        "loudness_lufs": -28.01,
+        "true_peak_dbtp": -13.49
+      }
+    }
+  ],
+  "audition_reels": {
+    "species": {
+      "path": "species-audition-reel.wav",
+      "order": [
+        "moon-jelly",
+        "reef-shark",
+        "giant-octopus",
+        "seahorse",
+        "glass-squid",
+        "anglerfish",
+        "sea-angel",
+        "gulper-eel"
+      ],
+      "gap_seconds": 0.5,
+      "sha256": "b7fdc1979b4d53682dcc704a4030ac6a21408768496ad9f09b2fc1e598534444",
+      "codec": "pcm_s16le",
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 19.5,
+      "bytes": 624044
+    },
+    "model_comparison": {
+      "path": "model-comparison-reel.wav",
+      "order": [
+        "shared-bubbles__elevenlabs-sound-effects-v2",
+        "shared-bubbles__mmaudio-v2-text-to-audio",
+        "shared-bubbles__sonilo-v1-1-sound-effects"
+      ],
+      "gap_seconds": 0.75,
+      "sha256": "15b6d714ab1515aace5f871bb6f7ab0b85b51ec48a0a03aa4060321aa9b8e9a3",
+      "codec": "pcm_s16le",
+      "sample_rate": 16000,
+      "channels": 1,
+      "duration_seconds": 7.5,
+      "bytes": 240044
+    }
+  }
+}

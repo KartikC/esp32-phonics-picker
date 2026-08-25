@@ -437,6 +437,29 @@ esp_err_t es8311_voice_mute(es8311_handle_t dev, bool mute)
     return es8311_write_reg(dev, ES8311_DAC_REG31, reg31);
 }
 
+esp_err_t es8311_power_down(es8311_handle_t dev)
+{
+    /* Keep this sequence aligned with Espressif esp_codec_dev's ES8311
+     * suspend path. Muting alone leaves the codec clocks and analog blocks
+     * running; the datasheet specifies 8 mA for normal operation. */
+    esp_err_t ret = es8311_write_reg(dev, ES8311_DAC_REG32, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_ADC_REG17, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_SYSTEM_REG0E, 0xFF);
+    ret |= es8311_write_reg(dev, ES8311_SYSTEM_REG12, 0x02);
+    ret |= es8311_write_reg(dev, ES8311_SYSTEM_REG14, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_SYSTEM_REG0D, 0xFA);
+    ret |= es8311_write_reg(dev, ES8311_ADC_REG15, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_CLK_MANAGER_REG02, 0x10);
+    ret |= es8311_write_reg(dev, ES8311_RESET_REG00, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_RESET_REG00, 0x1F);
+    ret |= es8311_write_reg(dev, ES8311_CLK_MANAGER_REG01, 0x30);
+    ret |= es8311_write_reg(dev, ES8311_CLK_MANAGER_REG01, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_GP_REG45, 0x00);
+    ret |= es8311_write_reg(dev, ES8311_SYSTEM_REG0D, 0xFC);
+    ret |= es8311_write_reg(dev, ES8311_CLK_MANAGER_REG02, 0x00);
+    return ret;
+}
+
 esp_err_t es8311_microphone_gain_set(es8311_handle_t dev, es8311_mic_gain_t gain_db)
 {
     return es8311_write_reg(dev, ES8311_ADC_REG16, gain_db); // ADC gain scale up

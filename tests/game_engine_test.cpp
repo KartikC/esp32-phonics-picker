@@ -3,6 +3,7 @@
 
 #include "../firmware/PhonicsGame/GameEngine.h"
 #include "../firmware/PhonicsGame/LayoutGeometry.h"
+#include "../firmware/PhonicsGame/RewardTransition.h"
 
 using namespace phonics_game;
 
@@ -96,8 +97,68 @@ int main() {
   pausedCelebrationGame.suspend(500);
   assert(pausedCelebrationGame.celebrationElapsed(90000) == 300);
   pausedCelebrationGame.resume(10500);
-  assert(pausedCelebrationGame.update(11299).type == EventType::none);
-  assert(pausedCelebrationGame.update(11300).type == EventType::roundStarted);
+  const uint32_t resumedCelebrationEnd =
+      10500 + (kCelebrationDurationMs - 300);
+  assert(pausedCelebrationGame.update(resumedCelebrationEnd - 1).type ==
+         EventType::none);
+  assert(pausedCelebrationGame.update(resumedCelebrationEnd).type ==
+         EventType::roundStarted);
+
+  static_assert(kCorrectPulseEndMs < kWaterRiseEndMs,
+                "the water transition must follow card confirmation");
+  static_assert(kWaterRiseEndMs < kCreatureRewardEndMs,
+                "the creature needs a visible reward hold");
+  static_assert(kCreatureRewardEndMs < kCelebrationDurationMs,
+                "the water needs time to recede before the next round");
+  static_assert(kCreatureRewardEndMs < kWaterRecedeEndMs,
+                "water recede must follow the creature hold");
+  static_assert(kWaterRecedeEndMs < kCelebrationDurationMs,
+                "a fully black frame must precede the next round");
+  static_assert(kCelebrationDurationMs - kWaterRecedeEndMs >= 80,
+                "the terminal black frame needs a reliable flush window");
+  static_assert(kWaterRiseEndMs - kCorrectPulseEndMs == 240,
+                "the established water-rise pacing must stay unchanged");
+  static_assert(kWaterRecedeEndMs - kCreatureRewardEndMs == 280,
+                "the established water-recede pacing must stay unchanged");
+  static_assert(kCelebrationDurationMs - kWaterRecedeEndMs == 120,
+                "the terminal black beat must remain 120 ms");
+  constexpr uint32_t kPreviousCreatureOnScreenMs = 1840;
+  constexpr uint32_t kCreatureOnScreenMs =
+      kWaterRecedeEndMs - kWaterRiseEndMs;
+  static_assert(kCreatureOnScreenMs == 2200,
+                "the creature should now remain on screen for 2200 ms");
+  static_assert(kCreatureOnScreenMs * 100 >=
+                    kPreviousCreatureOnScreenMs * 118 &&
+                kCreatureOnScreenMs * 100 <=
+                    kPreviousCreatureOnScreenMs * 122,
+                "the creature window should grow by approximately 20 percent");
+
+  constexpr uint16_t kTestDisplayHeight = 450;
+  assert(!rewardCreatureVisible(kWaterRiseEndMs - 1));
+  assert(rewardCreatureVisible(kWaterRiseEndMs));
+  assert(rewardCreatureVisible(kCreatureRewardEndMs - 1));
+  assert(rewardCreatureVisible(kCreatureRewardEndMs));
+  assert(rewardCreatureVisible(kWaterRecedeEndMs - 1));
+  assert(!rewardCreatureVisible(kWaterRecedeEndMs));
+  assert(!rewardCreatureVisible(kCelebrationDurationMs));
+  assert(rewardWaterSurfaceY(kCorrectPulseEndMs - 1,
+                            kTestDisplayHeight) == kTestDisplayHeight);
+  assert(rewardWaterSurfaceY(kCorrectPulseEndMs,
+                            kTestDisplayHeight) == kTestDisplayHeight);
+  assert(rewardWaterSurfaceY(kWaterRiseEndMs - 1,
+                            kTestDisplayHeight) > 0);
+  assert(rewardWaterSurfaceY(kWaterRiseEndMs,
+                            kTestDisplayHeight) == 0);
+  assert(rewardWaterSurfaceY(kCreatureRewardEndMs - 1,
+                            kTestDisplayHeight) == 0);
+  assert(rewardWaterSurfaceY(kCreatureRewardEndMs,
+                            kTestDisplayHeight) == 0);
+  assert(rewardWaterSurfaceY(kWaterRecedeEndMs - 1,
+                            kTestDisplayHeight) < kTestDisplayHeight);
+  assert(rewardWaterSurfaceY(kWaterRecedeEndMs,
+                            kTestDisplayHeight) == kTestDisplayHeight);
+  assert(rewardWaterSurfaceY(kCelebrationDurationMs,
+                            kTestDisplayHeight) == kTestDisplayHeight);
 
   // Exhaust every independent horizontal pair allowed by the motion clamp,
   // both vertical extremes, and every celebration pulse. The shadow is

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "moon_jelly",
+  "seed": 91427,
+  "prompt": "Production-ready low-resolution pixel-art water-creature sprite for a tiny portrait AMOLED. Original design with a strong readable silhouette, restrained interior detail, crisp opaque pixel edges, one dark outline, medium shading, and luminous ocean accents. Strictly one subject on a genuinely transparent background. Inspired only by the general readability and underwater adventure mood of polished side-view diving games; do not reproduce any existing game's creature design, sprite, composition, or exact palette. One original moon-jellyfish game sprite, complete animal in strict side view, a broad translucent luminous bell, compact connected oral arms and several graceful connected tentacles, cyan and violet bioluminescent accents, calm natural anatomy, centered vertical silhouette. No cute mascot face. No bubbles, detached glow particles, prey, ground, scenery, text, border, shadow, or multiple views.",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    26,
+    11,
+    102,
+    119
+  ],
+  "generated_at": "2026-08-23T16:24:32Z"
+}

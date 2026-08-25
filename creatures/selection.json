@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "selections": {
+    "moon_jelly": {
+      "vendor": "pixellab",
+      "seed": 23861
+    },
+    "blue_reef_shark": {
+      "vendor": "retrodiffusion",
+      "seed": 23861
+    }
+  }
+}

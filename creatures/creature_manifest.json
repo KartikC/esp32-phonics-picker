@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "source_size": [128, 128],
+  "frame_count": 4,
+  "palette": [
+    "#00000000",
+    "#071522",
+    "#0B2A3C",
+    "#124A60",
+    "#35677A",
+    "#5F8FA0",
+    "#91B7BE",
+    "#D8EEF0",
+    "#F7FFFF",
+    "#27D3D0",
+    "#2588D8",
+    "#7667C5",
+    "#B45CC7",
+    "#E06C8C",
+    "#F3B56B",
+    "#F4E39B"
+  ],
+  "assets": [
+    {
+      "id": "moon_jelly",
+      "label": "Moon jelly",
+      "target_size": [88, 120],
+      "content_box": [80, 112],
+      "render_scale": 3,
+      "anchor": "center",
+      "facing": "none",
+      "animation": "jelly_pulse",
+      "prompt": "One original moon-jellyfish game sprite designed for an 88 by 120 logical pixel grid and enlarged 3x on a tiny screen, complete animal in strict side view, a broad translucent luminous bell, compact connected oral arms and several thick connected tentacle groups, cyan and violet bioluminescent accents, calm natural anatomy, centered vertical silhouette, broad color clusters and very low interior detail. No cute mascot face. No one-pixel noise, bubbles, detached glow particles, prey, ground, scenery, text, border, shadow, or multiple views."
+    },
+    {
+      "id": "blue_reef_shark",
+      "label": "Blue reef shark",
+      "target_size": [112, 64],
+      "content_box": [106, 58],
+      "render_scale": 3,
+      "anchor": "center",
+      "facing": "east",
+      "animation": "shark_swim",
+      "prompt": "One original blue reef shark game sprite designed for a 112 by 64 logical pixel grid and enlarged 3x on a tiny screen, complete animal in strict side view facing right, streamlined but powerful body, unmistakable dorsal fin, compact pectoral fins, clear forked tail, slate-blue back and pale belly, tiny natural eye, calm swimming pose, strong horizontal silhouette, broad color clusters and very low interior detail. Not a mascot and not aggressive or gory. No one-pixel noise, bubbles, fish, ground, scenery, text, border, shadow, or multiple views."
+    }
+  ],
+  "generation": {
+    "seeds": [23861, 91427],
+    "vendors": ["pixellab", "retrodiffusion"]
+  }
+}

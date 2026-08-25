@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "generated_at": "2026-08-24",
+  "status": "downloaded, locally preserved, and completed at provider",
+  "requests": [
+    {
+      "id": "shared-bubbles__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03620-a40c-7210-b9de-a9427b7f108f",
+      "prompt": "A very subtle two-second handheld-game reward sound: three small rounded underwater bubbles rise at an unhurried pace, with one soft watery plip at the end. Cohesive late-1990s handheld console character, warm and gently stylized rather than realistic, quiet and intimate, clean transient shapes, dry, no reverb tail, no music, no melody, no voice, no creature vocalization, no splash, no harsh hiss, no deep bass."
+    },
+    {
+      "id": "shared-bubbles__mmaudio-v2-text-to-audio",
+      "model": "mmaudio-v2-text-to-audio",
+      "duration_seconds": 2,
+      "quote_usd": 0.01,
+      "queue_id": "01a03620-cdc4-7d33-b9e0-19c88d915b5d",
+      "prompt": "A very subtle two-second handheld-game reward sound: three small rounded underwater bubbles rise at an unhurried pace, with one soft watery plip at the end. Cohesive late-1990s handheld console character, warm and gently stylized rather than realistic, quiet and intimate, clean transient shapes, dry, no reverb tail, no music, no melody, no voice, no creature vocalization, no splash, no harsh hiss, no deep bass."
+    },
+    {
+      "id": "shared-bubbles__sonilo-v1-1-sound-effects",
+      "model": "sonilo-v1-1-sound-effects",
+      "duration_seconds": 2,
+      "quote_usd": 0.01,
+      "queue_id": "01a03620-cf31-74b2-864c-5f56539b0fcd",
+      "prompt": "A very subtle two-second handheld-game reward sound: three small rounded underwater bubbles rise at an unhurried pace, with one soft watery plip at the end. Cohesive late-1990s handheld console character, warm and gently stylized rather than realistic, quiet and intimate, clean transient shapes, dry, no reverb tail, no music, no melody, no voice, no creature vocalization, no splash, no harsh hiss, no deep bass."
+    },
+    {
+      "id": "moon-jelly__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-685e-7cd3-a20f-cf85e69f5ed0",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a moon jelly: two soft gelatinous underwater bloops followed by three tiny ascending bubbles, weightless and luminous in feeling. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, clean rounded transients, no music, no melody, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "reef-shark__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-6a1f-7940-8ae3-905dc9307dc6",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a calm reef shark: one short smooth underwater glide past the listener with a single muted bubble at the end, sleek and friendly but not cute. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, no roar, no bite, no splash, no music, no voice, no harsh hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "giant-octopus__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-6c09-76b1-985d-ae89730a5939",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a giant octopus: two soft padded suction-cup pops and one low rounded bubble, clever and tactile, never gross. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, clean rounded transients, no music, no voice, no squelch, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "seahorse__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-6d94-7490-b8d6-9a675208e122",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a seahorse: one tiny dry click, a delicate water tick, then two pinhead bubbles rising, precise and gentle. Warm stylized late-1990s handheld-console character, quiet and intimate, clean rounded transients, no music, no melody, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "glass-squid__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-c242-7672-a582-4d922d2035d1",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a glass squid: one hollow translucent water droplet tone and a small cluster of airy bubbles, delicate and slightly mysterious, never sharp. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, no glass breaking, no music, no melody, no voice, no splash, no hiss, no reverb tail."
+    },
+    {
+      "id": "anglerfish__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-c403-7b41-8ddc-cfbbea3be6f8",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for an anglerfish: one low soft bubble, a tiny warm muted lure ping, then one smaller bubble, curious and deep-sea but child-safe. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, no growl, no scare, no music, no melody phrase, no voice, no splash, no hiss, no reverb tail."
+    },
+    {
+      "id": "sea-angel__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-c4fe-7fe3-93a0-46da345f3064",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a sea angel: a soft feathery underwater flutter and two tiny bright bubbles, light and graceful without becoming magical. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, clean rounded transients, no music, no melody, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "gulper-eel__elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v2",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03623-c605-77d3-a60f-0429b1ab6e1f",
+      "prompt": "Two seconds, very subtle handheld-game creature reward for a gulper eel: one low hollow bubble gulp, a soft fold of moving water, then a tiny bubble, strange but gentle and child-safe. Warm stylized late-1990s handheld-console character, quiet and intimate, dry, no growl, no scare, no music, no voice, no splash, no harsh hiss, no reverb tail, no sub-bass boom."
+    }
+  ]
+}

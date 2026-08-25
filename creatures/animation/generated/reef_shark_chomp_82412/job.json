@@ -1,0 +1,20 @@
+{
+  "request": {
+    "frames_duration": 4,
+    "height": 160,
+    "input_image": "sha256:2aab2ac17b3dd7349d5cd6d9c118614e76ccb43ece29317b65d3e779f8eb31f9",
+    "input_palette": "iVBORw0KGgoAAAANSUhEUgAAAA8AAAABCAIAAACOvmNtAAAAN0lEQVR42mNkF1ViEZViV1BRlpXS0lAz0pBzNzeSF+Q3uHLx31aOwPtv7b4y6QgcFfa8z6hnAADY8gx0WAjOfwAAAABJRU5ErkJggg==",
+    "num_images": 1,
+    "prompt": "The exact same blue reef shark in the uploaded starting frame performs one small, natural, child-safe bite against a single flat magenta background that must be removed completely from the output. Produce exactly four registered frames in this order: closed original neutral mouth, half open, fully open, half open returning. Keep the camera locked and preserve the strongly foreshortened three-quarter banking turn exactly: head in the lower-right foreground, body curling in a broad C to the upper-left forked tail, near pectoral fin sweeping toward the viewer, far fin partly visible, and dorsal fin in the same place. Preserve the exact silhouette, body length and thickness, fins, tail, eye, gills, upper head, belly boundary, outline, colors, and chunky low-resolution clusters. Only the attached lower jaw and a small dark mouth cavity move. The jaw stays thick and natural, tapers toward the snout, and remains shorter than the upper snout. Calm and toothless: no teeth, gums, tongue, gore, prey, aggression, or scary expression. No body translation, lunge, tail motion, camera motion, anatomy deformation, second snout, beak, whisker, tendril, paddle jaw, detached pixels, bubbles, scenery, shadow, text, blur, anti-aliasing, gradients, or extra subject. One complete isolated shark with a genuinely transparent background in every output frame.",
+    "prompt_style": "rd_advanced_animation__custom_action",
+    "remove_bg": true,
+    "return_spritesheet": true,
+    "seed": 82421,
+    "upload_outputs": true,
+    "width": 160
+  },
+  "schema_version": 1,
+  "status": "accepted",
+  "submitted_at": "2026-08-24T23:37:49Z",
+  "task_id": "734a7d0e-a373-4a25-bcf0-c2cded4f5be0"
+}

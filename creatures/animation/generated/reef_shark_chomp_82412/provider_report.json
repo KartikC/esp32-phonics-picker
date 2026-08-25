@@ -1,0 +1,87 @@
+{
+  "balance_cost": 0.25,
+  "contact_sheet": "creatures/animation/generated/reef_shark_chomp_82412/provider_contact_sheet.png",
+  "contact_sheet_sha256": "35a657247b313c015fd75d551224a256dbd62ab70e2afdc42aa5b105a3c72f96",
+  "frames": [
+    {
+      "alpha_bounds": [
+        21,
+        21,
+        136,
+        135
+      ],
+      "conditioning_alpha_iou": 0.989997,
+      "index": 0,
+      "opaque_pixels": 6350,
+      "path": "creatures/animation/generated/reef_shark_chomp_82412/provider_frame_0.png",
+      "sha256": "cd07754f7e7cff96d445bf1503e446b55ec1a6f17ac0e4edf7ddf82c1585eb5f"
+    },
+    {
+      "alpha_bounds": [
+        22,
+        25,
+        136,
+        136
+      ],
+      "conditioning_alpha_iou": 0.933658,
+      "index": 1,
+      "opaque_pixels": 6326,
+      "path": "creatures/animation/generated/reef_shark_chomp_82412/provider_frame_1.png",
+      "sha256": "c1a0616ce6b1db1a97c5f09e99940c3c9a2eed8c78fb54091aec9b4c367875c9"
+    },
+    {
+      "alpha_bounds": [
+        23,
+        29,
+        136,
+        136
+      ],
+      "conditioning_alpha_iou": 0.789124,
+      "index": 2,
+      "opaque_pixels": 6285,
+      "path": "creatures/animation/generated/reef_shark_chomp_82412/provider_frame_2.png",
+      "sha256": "91920cee82868a654fddb321578cc30307268ed58e4011c91ddca9b648ec57e9"
+    },
+    {
+      "alpha_bounds": [
+        22,
+        32,
+        140,
+        137
+      ],
+      "conditioning_alpha_iou": 0.826746,
+      "index": 3,
+      "opaque_pixels": 6281,
+      "path": "creatures/animation/generated/reef_shark_chomp_82412/provider_frame_3.png",
+      "sha256": "6082b9375c7cd6abadcba07e9779896dfe2fa6f217fa1849ff860fade31f88c5"
+    }
+  ],
+  "generated_at": "2026-08-24T23:38:45Z",
+  "input_sha256": "2aab2ac17b3dd7349d5cd6d9c118614e76ccb43ece29317b65d3e779f8eb31f9",
+  "manifest": "creatures/animation/shark_chomp_manifest.json",
+  "manifest_sha256": "d75b34e6f230f295d89535106a2f3aa2a7fc84e1efb3b2beaf16348b12cee2a5",
+  "model": "rd_fast",
+  "preview_animation": "creatures/animation/generated/reef_shark_chomp_82412/provider_preview.gif",
+  "preview_animation_sha256": "818d48d77093092ab09a196e6e9c60b5a4db4176fb0f59e8519baf9ae96fa34b",
+  "provider_delivery": "base64",
+  "provider_format": "PNG",
+  "raw_output": "creatures/animation/generated/reef_shark_chomp_82412/provider_spritesheet.png",
+  "raw_output_sha256": "92668c1a74f04f940908e4dfe99c8718f81bde8aa3f3958b85b8ce6b5475810b",
+  "remaining_balance": 17.403,
+  "review_contract": {
+    "body_outside_reviewed_mouth_region_must_match_source": true,
+    "frame_order": [
+      "closed",
+      "half_open",
+      "open",
+      "half_open"
+    ],
+    "frame_zero_must_be_replaced_with_exact_source": true,
+    "manual_visual_approval_required": true,
+    "provider_output_is_never_consumed_directly_by_firmware": true,
+    "toothless_child_safe_mouth_required": true,
+    "transparent_background_required": true
+  },
+  "schema_version": 1,
+  "status": "provider_output_requires_manual_review"
+}

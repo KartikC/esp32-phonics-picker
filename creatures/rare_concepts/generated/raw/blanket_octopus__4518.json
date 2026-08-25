@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "preview_only_not_runtime",
+  "style_id": "02_evolutionary_16bit",
+  "vendor": "retrodiffusion",
+  "animal_id": "blanket_octopus",
+  "seed": 4518,
+  "prompt": "Production-ready original low-resolution pixel-art sea-animal game sprite. Subject: one original blanket octopus, complete animal in side view, small rounded mantle and one natural eye, arms extending into two enormous connected flowing web membranes like an underwater cape, membranes unfurled into a broad wavelike silhouette with restrained warm accent bands. Visual direction: authentic early-1990s 16-bit side-scrolling action-game sprite discipline, chunky one-to-two-pixel dark contour, six-to-eight dominant colors, flat cel-shaded bands, slightly prehistoric shape language, exaggerated readable anatomy, almost no tiny texture. It will be normalized to a coarse logical grid and enlarged exactly 3x on a 368 by 448 portrait AMOLED, so prioritize large coherent pixel clusters and instant silhouette recognition at arm's length. Constraints: single isolated animal only on a genuinely transparent background, entire silhouette visible with generous canvas safety, crisp opaque pixel edges, strict side view unless the animal is naturally vertical, no scenery, water, bubbles, plants, rocks, prey, shadow, text, label, logo, border, frame, multiple views, sprite sheet, detached particles, cute mascot face, gore, exposed teeth, or reference-game character. Use broad aesthetic principles only; do not reproduce any existing commercial game's sprite, character, composition, or exact palette.",
+  "response": {
+    "model": "rd_pro",
+    "balance_cost": 0.18
+  },
+  "alpha_bbox": [
+    0,
+    8,
+    128,
+    128
+  ],
+  "generated_at": "2026-08-24T16:48:15Z"
+}

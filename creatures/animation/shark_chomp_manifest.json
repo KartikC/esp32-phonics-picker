@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "id": "reef_shark_chomp_82412",
+  "status": "authoring_source_selected",
+  "source": "creatures/animation/source/reef_shark_banking_82412.png",
+  "source_sha256": "0042e78252174923e339f3bf0f29d1b083bd26d9a0eddc0a4e80c91629e58c7c",
+  "source_canvas": [128, 128],
+  "conditioning_canvas": [160, 160],
+  "source_offset": [16, 16],
+  "conditioning_background": "#FF00FF",
+  "palette": [
+    "#071522", "#0B2A3C", "#124A60", "#35677A", "#5F8FA0",
+    "#91B7BE", "#D8EEF0", "#F7FFFF", "#27D3D0", "#2588D8",
+    "#7667C5", "#B45CC7", "#E06C8C", "#F3B56B", "#F4E39B"
+  ],
+  "output_dir": "creatures/animation/generated/reef_shark_chomp_82412",
+  "provider": {
+    "vendor": "retrodiffusion",
+    "endpoint": "https://api.retrodiffusion.ai/v1/inferences",
+    "prompt_style": "rd_advanced_animation__custom_action",
+    "frames_duration": 4,
+    "generation_seed": 82421,
+    "maximum_cost_usd": 0.25
+  },
+  "prompt": "The exact same blue reef shark in the uploaded starting frame performs one small, natural, child-safe bite against a single flat magenta background that must be removed completely from the output. Produce exactly four registered frames in this order: closed original neutral mouth, half open, fully open, half open returning. Keep the camera locked and preserve the strongly foreshortened three-quarter banking turn exactly: head in the lower-right foreground, body curling in a broad C to the upper-left forked tail, near pectoral fin sweeping toward the viewer, far fin partly visible, and dorsal fin in the same place. Preserve the exact silhouette, body length and thickness, fins, tail, eye, gills, upper head, belly boundary, outline, colors, and chunky low-resolution clusters. Only the attached lower jaw and a small dark mouth cavity move. The jaw stays thick and natural, tapers toward the snout, and remains shorter than the upper snout. Calm and toothless: no teeth, gums, tongue, gore, prey, aggression, or scary expression. No body translation, lunge, tail motion, camera motion, anatomy deformation, second snout, beak, whisker, tendril, paddle jaw, detached pixels, bubbles, scenery, shadow, text, blur, anti-aliasing, gradients, or extra subject. One complete isolated shark with a genuinely transparent background in every output frame.",
+  "review_contract": {
+    "frame_order": ["closed", "half_open", "open", "half_open"],
+    "frame_zero_must_be_replaced_with_exact_source": true,
+    "provider_output_is_never_consumed_directly_by_firmware": true,
+    "body_outside_reviewed_mouth_region_must_match_source": true,
+    "transparent_background_required": true,
+    "toothless_child_safe_mouth_required": true,
+    "manual_visual_approval_required": true
+  },
+  "review_recipe": {
+    "provider_frame_schedule": [null, 1, 3, 1],
+    "patch_polygon_conditioning": [
+      [98, 130], [110, 126], [122, 125], [134, 122], [143, 118],
+      [148, 118], [149, 146], [104, 146], [98, 140]
+    ],
+    "crop_box_conditioning": [16, 16, 144, 144],
+    "mouth_probe_box_reviewed": [88, 108, 120, 126],
+    "output_frame_size": [128, 128],
+    "logical_size": [112, 112],
+    "content_box": [108, 108],
+    "render_scale": 3,
+    "reviewed_output_dir": "creatures/animation/reviewed/reef_shark_chomp_82412",
+    "allowed_colors": [
+      "#071522", "#0B2A3C", "#124A60", "#35677A", "#5F8FA0",
+      "#91B7BE", "#D8EEF0", "#F7FFFF", "#27D3D0"
+    ]
+  },
+  "visual_approval": {
+    "status": "approved_for_device_test",
+    "contact_sheet_sha256": "cd2fd56b8d3a50d3e0a868d290a5762d87e844660fce81d46c11ad07decd53f4",
+    "reviewed_at": "2026-08-24T23:46:00Z",
+    "notes": "Exact selected banking pose outside the mouth. Closed, subtle half-open, clearly open, identical half-open recovery. Thick attached lower jaw, dark cavity, no teeth, no eye or gill drift, and no detached provider artifacts."
+  }
+}

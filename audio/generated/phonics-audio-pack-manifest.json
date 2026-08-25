@@ -3,9 +3,9 @@
   "magic": "PHONICS1",
   "sample_rate": 16000,
   "format": "PCM signed 16-bit little-endian, mono",
-  "asset_count": 42,
-  "bytes": 950976,
-  "sha256": "563943402470eada0150e74720086d33ef9921d8b07e58e14247f18e9175ea72",
+  "asset_count": 86,
+  "bytes": 4422336,
+  "sha256": "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9",
   "flash_partition": {
     "label": "ffat",
     "offset": "0x610000",
@@ -221,6 +221,226 @@
       "id": "praise_thats_it",
       "offset": 935170,
       "length": 15806
+    },
+    {
+      "id": "sfx_bubble_round",
+      "offset": 950976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_bubble_even",
+      "offset": 1014976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_bubble_hollow",
+      "offset": 1078976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_bubble_cascade",
+      "offset": 1142976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_moon_jelly",
+      "offset": 1206976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_reef_shark",
+      "offset": 1270976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_giant_octopus",
+      "offset": 1334976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_seahorse",
+      "offset": 1398976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_glass_squid",
+      "offset": 1462976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_anglerfish",
+      "offset": 1526976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_sea_angel",
+      "offset": 1590976,
+      "length": 64000
+    },
+    {
+      "id": "sfx_creature_gulper_eel",
+      "offset": 1654976,
+      "length": 64000
+    },
+    {
+      "id": "reward_mix_b0_c0",
+      "offset": 1718976,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c1",
+      "offset": 1803456,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c2",
+      "offset": 1887936,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c3",
+      "offset": 1972416,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c4",
+      "offset": 2056896,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c5",
+      "offset": 2141376,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c6",
+      "offset": 2225856,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b0_c7",
+      "offset": 2310336,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c0",
+      "offset": 2394816,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c1",
+      "offset": 2479296,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c2",
+      "offset": 2563776,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c3",
+      "offset": 2648256,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c4",
+      "offset": 2732736,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c5",
+      "offset": 2817216,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c6",
+      "offset": 2901696,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b1_c7",
+      "offset": 2986176,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c0",
+      "offset": 3070656,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c1",
+      "offset": 3155136,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c2",
+      "offset": 3239616,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c3",
+      "offset": 3324096,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c4",
+      "offset": 3408576,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c5",
+      "offset": 3493056,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c6",
+      "offset": 3577536,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b2_c7",
+      "offset": 3662016,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c0",
+      "offset": 3746496,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c1",
+      "offset": 3830976,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c2",
+      "offset": 3915456,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c3",
+      "offset": 3999936,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c4",
+      "offset": 4084416,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c5",
+      "offset": 4168896,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c6",
+      "offset": 4253376,
+      "length": 84480
+    },
+    {
+      "id": "reward_mix_b3_c7",
+      "offset": 4337856,
+      "length": 84480
     }
   ]
 }

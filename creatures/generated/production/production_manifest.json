@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "builder": "scripts/build_creature_pack.py",
+  "builder_sha256": "ba8fa2765f2c58bd4d4eb95fb9604caa8c323b56578ee7dfeed1960c30ae2252",
+  "source_manifest_sha256": "58837b9f5391f8f9785b276b4054a1892f9d1b72f9e9df670b900193cc2d0310",
+  "selection_sha256": "e88cf2e6c1e21df9b73fb3a6b4e5cc833689200a0917e8f8b8e42a7b528ea48c",
+  "header": "firmware/OceanCreatureDemo/GeneratedCreatureSprites.h",
+  "header_sha256": "422d00bce2a8b067fddf712300ddcb279cd54334870cb2adcb5cc35565a060a7",
+  "device_preview": "creatures/generated/production/device_preview.png",
+  "device_preview_sha256": "abb19b9e2d766df67ae7d1856a81eb8813b5b604a62c46fdc10df8d9277ff29b",
+  "device_preview_shark": "creatures/generated/production/device_preview_shark.png",
+  "device_preview_shark_sha256": "973520ef52873685dd0f440939416bf6f1430eb452223aa267dd60db31902259",
+  "device_animation": "creatures/generated/production/device_preview.gif",
+  "device_animation_sha256": "057cae0de1ee6bdae5185356da25b36dd4d73f12050b11de9442eb28568288b3",
+  "total_packed_frame_bytes": 35456,
+  "assets": [
+    {
+      "id": "moon_jelly",
+      "selection": {
+        "vendor": "pixellab",
+        "seed": 23861
+      },
+      "source": "creatures/generated/candidates/pixellab/moon_jelly__23861.png",
+      "source_sha256": "9626695217bbdc530b191f04345403605a618ec96a5963a16ec40505e47c5705",
+      "source_metadata": "creatures/generated/candidates/pixellab/moon_jelly__23861.json",
+      "source_metadata_sha256": "7c7ec53ad28d575863a9f696529a29aebd1b46dabcbc4e7851e04684b59202a4",
+      "source_prompt_sha256": "809aceb40adb1df046457f15728d2eda59171ccdf71e68324e3271fd6d74a653",
+      "runtime_png": "creatures/generated/production/moon_jelly.png",
+      "runtime_png_sha256": "df292aaf0856376bdc217dda3d991d184be180f268d714e1f87b57309d69b91c",
+      "sheet": "creatures/generated/production/moon_jelly_sheet.png",
+      "sheet_sha256": "f530cccab9781f2dd19a3a12081b79599971fe0a80c85028b8cf431c66fdecb2",
+      "target_size": [
+        88,
+        120
+      ],
+      "render_scale": 3,
+      "display_size": [
+        264,
+        360
+      ],
+      "packed_bytes_per_frame": 5280,
+      "packed_sha256": [
+        "a8072ca83616567e8c248d266a961ca803b32f982b06cd13175ea6ec4ca29bc6",
+        "cbeabed5b499dcfee890da85719a275d83d9edfd76b776ffccd157b56365d486",
+        "036e3cce8f52c6044fb95e0ad89d2b1a115f80315ec9ac2dccfb93e74e32c791",
+        "3dfabc02bd6d6b7e8b4c660ce8d709e4599b615cafe4112fe22cba36195693c0"
+      ],
+      "opaque_pixels": [
+        3869,
+        3781,
+        3767,
+        3832
+      ],
+      "component_sizes": [
+        [
+          3869
+        ],
+        [
+          3781
+        ],
+        [
+          3767
+        ],
+        [
+          3832
+        ]
+      ],
+      "edge_margins": [
+        4,
+        5,
+        5,
+        4
+      ],
+      "checks": {
+        "source_is_128_square": true,
+        "candidate_metadata_matches_selection": true,
+        "four_frames": true,
+        "target_dimensions": true,
+        "nonempty_frames": true,
+        "four_bit_roundtrip": true,
+        "canvas_safety": true,
+        "coherent_subject": true,
+        "bounded_palette": true
+      }
+    },
+    {
+      "id": "blue_reef_shark",
+      "selection": {
+        "vendor": "retrodiffusion",
+        "seed": 23861
+      },
+      "source": "creatures/generated/candidates/retrodiffusion/blue_reef_shark__23861.png",
+      "source_sha256": "c76c446a81d8215207972d5c5c8f70d62adc8f73222ccb3a3dbf224ac7b7612f",
+      "source_metadata": "creatures/generated/candidates/retrodiffusion/blue_reef_shark__23861.json",
+      "source_metadata_sha256": "1b9f34bc0dbd6ac5826ed74102871cf487b183d885112cde7f4f8c59603c3fc8",
+      "source_prompt_sha256": "70642a439953704826fb82e8f22c58924297bce4ce0b74438b717557af5fcd57",
+      "runtime_png": "creatures/generated/production/blue_reef_shark.png",
+      "runtime_png_sha256": "3cffec787ddd204c2d44b6e1fe4529a2fe963145e07e6e51e3cf1bddad490ae9",
+      "sheet": "creatures/generated/production/blue_reef_shark_sheet.png",
+      "sheet_sha256": "df9cf862039474757453f6978950639b7f399c0540816fd0f042a816d7b729ba",
+      "target_size": [
+        112,
+        64
+      ],
+      "render_scale": 3,
+      "display_size": [
+        336,
+        192
+      ],
+      "packed_bytes_per_frame": 3584,
+      "packed_sha256": [
+        "e2c42169a82826f2c9309f2d41596c23ef661537c0f2caf1fe45af3bd5a9cc91",
+        "d5744bc5d897f1534bab58052f00c2cea8ed69cc99d727912b7c343b52c041f1",
+        "e2c42169a82826f2c9309f2d41596c23ef661537c0f2caf1fe45af3bd5a9cc91",
+        "53ae75982c2b6f04e92ae391fc24fd6cfd2fc90885bafa86d1dfc7ae5fb3bdeb"
+      ],
+      "opaque_pixels": [
+        1898,
+        1898,
+        1898,
+        1898
+      ],
+      "component_sizes": [
+        [
+          1898
+        ],
+        [
+          1898
+        ],
+        [
+          1898
+        ],
+        [
+          1898
+        ]
+      ],
+      "edge_margins": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "checks": {
+        "source_is_128_square": true,
+        "candidate_metadata_matches_selection": true,
+        "four_frames": true,
+        "target_dimensions": true,
+        "nonempty_frames": true,
+        "four_bit_roundtrip": true,
+        "canvas_safety": true,
+        "coherent_subject": true,
+        "bounded_palette": true
+      }
+    }
+  ]
+}

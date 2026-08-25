@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "generated_at": "2026-08-24",
+  "model": "elevenlabs-sound-effects-v2",
+  "status": "downloaded, locally preserved, and completed at provider",
+  "quoted_total_usd": 0.06,
+  "requests": [
+    {
+      "id": "bubbles-even",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-31d7-7bd1-a9be-22d96980eaf4",
+      "prompt": "A very subtle two-second handheld-game reward sound, close sibling of a warm late-1990s portable-console effect: exactly three small rounded underwater bubbles, evenly spaced, each gently rising in pitch, followed by one soft watery plip. Quiet, intimate, dry, clean simple shapes, slightly stylized rather than realistic, no music, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "bubbles-large-last",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-335d-78f2-81a4-b9acdbcb657b",
+      "prompt": "A very subtle two-second handheld-game reward sound in the same warm late-1990s portable-console family: two tiny rounded underwater bubbles, then one slightly larger hollow bubble and a soft watery plip, with natural uneven spacing. Quiet, intimate, dry, clean simple shapes, gently stylized, no music, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "bubbles-cascade",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-34d9-7bb1-a062-7e47b44bf552",
+      "prompt": "A very subtle two-second handheld-game reward sound in the same warm late-1990s portable-console family: a delicate cluster of four pinhead underwater bubbles rises in a loose cascade, ending in one rounded low watery plup. Quiet, intimate, dry, clean simple shapes, gently stylized rather than realistic, no music, no voice, no splash, no hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "shark-pressure-pulse",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-8381-78b1-8ddd-00414c6b59ba",
+      "prompt": "Two-second very subtle handheld-game reward for a reef shark chomp underwater: one quick muffled jaw-close expressed only as a rounded water-pressure pulse, then a tight outward ripple and two small disturbed bubbles. Warm stylized late-1990s portable-console character, calm and child-safe, quiet, dry, no teeth, no crunch, no roar, no attack, no large splash, no music, no hiss, no reverb, no sub-bass boom."
+    },
+    {
+      "id": "shark-glide-chomp",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-858b-7600-9494-2cf311999608",
+      "prompt": "Two-second very subtle handheld-game reward for a reef shark chomp underwater: a smooth short glide, then a soft compact whoomp of water displaced as the jaws close, followed by one tiny rising bubble. Warm stylized late-1990s portable-console character, sleek and child-safe, quiet, dry, no teeth, no crunch, no roar, no attack, no splash, no music, no harsh hiss, no reverb tail, no deep bass."
+    },
+    {
+      "id": "shark-suction-wake",
+      "duration_seconds": 2,
+      "loop": false,
+      "quote_usd": 0.01,
+      "queue_id": "01a03638-8702-7063-8d5e-7412c705fd97",
+      "prompt": "Two-second very subtle handheld-game reward for a reef shark chomp underwater: a small inward suction of water, a muted rounded closure pulse, then a brief folded wake with three microbubbles. Warm stylized late-1990s portable-console character, curious and child-safe, quiet, intimate, dry, no teeth, no crunch, no roar, no attack, no splash, no music, no hiss, no reverb, no sub-bass boom."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "status": "preview_only_not_runtime",
+  "source_size": [128, 128],
+  "render_scale": 3,
+  "style": {
+    "id": "02_evolutionary_16bit",
+    "label": "Evolutionary 16-bit",
+    "vendor": "retrodiffusion",
+    "palette": ["#00000000", "#09131C", "#142B3B", "#28516A", "#47768A", "#76A0A5", "#BDD0BE", "#F1E6B5", "#7C4662", "#B5685E", "#D99A63", "#5D6A46", "#849B65", "#C7C58A", "#394058", "#E8EEF0"],
+    "brief": "authentic early-1990s 16-bit side-scrolling action-game sprite discipline, chunky one-to-two-pixel dark contour, six-to-eight dominant colors, flat cel-shaded bands, slightly prehistoric shape language, exaggerated readable anatomy, almost no tiny texture"
+  },
+  "shared_constraints": "single isolated animal only on a genuinely transparent background, entire silhouette visible with generous canvas safety, crisp opaque pixel edges, strict side view unless the animal is naturally vertical, no scenery, water, bubbles, plants, rocks, prey, shadow, text, label, logo, border, frame, multiple views, sprite sheet, detached particles, cute mascot face, gore, exposed teeth, or reference-game character",
+  "animals": [
+    {
+      "id": "vampire_squid",
+      "label": "Vampire squid",
+      "seed": 4511,
+      "logical_size": [88, 112],
+      "prompt": "one original vampire squid, complete animal in a calm three-quarter side view, rounded dark mantle, one natural eye, eight arms joined by a broad cloak-like web held partly open, subtle glowing blue arm tips, one compact connected silhouette, gentle rather than threatening"
+    },
+    {
+      "id": "dumbo_octopus",
+      "label": "Dumbo octopus",
+      "seed": 4512,
+      "logical_size": [96, 88],
+      "prompt": "one original dumbo octopus, complete animal in strict side view facing right, rounded mantle, two unmistakable ear-like swimming fins, short webbed arms gathered into one compact skirt, one natural eye, calm hovering pose"
+    },
+    {
+      "id": "leafy_seadragon",
+      "label": "Leafy seadragon",
+      "seed": 4513,
+      "logical_size": [80, 112],
+      "prompt": "one original leafy seadragon, complete animal in strict side view facing right, long horse-like snout, gently curved narrow body, curled tail, a limited number of large connected leaf-shaped appendages that read clearly at low resolution, elegant natural anatomy"
+    },
+    {
+      "id": "glass_squid",
+      "label": "Glass squid",
+      "seed": 4514,
+      "logical_size": [80, 112],
+      "prompt": "one original glass squid, complete animal in a centered vertical side view, broad translucent mantle tapering upward, two large natural eyes, short connected arms below, pale glassy body with a few broad visible internal shapes and restrained cyan bioluminescent accents"
+    },
+    {
+      "id": "anglerfish",
+      "label": "Anglerfish",
+      "seed": 4515,
+      "logical_size": [112, 72],
+      "prompt": "one original deep-sea anglerfish, complete animal in strict side view facing right, compact heavy head and tapered body, closed mouth with no visible teeth, one small natural eye, short fins, one sturdy forehead stalk ending in a connected warm luminous lure, strange but calm"
+    },
+    {
+      "id": "barreleye",
+      "label": "Barreleye fish",
+      "seed": 4516,
+      "logical_size": [112, 72],
+      "prompt": "one original barreleye fish, complete animal in strict side view facing right, small tapered dark body, compact fins and tail, unmistakable transparent rounded head dome containing two large upward-angled green tubular eyes, simple broad anatomy and eerie calm pose"
+    },
+    {
+      "id": "gulper_eel",
+      "label": "Deep-sea eel",
+      "seed": 4521,
+      "logical_size": [112, 88],
+      "prompt": "one original deep-sea gulper eel, complete animal in strict side view facing right, long dark blue eel body in one broad gentle curve, oversized pouch-like head with the mouth fully closed and no visible teeth, tiny natural eye, narrow whip tail with a restrained cyan bioluminescent tip, strange but calm anatomy, one strong connected silhouette"
+    },
+    {
+      "id": "blanket_octopus",
+      "label": "Blanket octopus",
+      "seed": 4518,
+      "logical_size": [104, 112],
+      "prompt": "one original blanket octopus, complete animal in side view, small rounded mantle and one natural eye, arms extending into two enormous connected flowing web membranes like an underwater cape, membranes unfurled into a broad wavelike silhouette with restrained warm accent bands"
+    },
+    {
+      "id": "sea_angel",
+      "label": "Sea angel",
+      "seed": 4519,
+      "logical_size": [80, 112],
+      "prompt": "one original sea angel pelagic snail, complete animal centered vertically, tiny tapered translucent body, two broad symmetrical wing-like swimming lobes, small paired head tentacles, soft pale cyan internal glow, serene natural anatomy and a single clean silhouette"
+    },
+    {
+      "id": "siphonophore",
+      "label": "Glowing siphonophore",
+      "seed": 4520,
+      "logical_size": [72, 120],
+      "prompt": "one original deep-sea siphonophore colony simplified as one complete vertical animal, a long connected chain of five to seven large repeating bell-shaped units, tapered feeding structures kept attached to the central body, cyan and warm bioluminescent bands, coherent silhouette rather than scattered debris"
+    }
+  ]
+}

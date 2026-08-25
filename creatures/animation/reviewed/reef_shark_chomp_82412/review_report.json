@@ -1,0 +1,102 @@
+{
+  "checks": {
+    "all_pixels_use_selected_source_palette": true,
+    "changes_are_bounded_to_reviewed_mouth_patch": true,
+    "closed_half_open_half_dark_cavity_schedule": true,
+    "component_count_does_not_increase": true,
+    "four_reviewed_128px_frames": true,
+    "frame_zero_is_exact_selected_source": true,
+    "half_open_frames_are_identical": true,
+    "no_frame_touches_canvas_edge": true,
+    "visual_approval_matches_review_contact": true
+  },
+  "frames": [
+    {
+      "alpha_bounds": [
+        5,
+        6,
+        120,
+        120
+      ],
+      "changed_pixels_from_frame_zero": 0,
+      "changed_pixels_outside_reviewed_patch": 0,
+      "connected_components": 1,
+      "index": 0,
+      "opaque_pixels": 6382,
+      "path": "creatures/animation/reviewed/reef_shark_chomp_82412/frame_0.png",
+      "sha256": "5b8f23c99255fcd95da04affedbf4156ea2ffc023a2aee95d05db27aff618f66"
+    },
+    {
+      "alpha_bounds": [
+        5,
+        6,
+        120,
+        120
+      ],
+      "changed_pixels_from_frame_zero": 20,
+      "changed_pixels_outside_reviewed_patch": 0,
+      "connected_components": 1,
+      "index": 1,
+      "opaque_pixels": 6381,
+      "path": "creatures/animation/reviewed/reef_shark_chomp_82412/frame_1.png",
+      "sha256": "69314a94e11478c6a4e82b2a2e0b2530edfd062e971dd587e0a05f836d1213f6"
+    },
+    {
+      "alpha_bounds": [
+        5,
+        6,
+        120,
+        121
+      ],
+      "changed_pixels_from_frame_zero": 217,
+      "changed_pixels_outside_reviewed_patch": 0,
+      "connected_components": 1,
+      "index": 2,
+      "opaque_pixels": 6375,
+      "path": "creatures/animation/reviewed/reef_shark_chomp_82412/frame_2.png",
+      "sha256": "a3bd1bfa7fad4814b0b26c3a16a7e9dc05f239c769d8a36ff51bc70e6d3f5f4b"
+    },
+    {
+      "alpha_bounds": [
+        5,
+        6,
+        120,
+        120
+      ],
+      "changed_pixels_from_frame_zero": 20,
+      "changed_pixels_outside_reviewed_patch": 0,
+      "connected_components": 1,
+      "index": 3,
+      "opaque_pixels": 6381,
+      "path": "creatures/animation/reviewed/reef_shark_chomp_82412/frame_3.png",
+      "sha256": "69314a94e11478c6a4e82b2a2e0b2530edfd062e971dd587e0a05f836d1213f6"
+    }
+  ],
+  "manifest": "creatures/animation/shark_chomp_manifest.json",
+  "manifest_sha256": "0cc499e0eb167f6685292c3a56b300bb62462fbb461b65e4e1a5b5e8ae7153b7",
+  "mouth_dark_pixel_counts": [
+    53,
+    54,
+    96,
+    54
+  ],
+  "provider_balance_cost": 0.25,
+  "provider_frame_schedule": [
+    null,
+    1,
+    3,
+    1
+  ],
+  "provider_model": "rd_fast",
+  "provider_report_sha256": "d0f957d4fc2dbcad68d5dffd935d6ec53c6719045c134ace56d87c0973028aa1",
+  "review_contact_sheet": "creatures/animation/reviewed/reef_shark_chomp_82412/review_contact_sheet_3x.png",
+  "review_contact_sheet_sha256": "cd2fd56b8d3a50d3e0a868d290a5762d87e844660fce81d46c11ad07decd53f4",
+  "review_preview": "creatures/animation/reviewed/reef_shark_chomp_82412/review_preview.gif",
+  "review_preview_sha256": "7a70c9de5fa577ce6a35dc8ad3baf4f5012dd0495f3433c12478b6f9b653f039",
+  "reviewed_spritesheet": "creatures/animation/reviewed/reef_shark_chomp_82412/reviewed_spritesheet.png",
+  "reviewed_spritesheet_sha256": "78a3f778aa1cf943e41b01081e87ede44b70e4229086a74edfbcb820745c4f7a",
+  "schema_version": 1,
+  "source": "creatures/animation/source/reef_shark_banking_82412.png",
+  "source_sha256": "0042e78252174923e339f3bf0f29d1b083bd26d9a0eddc0a4e80c91629e58c7c",
+  "status": "reviewed_for_device_test"
+}

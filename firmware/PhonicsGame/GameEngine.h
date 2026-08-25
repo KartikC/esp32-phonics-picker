@@ -12,7 +12,18 @@ constexpr uint8_t kPraiseVariantCount = 4;
 constexpr uint8_t kLayoutVariantCount = 6;
 constexpr uint32_t kFirstNudgeDelayMs = 8000;
 constexpr uint32_t kSecondNudgeDelayMs = 10000;
-constexpr uint32_t kCelebrationDurationMs = 1100;
+// A correct answer first confirms the chosen card, then transitions into a
+// short underwater creature reward before returning to the next clean round.
+constexpr uint32_t kCorrectPulseEndMs = 400;
+constexpr uint32_t kWaterRiseEndMs = 640;
+// Keep the creature on screen for 2200 ms (640..2840), about 20% longer than
+// the previous 1840 ms window. Only the full-water hold grows; the rise and
+// recede keep their established pacing.
+constexpr uint32_t kCreatureRewardEndMs = 2560;
+constexpr uint32_t kWaterRecedeEndMs = 2840;
+// Leave a deliberate fully black beat after the recede. At 120 ms it cannot
+// be skipped by a single framebuffer composite/flush before the next round.
+constexpr uint32_t kCelebrationDurationMs = 2960;
 
 enum class EventType : uint8_t {
   none,

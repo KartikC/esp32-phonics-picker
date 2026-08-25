@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "sample_count": 8,
+  "expected_sample_count": 8,
+  "retrodiffusion_reported_balance_cost_total": 0.72,
+  "note": "PixelLab usage is retained verbatim when supplied; the service response may not expose a USD amount.",
+  "samples": [
+    {
+      "vendor": "pixellab",
+      "asset_id": "blue_reef_shark",
+      "seed": 23861,
+      "alpha_bbox": [
+        10,
+        36,
+        124,
+        89
+      ],
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "vendor": "pixellab",
+      "asset_id": "blue_reef_shark",
+      "seed": 91427,
+      "alpha_bbox": [
+        9,
+        40,
+        120,
+        91
+      ],
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "vendor": "pixellab",
+      "asset_id": "moon_jelly",
+      "seed": 23861,
+      "alpha_bbox": [
+        35,
+        9,
+        96,
+        121
+      ],
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "vendor": "pixellab",
+      "asset_id": "moon_jelly",
+      "seed": 91427,
+      "alpha_bbox": [
+        29,
+        4,
+        97,
+        118
+      ],
+      "reported_balance_cost": null,
+      "usage": {
+        "type": "generations",
+        "generations": 1.0
+      }
+    },
+    {
+      "vendor": "retrodiffusion",
+      "asset_id": "blue_reef_shark",
+      "seed": 23861,
+      "alpha_bbox": [
+        2,
+        39,
+        126,
+        89
+      ],
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "vendor": "retrodiffusion",
+      "asset_id": "blue_reef_shark",
+      "seed": 91427,
+      "alpha_bbox": [
+        0,
+        18,
+        128,
+        101
+      ],
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "vendor": "retrodiffusion",
+      "asset_id": "moon_jelly",
+      "seed": 23861,
+      "alpha_bbox": [
+        20,
+        3,
+        108,
+        126
+      ],
+      "reported_balance_cost": 0.18,
+      "usage": null
+    },
+    {
+      "vendor": "retrodiffusion",
+      "asset_id": "moon_jelly",
+      "seed": 91427,
+      "alpha_bbox": [
+        26,
+        11,
+        102,
+        119
+      ],
+      "reported_balance_cost": 0.18,
+      "usage": null
+    }
+  ]
+}

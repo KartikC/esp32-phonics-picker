@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "vendor": "pixellab",
+  "asset_id": "blue_reef_shark",
+  "seed": 23861,
+  "prompt": "Production-ready low-resolution pixel-art water-creature sprite for a tiny portrait AMOLED. Original design with a strong readable silhouette, restrained interior detail, crisp opaque pixel edges, one dark outline, medium shading, and luminous ocean accents. Strictly one subject on a genuinely transparent background. Inspired only by the general readability and underwater adventure mood of polished side-view diving games; do not reproduce any existing game's creature design, sprite, composition, or exact palette. One original blue reef shark game sprite, complete animal in strict side view facing right, streamlined but powerful body, unmistakable dorsal fin, compact pectoral fins, clear forked tail, slate-blue back and pale belly, tiny natural eye, calm swimming pose and strong horizontal silhouette. Not a mascot and not aggressive or gory. No bubbles, fish, ground, scenery, text, border, shadow, or multiple views.",
+  "response": {
+    "usage": {
+      "type": "generations",
+      "generations": 1.0
+    },
+    "model": "pixflux"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    10,
+    36,
+    124,
+    89
+  ],
+  "generated_at": "2026-08-23T16:24:38Z"
+}

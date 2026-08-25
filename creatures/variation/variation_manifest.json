@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "style": "Evolutionary 16-bit",
+  "frame_count": 4,
+  "semantic_roles": [
+    "transparent",
+    "outline",
+    "deep_shadow",
+    "body_shadow",
+    "body_midtone",
+    "body_light",
+    "highlight",
+    "belly_shadow",
+    "belly_light",
+    "pattern_dark",
+    "pattern_light",
+    "eye",
+    "mouth_or_gill",
+    "biological_accent",
+    "rare_accent",
+    "glint"
+  ],
+  "source_color_roles": {
+    "#09131C": 1,
+    "#142B3B": 2,
+    "#28516A": 3,
+    "#394058": 3,
+    "#47768A": 4,
+    "#5D6A46": 7,
+    "#76A0A5": 5,
+    "#BDD0BE": 6,
+    "#F1E6B5": 8,
+    "#7C4662": 13,
+    "#B4685E": 13,
+    "#C7C58A": 14,
+    "#D89A63": 14,
+    "#E8EEF0": 15
+  },
+  "palettes": [
+    {
+      "id": "tide_slate",
+      "label": "Tide slate",
+      "colors": ["#00000000", "#09131C", "#142B3B", "#28516A", "#47768A", "#76A0A5", "#BDD0BE", "#849B9A", "#D4DDC8", "#263F54", "#C7C58A", "#09131C", "#394058", "#7C4662", "#D99A63", "#E8EEF0"]
+    },
+    {
+      "id": "kelp_green",
+      "label": "Kelp green",
+      "colors": ["#00000000", "#09131C", "#1F2F24", "#39543A", "#5D7749", "#849B65", "#C7C58A", "#71815A", "#D8D6A3", "#2C4630", "#A7B874", "#09131C", "#394058", "#7C4662", "#D99A63", "#E8EEF0"]
+    },
+    {
+      "id": "coral_rust",
+      "label": "Coral rust",
+      "colors": ["#00000000", "#09131C", "#40202B", "#713747", "#A4534E", "#D1785B", "#E2AD78", "#9E654F", "#F0C99A", "#692D3D", "#D99A63", "#09131C", "#394058", "#7C4662", "#C7C58A", "#E8EEF0"]
+    },
+    {
+      "id": "plum_deep",
+      "label": "Plum deep",
+      "colors": ["#00000000", "#09131C", "#2B203E", "#4B315A", "#704568", "#9C6179", "#D0929D", "#6B586F", "#D8BAC1", "#442649", "#B87991", "#09131C", "#394058", "#7C4662", "#D99A63", "#E8EEF0"]
+    },
+    {
+      "id": "sand_gold",
+      "label": "Sand gold",
+      "colors": ["#00000000", "#09131C", "#3E3020", "#67502D", "#92713C", "#C59B58", "#E3C985", "#8A754E", "#EAD9A5", "#5A4327", "#D5B66A", "#09131C", "#394058", "#7C4662", "#D99A63", "#E8EEF0"]
+    },
+    {
+      "id": "moon_pale",
+      "label": "Moon pale",
+      "colors": ["#00000000", "#09131C", "#25313D", "#405564", "#68828C", "#9CB1AC", "#D5D9C5", "#829393", "#E5E4CC", "#344954", "#BCC9BA", "#09131C", "#394058", "#7C4662", "#D99A63", "#E8EEF0"]
+    }
+  ],
+  "animals": [
+    {
+      "id": "moon_jelly",
+      "label": "Moon jelly",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/moon_jelly__4501.png",
+      "logical_size": [88, 120],
+      "content_box": [82, 114],
+      "render_scale": 3,
+      "animation": "jelly_pulse",
+      "base_rarity": "basic",
+      "semantic_overrides": [],
+      "rare_treatment": {
+        "id": "celestial_bell",
+        "label": "Celestial bell",
+        "overlay": [
+          {"shape": "ellipse", "box": [0.30, 0.12, 0.36, 0.17], "code": 3},
+          {"shape": "ellipse", "box": [0.47, 0.08, 0.53, 0.13], "code": 2},
+          {"shape": "ellipse", "box": [0.56, 0.15, 0.63, 0.20], "code": 3},
+          {"shape": "ellipse", "box": [0.42, 0.22, 0.47, 0.26], "code": 2},
+          {"shape": "ellipse", "box": [0.57, 0.25, 0.62, 0.29], "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.10, 0.02, 0.90, 0.43]}],
+        "exclude": [{"shape": "rectangle", "box": [0.00, 0.36, 1.00, 1.00]}],
+        "protected_anatomy": ["outer contour", "bell rim", "oral arms", "tentacles"]
+      }
+    },
+    {
+      "id": "reef_shark",
+      "label": "Reef shark",
+      "source": "creatures/animation/source/reef_shark_banking_82412.png",
+      "source_color_roles": {
+        "#071522": 1,
+        "#0B2A3C": 2,
+        "#124A60": 3,
+        "#35677A": 4,
+        "#5F8FA0": 5,
+        "#91B7BE": 6,
+        "#D8EEF0": 8,
+        "#27D3D0": 6,
+        "#F7FFFF": 15
+      },
+      "logical_size": [120, 124],
+      "content_box": [116, 115],
+      "render_scale": 3,
+      "animation": "reviewed_chomp",
+      "registration": {
+        "source_anchor_box": [5, 6, 120, 120],
+        "target_anchor_box": [2, 2, 118, 117]
+      },
+      "authored_animation": {
+        "manifest": "creatures/animation/shark_chomp_manifest.json",
+        "report": "creatures/animation/reviewed/reef_shark_chomp_82412/review_report.json"
+      },
+      "base_rarity": "rare",
+      "semantic_overrides": [
+        {"shape": "rectangle", "box": [0.47, 0.81, 0.99, 1.00], "source_roles": [6], "target_role": 7},
+        {"shape": "rectangle", "box": [0.748, 0.837, 0.756, 0.862], "source_roles": [1], "target_role": 11},
+        {"shape": "rectangle", "box": [0.714, 0.902, 0.756, 0.902], "source_roles": [1], "target_role": 12}
+      ],
+      "rare_treatment": {
+        "id": "ancestral_bands",
+        "label": "Ancestral bands",
+        "overlay": [
+          {"shape": "line", "points": [[0.26, 0.49], [0.34, 0.62]], "width": 2, "code": 3},
+          {"shape": "line", "points": [[0.32, 0.47], [0.40, 0.64]], "width": 2, "code": 2},
+          {"shape": "line", "points": [[0.38, 0.49], [0.48, 0.66]], "width": 2, "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.10, 0.20, 0.62, 0.81]}],
+        "exclude": [
+          {"shape": "ellipse", "box": [0.45, 0.63, 1.00, 0.95]},
+          {"shape": "rectangle", "box": [0.00, 0.79, 1.00, 1.00]},
+          {"shape": "ellipse", "box": [0.18, 0.09, 0.44, 0.41]},
+          {"shape": "ellipse", "box": [0.43, 0.20, 0.65, 0.43]}
+        ],
+        "protected_anatomy": ["outer contour", "tail", "fins", "belly", "eye", "nostril", "mouth", "gills"]
+      }
+    },
+    {
+      "id": "giant_octopus",
+      "label": "Giant octopus",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/giant_octopus__4503.png",
+      "logical_size": [96, 112],
+      "content_box": [90, 106],
+      "render_scale": 3,
+      "animation": "octopus_sway",
+      "base_rarity": "medium",
+      "semantic_overrides": [
+        {"shape": "rectangle", "box": [0.50, 0.37, 0.54, 0.38], "source_roles": [1], "target_role": 11},
+        {"shape": "ellipse", "box": [0.39, 0.38, 0.47, 0.44], "source_roles": [1, 2, 4], "target_role": 3}
+      ],
+      "rare_treatment": {
+        "id": "mantle_rings",
+        "label": "Mantle rings",
+        "overlay": [
+          {"shape": "ellipse_outline", "box": [0.17, 0.18, 0.38, 0.35], "width": 2, "code": 3},
+          {"shape": "ellipse_outline", "box": [0.21, 0.22, 0.34, 0.32], "width": 1, "code": 2},
+          {"shape": "ellipse", "box": [0.20, 0.34, 0.25, 0.39], "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.06, 0.04, 0.62, 0.52]}],
+        "exclude": [{"shape": "ellipse", "box": [0.39, 0.25, 0.59, 0.46]}],
+        "protected_anatomy": ["outer contour", "eye", "mouth", "arm roots", "suckers", "arm tips"]
+      }
+    },
+    {
+      "id": "seahorse",
+      "label": "Seahorse",
+      "source": "creatures/style_bakeoff/generated/raw/02_evolutionary_16bit/seahorse__4504.png",
+      "logical_size": [80, 112],
+      "content_box": [72, 106],
+      "render_scale": 3,
+      "animation": "seahorse_bob",
+      "base_rarity": "basic",
+      "semantic_overrides": [
+        {"shape": "ellipse", "box": [0.56, 0.10, 0.70, 0.24], "source_roles": [1, 2, 3], "target_role": 11},
+        {"shape": "ellipse", "box": [0.38, 0.36, 0.66, 0.72], "source_roles": [3], "target_role": 7},
+        {"shape": "ellipse", "box": [0.38, 0.36, 0.66, 0.72], "source_roles": [5, 6, 15], "target_role": 8}
+      ],
+      "rare_treatment": {
+        "id": "royal_diamonds",
+        "label": "Royal diamonds",
+        "overlay": [
+          {"shape": "polygon", "points": [[0.43, 0.28], [0.46, 0.30], [0.43, 0.32], [0.41, 0.30]], "code": 3},
+          {"shape": "polygon", "points": [[0.46, 0.32], [0.49, 0.35], [0.46, 0.37], [0.42, 0.35]], "code": 3},
+          {"shape": "polygon", "points": [[0.37, 0.59], [0.39, 0.62], [0.37, 0.66], [0.34, 0.62]], "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.29, 0.26, 0.70, 0.73]}],
+        "exclude": [
+          {"shape": "ellipse", "box": [0.41, 0.05, 0.82, 0.31]},
+          {"shape": "ellipse", "box": [0.11, 0.36, 0.39, 0.61]}
+        ],
+        "protected_anatomy": ["outer contour", "crest", "eye", "snout", "fin", "belly", "curled tail"]
+      }
+    },
+    {
+      "id": "glass_squid",
+      "label": "Glass squid",
+      "source": "creatures/rare_concepts/generated/raw/glass_squid__4514.png",
+      "logical_size": [80, 112],
+      "content_box": [74, 106],
+      "render_scale": 3,
+      "animation": "glass_squid_pulse",
+      "base_rarity": "basic",
+      "automatic_palette_indices": [0, 1, 5],
+      "semantic_overrides": [
+        {"shape": "ellipse", "box": [0.17, 0.50, 0.43, 0.72], "source_roles": [1, 2, 3], "target_role": 11},
+        {"shape": "ellipse", "box": [0.57, 0.50, 0.83, 0.72], "source_roles": [1, 2, 3], "target_role": 11}
+      ],
+      "rare_treatment": {
+        "id": "prismatic_panes",
+        "label": "Prismatic panes",
+        "overlay": [
+          {"shape": "line", "points": [[0.45, 0.20], [0.49, 0.39]], "width": 2, "code": 2},
+          {"shape": "line", "points": [[0.50, 0.13], [0.50, 0.43]], "width": 2, "code": 3},
+          {"shape": "line", "points": [[0.60, 0.19], [0.54, 0.40]], "width": 2, "code": 2}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.17, 0.02, 0.83, 0.55]}],
+        "exclude": [
+          {"shape": "rectangle", "box": [0.35, 0.05, 0.65, 0.50]},
+          {"shape": "rectangle", "box": [0.00, 0.48, 1.00, 1.00]}
+        ],
+        "protected_anatomy": ["outer contour", "mantle edge", "eyes", "oral arms", "tentacles", "internal organs"]
+      },
+      "rare_safe": {
+        "include": [{"shape": "ellipse", "box": [0.17, 0.02, 0.83, 0.55]}],
+        "exclude": [{"shape": "rectangle", "box": [0.00, 0.48, 1.00, 1.00]}],
+        "allowed_roles": [2, 3, 4, 5, 6, 7, 13, 14],
+        "protected_anatomy": ["outer contour", "mantle edge", "eyes", "oral arms", "tentacles"]
+      }
+    },
+    {
+      "id": "anglerfish",
+      "label": "Anglerfish",
+      "source": "creatures/rare_concepts/generated/raw/anglerfish__4515.png",
+      "logical_size": [112, 72],
+      "content_box": [108, 66],
+      "render_scale": 3,
+      "animation": "anglerfish_hover",
+      "base_rarity": "rare",
+      "pulsing_glow": {
+        "role": 14,
+        "dim": "#7B4B2A",
+        "medium": "#D89A63",
+        "bright": "#F1E6B5"
+      },
+      "semantic_overrides": [
+        {"shape": "ellipse", "box": [0.63, 0.38, 0.76, 0.60], "source_roles": [1, 2, 3], "target_role": 11},
+        {"shape": "rectangle", "box": [0.67, 0.61, 0.91, 0.79], "source_roles": [1, 2, 3], "target_role": 12},
+        {"shape": "ellipse", "box": [0.83, 0.20, 0.98, 0.52], "source_roles": [8, 13, 14, 15], "target_role": 14}
+      ],
+      "rare_treatment": {
+        "id": "abyssal_constellation",
+        "label": "Abyssal constellation",
+        "overlay": [
+          {"shape": "line", "points": [[0.297, 0.465], [0.387, 0.437], [0.477, 0.465], [0.532, 0.451]], "width": 1, "code": 2},
+          {"shape": "polygon", "points": [[0.324, 0.423], [0.351, 0.465], [0.324, 0.507], [0.297, 0.465]], "code": 3},
+          {"shape": "polygon", "points": [[0.405, 0.360], [0.427, 0.395], [0.405, 0.430], [0.383, 0.395]], "code": 3},
+          {"shape": "polygon", "points": [[0.505, 0.408], [0.532, 0.451], [0.505, 0.493], [0.477, 0.451]], "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.22, 0.30, 0.68, 0.78]}],
+        "exclude": [
+          {"shape": "rectangle", "box": [0.00, 0.00, 0.24, 1.00]},
+          {"shape": "ellipse", "box": [0.58, 0.25, 1.00, 0.88]}
+        ],
+        "protected_anatomy": ["outer contour", "tail", "fins", "eye", "mouth", "gill", "lure stalk", "lure bulb"]
+      }
+    },
+    {
+      "id": "sea_angel",
+      "label": "Sea angel",
+      "source": "creatures/rare_concepts/generated/raw/sea_angel__4519.png",
+      "logical_size": [88, 96],
+      "content_box": [84, 84],
+      "render_scale": 4,
+      "animation": "sea_angel_wingbeat",
+      "base_rarity": "medium",
+      "automatic_palette_indices": [0, 1, 5],
+      "celebration_sparkles": false,
+      "semantic_overrides": [
+        {"shape": "ellipse", "box": [0.06, 0.25, 0.44, 0.62], "source_roles": [8, 15], "target_role": 6},
+        {"shape": "ellipse", "box": [0.56, 0.25, 0.94, 0.62], "source_roles": [8, 15], "target_role": 6}
+      ],
+      "rare_treatment": {
+        "id": "halo_wings",
+        "label": "Halo wings",
+        "overlay": [
+          {"shape": "line", "points": [[0.13, 0.37], [0.24, 0.41]], "width": 2, "code": 3},
+          {"shape": "line", "points": [[0.20, 0.39], [0.31, 0.43]], "width": 2, "code": 2},
+          {"shape": "line", "points": [[0.76, 0.41], [0.87, 0.37]], "width": 2, "code": 3},
+          {"shape": "line", "points": [[0.69, 0.43], [0.80, 0.39]], "width": 2, "code": 2}
+        ]
+      },
+      "pattern_safe": {
+        "include": [
+          {"shape": "ellipse", "box": [0.06, 0.25, 0.44, 0.62]},
+          {"shape": "ellipse", "box": [0.56, 0.25, 0.94, 0.62]}
+        ],
+        "exclude": [
+          {"shape": "rectangle", "box": [0.35, 0.00, 0.66, 1.00]}
+        ],
+        "protected_anatomy": ["outer contour", "head tentacles", "wing edges", "tail tip", "internal glow"]
+      }
+    },
+    {
+      "id": "gulper_eel",
+      "label": "Deep-sea eel",
+      "source": "creatures/rare_concepts/generated/raw/gulper_eel__4521.png",
+      "logical_size": [112, 88],
+      "content_box": [108, 82],
+      "render_scale": 3,
+      "animation": "eel_undulate",
+      "base_rarity": "rare",
+      "semantic_overrides": [
+        {"shape": "ellipse", "box": [0.76, 0.25, 0.89, 0.45], "source_roles": [1, 2, 3], "target_role": 11},
+        {"shape": "rectangle", "box": [0.67, 0.45, 0.94, 0.61], "source_roles": [1, 2, 3], "target_role": 12},
+        {"shape": "ellipse", "box": [0.72, 0.68, 0.94, 0.92], "source_roles": [4, 5, 6], "target_role": 13}
+      ],
+      "rare_treatment": {
+        "id": "ghost_current",
+        "label": "Ghost current",
+        "overlay": [
+          {"shape": "line", "points": [[0.306, 0.161], [0.369, 0.218]], "width": 2, "code": 3},
+          {"shape": "line", "points": [[0.405, 0.172], [0.468, 0.230]], "width": 2, "code": 2},
+          {"shape": "line", "points": [[0.505, 0.184], [0.568, 0.241]], "width": 2, "code": 3}
+        ]
+      },
+      "pattern_safe": {
+        "include": [{"shape": "ellipse", "box": [0.04, 0.12, 0.72, 0.76]}],
+        "exclude": [
+          {"shape": "ellipse", "box": [0.60, 0.16, 1.00, 0.68]},
+          {"shape": "rectangle", "box": [0.48, 0.63, 1.00, 1.00]}
+        ],
+        "protected_anatomy": ["outer contour", "pouch head", "eye", "mouth", "tail tip", "bioluminescent tip"]
+      }
+    }
+  ]
+}

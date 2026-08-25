@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "sample_rate": 16000,
+  "combination_count": 32,
+  "runtime_layer_count": 1,
+  "byte_exact_composite_count": 32,
+  "praise_pairing": "(bubble variant + creature index) modulo 4",
+  "mix_offsets_ms": {
+    "praise": 0,
+    "bubble": 400,
+    "creature": 640
+  },
+  "bubble_precedes_creature_ms": 240,
+  "latest_authored_audio_end_ms": 2640,
+  "playback_end_with_silence_ms": 2680,
+  "celebration_duration_ms": 2960,
+  "quiet_tail_before_next_round_ms": 280,
+  "unclamped_clipped_sample_count": 0,
+  "worst_unclamped_peak_sample": 20540,
+  "worst_unclamped_peak_dbfs": -4.057,
+  "worst_mix": {
+    "mix": "reward_mix_b0_c3",
+    "praise": "praise_thats_it",
+    "bubble": "sfx_bubble_round",
+    "creature": "sfx_creature_seahorse"
+  },
+  "level_policy": {
+    "bubble_role": "water-rise bed; lower than creature gesture",
+    "bubble_program_target_lufs": -28,
+    "bubble_true_peak_dbtp_ceiling": -9,
+    "creature_role": "species gesture; slightly louder than bubble bed",
+    "creature_gain_over_bubbles_db": 1.5,
+    "creature_nominal_program_target_lufs": -26.5,
+    "creature_true_peak_dbtp_ceiling": -7.5,
+    "short_transient_policy": "respect peak ceiling instead of compressing sparse gestures to an integrated target",
+    "mix_offsets_ms": {
+      "praise": 0,
+      "bubble": 400,
+      "creature": 640
+    },
+    "delivery": "32 offline PCM masters; runtime uses the proven one-asset direct streamer",
+    "praise_pairing": "praise variant = (bubble variant + creature index) modulo 4",
+    "deployed_mix_count": 32,
+    "mix_duration_seconds": 2.64
+  },
+  "status": "passed"
+}

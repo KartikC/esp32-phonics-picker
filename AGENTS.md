@@ -40,6 +40,8 @@ preflight checks and uses the offsets above.
 
 - interaction and visual behavior: `PRODUCT_SPEC.md`
 - app firmware: `firmware/PhonicsGame/`
+- reviewed creature runtime assets: `firmware/CreatureAssets/` generated from
+  `creatures/variation/variation_manifest.json`
 - accepted audio: `audio/generated/device-pcm/`
 - flashable audio and index: `audio/generated/phonics-audio-pack.bin` and
   `firmware/PhonicsGame/AudioAssetIndex.h`
@@ -58,11 +60,27 @@ external authoring sources and can change the accepted experience.
 Run `./scripts/test.sh --firmware` after source changes. For a physical install,
 also run `scripts/verify_device.py` and manually confirm:
 
-- the display shows only two lowercase cards, the fixed play button, and tiny
-  battery dots on a black background;
+- an active round shows only two lowercase cards, the fixed play button, and
+  tiny battery dots on a black background;
 - replay is audible;
+- a correct reward audibly plays praise, then bubbles, then the matching
+  creature gesture; the creature is slightly louder than the bubble bed;
 - both cards respond to tilt;
-- a wrong tap retains the round and a correct tap advances;
+- a wrong tap retains the round and a correct tap shows one large water-creature
+  reward before advancing;
+- with USB data attached, a replay-circle double tap mutes with a crossed
+  speaker indicator, a second double tap unmutes, and disconnect clears mute;
 - short PWR press/release sleeps and wakes to the same round.
 
 Never report a hardware deployment as verified from compilation alone.
+
+## Separate ocean-creature prototype
+
+`firmware/OceanCreatureDemo/` remains a separate visual-audit flash target; its
+reviewed generated creature header is also consumed by the canonical Picker's
+correct-answer reward. The assets can be audited with
+`./scripts/test_creature_pipeline.sh` and the demo compiled with
+`./scripts/test_creature_pipeline.sh --firmware`. Do not flash that demo with
+the canonical phonics flash command, and do not report a newly changed demo as
+device-verified until the separate manual gates in
+`docs/CREATURE_SPRITE_PIPELINE.md` pass on a V2 board.

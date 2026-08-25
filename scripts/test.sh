@@ -27,10 +27,18 @@ command -v "$cxx" >/dev/null 2>&1 || {
 }
 test_dir=$(mktemp -d "${TMPDIR:-/tmp}/phonics-tests.XXXXXX")
 trap 'rm -rf "$test_dir"' EXIT
-"$cxx" -std=c++17 -Wall -Wextra -pedantic tests/game_engine_test.cpp \
-  -o "$test_dir/game_engine_test"
-"$test_dir/game_engine_test"
-echo "Game engine tests passed"
+for test_source in \
+  tests/game_engine_test.cpp \
+  tests/creature_reward_selector_test.cpp \
+  tests/reward_audio_selector_test.cpp \
+  tests/mute_controller_test.cpp \
+  tests/audio_idle_policy_test.cpp; do
+  test_name=$(basename "$test_source" .cpp)
+  "$cxx" -std=c++17 -Wall -Wextra -pedantic "$test_source" \
+    -o "$test_dir/$test_name"
+  "$test_dir/$test_name"
+  echo "$test_name passed"
+done
 
 if [[ "$with_firmware" == true ]]; then
   ./scripts/build_firmware.sh
