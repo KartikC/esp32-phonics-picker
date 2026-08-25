@@ -1,4 +1,4 @@
-# Physical-device verification snapshot
+# Initial physical-device verification snapshot — 2026-08-22
 
 This is a sanitized record of the production build tested on a physical
 Waveshare ESP32-S3-Touch-AMOLED-1.8 V2 on 2026-08-22. Per-device identifiers,
@@ -217,7 +217,7 @@ allowed creature, palette, common pattern or authored-rare treatment, and
 representative seed. Production reward selection and child-facing behavior are
 unchanged.
 
-The same previously approved `/dev/cu.usbmodem1401` V2 board was flashed again
+The same previously approved V2 board was flashed again
 through the canonical five-region path. Esptool identified the ESP32-S3 rev
 0.2, 8 MB PSRAM, and 16 MB flash, then hash-verified the bootloader, partition
 table, OTA selector, application, and unchanged audio pack. The final
@@ -318,7 +318,7 @@ It keeps the same child-facing pixels, brightness, motion rate, volume, audio
 assets, game timing, and eight-creature reward pack while removing avoidable
 awake-silent and standby work.
 
-The same previously approved `/dev/cu.usbmodem1401` V2 board was flashed through
+The same previously approved V2 board was flashed through
 the canonical five-region path. Esptool identified ESP32-S3 rev 0.2, 8 MB
 PSRAM, and 16 MB flash, then hash-verified the bootloader, partition table, OTA
 selector, application, and unchanged audio pack. The installed application is
@@ -395,7 +395,7 @@ Diffusion seed `82412`, with a reviewed source-conditioned four-frame chomp.
 The giant octopus retains its existing silhouette and motion while replacing
 the oversized dark patch behind its eye with a mantle-tone shadow.
 
-The same previously approved `/dev/cu.usbmodem1401` V2 board was flashed through
+The same previously approved V2 board was flashed through
 the canonical five-region path. Esptool identified ESP32-S3 rev 0.2, 8 MB
 PSRAM, and 16 MB flash, then hash-verified the bootloader, partition table, OTA
 selector, application, and unchanged audio pack. The installed application is
@@ -455,7 +455,7 @@ mottle, and rare Mantle rings remain attached through the sway.
 The five efficient review files were uploaded to the owner-verified Google
 Drive folder
 [`ESP32 Phonics Picker - Device Review 2026-08-24`](https://drive.google.com/drive/folders/1xevtiQXXSPP0tzNQ_difdKQpp4dv6lIx)
-under `kartiksathappan@gmail.com`; Drive readback confirmed the exact parent
+through the owner-verified account; Drive readback confirmed the exact parent
 folder and byte sizes:
 
 - [mobile shark/octopus video](https://drive.google.com/file/d/1DO-3VBwJ9SR2CXZXQwKyrIwATWjPdAfx/view?usp=drivesdk),
@@ -499,9 +499,9 @@ frame is drawn, the selected 84,480-byte PCM payload is copied into fixed
 internal DRAM; playback then uses the proven direct streamer with no runtime
 summation and no PSRAM reads competing with the animated framebuffer.
 
-The same user-confirmed V2 board was installed at `/dev/cu.usbmodem101`.
-Esptool identified the same ESP32-S3 rev 0.2, MAC `28:84:85:8d:46:9c`, 8 MB
-PSRAM, and 16 MB flash. It wrote and hash-verified all five canonical regions:
+The same user-confirmed V2 board was installed again. Esptool identified the
+same ESP32-S3 rev 0.2, 8 MB PSRAM, and 16 MB flash. It wrote and hash-verified
+all five canonical regions:
 bootloader at `0x0`, partition table at `0x8000`, OTA selector at `0xe000`,
 application at `0x10000`, and the audio pack at `0x610000`.
 
@@ -525,3 +525,73 @@ reported that it sounds good, closing the perceptual gate that the earlier
 automated checks could not. Final serial confirmation left the board in
 `standby=yes` with `audio=suspended`, `audio_power=suspended`, `mute=off`, and
 `audio_write_failures=0`.
+
+## 2026-08-25 stone-card, Atkinson, and Deep loop installation
+
+This append-only entry supersedes the installed application identity above.
+The installed firmware corresponds to source commit `5fee23c`: the accepted
+tone-on-tone carved tide-stone cards, centered Atkinson Hyperlegible Next
+lowercase glyphs, the native 64 x 64 Deep loop replay control, its warm-red
+maintenance-mute slash, and the offline single-stream celebration audio are all
+present together.
+
+The same user-confirmed V2 board was flashed through the canonical five-region
+path. Esptool identified ESP32-S3 rev 0.2, 8 MB PSRAM, and 16 MB flash, then
+wrote and hash-verified the bootloader at `0x0`, partition table at `0x8000`,
+OTA selector at `0xe000`, application at `0x10000`, and audio pack at
+`0x610000`. The installed application is 1,522,400 bytes with SHA-256
+`5ef2432dabd32cbf80850ce183891ec8d2b5c8438881f6f18316325706945e79`.
+The 86-asset audio pack remains 4,422,336 bytes with SHA-256
+`bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9`.
+
+The complete serial verifier passed after the flash. It confirmed 8 MB PSRAM,
+ready audio at logical volume 90, idle/on/idle codec transitions with zero
+write failures, a ready IMU, interrupt-gated touch polling, reduced idle I2C
+polling, two complete audible single-stream reward paths, four-way bubble
+selection, species-matched cues, serial mute/unmute, all eight common and all
+eight rare creature render paths, production palette restrictions, and
+unchanged rarity counters during diagnostic checks. Cleanup returned the board
+to the awake game with `preview=no` and `mute=off`.
+
+A fresh, unmirrored FaceTime HD session then drove a real replay, wrong choice,
+second replay, correct choice, and the complete 2.96-second production reward
+transition. The ignored 1280 x 720 camera master is 24.391033 seconds and
+6,175,746 bytes with SHA-256
+`63c763b2ba66286d7abd0ff4b2a6c02ce1716a62718ac0cd84a7682a33fa2811`;
+its serial timeline is 2,898 bytes with SHA-256
+`b37781c147bd6365e9a06396007d6652f37de359bcf114a5c5110c15bdefc08b`.
+The reviewed public derivative is
+`docs/images/phonics-picker-gameplay.gif`: 368 x 446, 4.41 seconds, 1,702,801
+bytes, and SHA-256
+`b9c7a870783df5c172b43358d1403ab0a946430612a4d41c34e294f5f2258d78`.
+
+Inspection of the opening, transition, reward, and closing frames confirmed:
+
+- the opening `l` / `r` round and closing `i` / `p` round both use the current
+  carved stone cards, centered white Atkinson glyphs with dark halos, and the
+  Deep loop replay control;
+- no stray bright-green specks or palette-independent dark-blue line artifacts
+  are visible on either current card surface;
+- water rises from the real card screen, reveals the large named Coral-rust
+  striped moon jelly, recedes through the black beat, and returns to a fresh
+  round; and
+- the camera framing is unmirrored and contains no identifying background
+  detail.
+
+The exact source-faithful README stills were regenerated separately from the
+same checked-in runtime data. The normal image is 6,196 bytes with SHA-256
+`7891009a15e422f3765d1c2a026becaa645106182050d63ec17b44cce33616df`;
+the maintenance-mute image is 6,430 bytes with SHA-256
+`1a57488cf5ccc5a918b8781fde2433a25c70d0c8e9501361b4593dccb66520bb`.
+They are exact renderer evidence, not substitutes for the physical camera
+capture.
+
+The walkthrough used deterministic USB maintenance commands, so it does not
+claim fresh hands-on touch alignment, hand tilt, physical replay double-tap,
+sustained cable-removal auto-unmute, PWR standby/wake, or perceptual speaker
+quality. Those person-at-device gates remain distinct. The capture completed
+awake with ready idle audio, `preview=no`, `mute=off`, and a new distinct round;
+the real correct choice naturally advanced play progress to `clean=1`,
+`pity=2`. A final post-capture canonical verifier repeated the full automated
+runtime matrix, kept both counters unchanged, and again restored the awake,
+unmuted, non-preview game.

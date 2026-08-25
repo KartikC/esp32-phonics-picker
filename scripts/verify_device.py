@@ -39,6 +39,13 @@ CREATURE_SFX_BY_REWARD = {
 CREATURE_INDEX = {
     reward: index for index, reward in enumerate(CREATURE_SFX_BY_REWARD)
 }
+COMPLETE_STATUS_KEYS = frozenset({
+    "psram", "audio", "audio_power", "audio_idle_downs",
+    "audio_write_failures", "volume", "imu", "preview", "standby", "mute",
+    "usb_data", "reward_clean", "reward_pity", "target", "distractor",
+    "distinct", "slide_left", "slide_right", "motion_rate",
+    "touch_irq_gate", "touch_polls", "power_polls",
+})
 
 def choose_port(requested: str | None, available_ports: object) -> str:
     if requested:
@@ -59,6 +66,11 @@ def parse_status(line: str) -> dict[str, str]:
             key, value = field.split("=", 1)
             values[key] = value
     return values
+
+
+def status_is_complete(status: dict[str, str]) -> bool:
+    """Reject STATUS records interrupted by asynchronous diagnostic logging."""
+    return COMPLETE_STATUS_KEYS.issubset(status)
 
 
 def request_line(
@@ -101,20 +113,27 @@ def require_status(status: dict[str, str], expected: dict[str, str]) -> None:
 
 
 def wait_for_status(
-    device: object, expected: dict[str, str], timeout: float
+    device: object, expected: dict[str, str], timeout: float,
+    required_keys: frozenset[str] | set[str] | tuple[str, ...] = (),
 ) -> dict[str, str]:
     """Poll STATUS until the runtime reaches the requested state."""
+    required = set(required_keys)
     deadline = time.monotonic() + timeout
     last_status: dict[str, str] = {}
     while time.monotonic() < deadline:
         last_status = parse_status(request_line(
             device, b"STATUS\n", "[status] ", 2.0, 0.5
         ))
-        if all(last_status.get(key) == value for key, value in expected.items()):
+        if (required.issubset(last_status) and
+                all(last_status.get(key) == value
+                    for key, value in expected.items())):
             return last_status
         time.sleep(0.20)
     require_status(last_status, expected)
-    raise RuntimeError("unreachable")
+    missing = sorted(required.difference(last_status))
+    raise RuntimeError(
+        "STATUS is missing required fields: " + ", ".join(missing)
+    )
 
 
 def verify_reward_audio_fields(line: str) -> str:
@@ -188,7 +207,7 @@ def main() -> None:
                     "usb_data": "yes",
                     "distinct": "yes",
                     "touch_irq_gate": "yes",
-                }, args.timeout)
+                }, args.timeout, COMPLETE_STATUS_KEYS)
                 for counter in (
                     "reward_clean", "reward_pity", "audio_idle_downs",
                     "touch_polls", "power_polls",
@@ -209,7 +228,8 @@ def main() -> None:
                 }, 4.0)
                 idle_audio = wait_for_status(device, {
                     "audio": "ready", "audio_power": "idle"
-                }, 8.0)
+                }, 8.0, {"audio_idle_downs", "touch_polls", "power_polls"})
+                idle_audio_observed_at = time.monotonic()
                 if int(idle_audio["audio_idle_downs"]) <= int(
                     initial["audio_idle_downs"]
                 ):
@@ -220,20 +240,26 @@ def main() -> None:
                 time.sleep(0.40)
                 quiet_poll = wait_for_status(device, {
                     "touch_irq_gate": "yes"
-                }, 4.0)
+                }, 4.0, {"touch_polls", "power_polls"})
+                quiet_poll_observed_at = time.monotonic()
                 touch_delta = int(quiet_poll["touch_polls"]) - int(
                     idle_audio["touch_polls"]
                 )
                 power_delta = int(quiet_poll["power_polls"]) - int(
                     idle_audio["power_polls"]
                 )
-                if not 3 <= touch_delta <= 12:
+                poll_interval = quiet_poll_observed_at - idle_audio_observed_at
+                touch_rate = touch_delta / poll_interval
+                power_rate = power_delta / poll_interval
+                if not 7.5 <= touch_rate <= 30.0:
                     raise RuntimeError(
-                        f"idle touch polling too frequent: {touch_delta} reads/0.4s"
+                        "idle touch polling cadence out of range: "
+                        f"{touch_rate:.1f} reads/s over {poll_interval:.2f}s"
                     )
-                if not 8 <= power_delta <= 30:
+                if not 20.0 <= power_rate <= 75.0:
                     raise RuntimeError(
-                        f"PWR polling cadence out of range: {power_delta} reads/0.4s"
+                        "PWR polling cadence out of range: "
+                        f"{power_rate:.1f} reads/s over {poll_interval:.2f}s"
                     )
 
                 # Exercise two complete, audible production celebrations. The
@@ -341,7 +367,7 @@ def main() -> None:
                     "audio": "ready", "mute": "off", "usb_data": "yes",
                     "preview": "no", "audio_power": "idle",
                     "audio_write_failures": "0",
-                }, 4.0)
+                }, 4.0, {"reward_clean", "reward_pity"})
                 for counter in ("reward_clean", "reward_pity"):
                     if final_status.get(counter) != initial.get(counter):
                         raise RuntimeError(

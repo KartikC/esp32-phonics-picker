@@ -19,6 +19,8 @@ elif [[ $# -gt 0 ]]; then
 fi
 
 "$python_bin" scripts/verify_repo.py
+"$python_bin" tests/verify_device_status_test.py
+"$python_bin" tests/readme_media_tools_test.py
 
 cxx=${CXX:-c++}
 command -v "$cxx" >/dev/null 2>&1 || {

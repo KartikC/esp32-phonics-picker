@@ -40,6 +40,12 @@ preflight checks and uses the offsets above.
 
 - interaction and visual behavior: `PRODUCT_SPEC.md`
 - app firmware: `firmware/PhonicsGame/`
+- selected card surface: `firmware/PhonicsGame/CardStoneAsset.h` and
+  `firmware/PhonicsGame/CardStoneRendering.h`, generated from the audited
+  source recorded in `art/letter_cards/generated/stone_card_report.json`
+- selected letter font:
+  `firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h`, tied to
+  `art/fonts/generated/atkinson_hyperlegible_next_report.json`
 - selected replay control: `firmware/PhonicsGame/ReplayButtonAsset.h` generated
   from the audited source recorded in
   `art/replay_button/generated/deep_loop_report.json`
@@ -53,10 +59,12 @@ preflight checks and uses the offsets above.
   `scripts/build_firmware.sh`
 - exact output hashes and flash offsets: `firmware/BUILD_MANIFEST.json`
 - physical validation evidence: `DEVICE_REPORT.md`
+- source-faithful public still renderer: `scripts/preview_on_device.py`
 
-Checked-in generated audio, the pack, and font headers are authoritative for a
-normal build. Do not regenerate them merely to deploy. Regeneration depends on
-external authoring sources and can change the accepted experience.
+Checked-in generated audio, the pack, card/replay data, and font headers are
+authoritative for a normal build. Do not regenerate them merely to deploy.
+Regeneration depends on external authoring sources and can change the accepted
+experience.
 
 ## Required verification
 
@@ -64,20 +72,33 @@ Run `./scripts/test.sh --firmware` after source changes. For a physical install,
 also run `scripts/verify_device.py` and manually confirm:
 
 - an active round shows only two tone-on-tone lowercase stone cards, the fixed
-  Deep loop play button, and tiny battery dots on a black background; no bright
-  green specks or palette-independent blue lines appear on either card;
+  Deep loop play button, and tiny battery dots on a black background; each
+  centered white Atkinson glyph has its deep-slate halo, and no bright green
+  specks or palette-independent blue lines appear on either card;
 - replay is audible;
 - a correct reward audibly plays praise, then bubbles, then the matching
   creature gesture; the creature is slightly louder than the bubble bed;
 - both cards respond to tilt;
 - a wrong tap retains the round and a correct tap shows one large water-creature
   reward before advancing;
-- with USB data attached, a replay-circle double tap mutes with a warm-red
-  slash across the control, a second double tap unmutes, and disconnect clears
-  mute;
+- with USB data attached, a double tap anywhere in the complete Deep loop
+  replay target mutes with a warm-red slash across the control, a second double
+  tap unmutes, and disconnect clears mute;
 - short PWR press/release sleeps and wakes to the same round.
 
 Never report a hardware deployment as verified from compilation alone.
+
+## Public media
+
+Regenerate the README stills whenever the accepted card, letter-font, or replay
+asset changes. `scripts/preview_on_device.py` is an exact source-faithful
+renderer, not physical framebuffer evidence. For a physical README GIF, use a
+fresh `scripts/capture_readme_walkthrough.py` session from the currently
+installed application, then `scripts/build_readme_media.py`; inspect its first,
+reward, and final frames before publication. Keep raw camera masters and serial
+timelines under ignored `build/`, and commit only reviewed derivatives under
+`docs/images/`. This media-authoring path requires `ffmpeg` and `ffprobe` on
+`PATH` plus `python3 -m pip install -r requirements-authoring.txt`.
 
 ## Separate ocean-creature prototype
 

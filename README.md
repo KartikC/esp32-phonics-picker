@@ -12,7 +12,11 @@ has not yet been measured, and battery/charge-only PWR wake remains a separate
 physical gate, so the repository claims structural savings rather than mA or a
 percentage.
 
-![The Phonics Picker UI: replay button, two battery dots, and two lowercase letter cards](docs/images/phonics-picker-ui.png)
+![Current Phonics Picker listening round with the Deep loop replay control, two yellow battery dots, and centered Atkinson lowercase letters on tone-on-tone carved tide-stone cards](docs/images/phonics-picker-ui.png)
+
+*Source-faithful 368 x 448 render of the checked-in card, font, and replay
+assets. The listening round stays deliberately spare: one replay control and
+two large choices.*
 
 > [!IMPORTANT]
 > This firmware is for the **ESP32-S3 V2 board with a CO5300 display and CST820
@@ -87,15 +91,26 @@ agents are in [AGENTS.md](AGENTS.md).
    small centered name at the bottom identifies the creature during its
    appearance.
 
+![A physical V2 board transitions from the current letter cards through a rising-water moon-jelly reward and back to a fresh two-card round](docs/images/phonics-picker-gameplay.gif)
+
+*Fresh, unmirrored FaceTime HD capture of the checked-in build running on the
+physical V2 board. A correct choice raises the water, reveals the named reward,
+and returns to a new round in 2.96 seconds.*
+
 The round never prints or otherwise reveals the answer. The fixed ocean-current
 **Deep loop** play button at the top repeats the exact current prompt. Gently
-tilting the board lets both cards drift together without changing their touch
-targets or which answer is correct.
+tilting the board lets both cards drift together; their hit areas move with
+them without changing size or which answer is correct.
 
-For bench work with a USB data cable attached, double-tap inside the visible
-play circle to mute or unmute; a warm-red slash across the control shows mute.
-A charge-only cable cannot enable this gesture, and disconnecting data clears
-mute.
+For bench work with a USB data cable attached, double-tap inside the complete
+42-pixel-radius Deep loop replay target to mute or unmute; a warm-red slash
+across the control shows mute. A charge-only cable cannot enable this gesture,
+and a sustained data disconnect clears mute.
+
+![Source-faithful Phonics Picker maintenance-mute state with a warm-red slash across the Deep loop replay control](docs/images/phonics-picker-usb-mute.png)
+
+*The maintenance-mute overlay is painted over the same replay asset, so it adds
+no second full-screen image to the firmware.*
 
 The tiny dots at the top are parent-facing battery status:
 
@@ -119,7 +134,8 @@ interaction contract.
 
 ## Reproducibility
 
-The repository pins and includes everything needed for the installed result:
+The repository pins and includes everything needed for the checked-in,
+physically installed result:
 
 - Arduino CLI 1.5.1, downloaded with an official SHA-256 check
 - Arduino-ESP32 core 3.3.11
@@ -132,8 +148,8 @@ The repository pins and includes everything needed for the installed result:
 - a fixed build epoch taken from the hardware-verified firmware commit, so the
   application binary is byte-reproducible across clean builds
 - the slim display, touch, and IMU sources used by the build
-- the generated Atkinson Hyperlegible Next ExtraBold 800 lowercase card font
-  and the Nunito adult-label bitmap font
+- the generated Atkinson Hyperlegible Next ExtraBold 800 lowercase card font;
+  small creature names use the built-in GFX face
 - all 86 accepted 16 kHz PCM assets (26 phonics, 16 speech, four bubble beds,
   eight species cues, and 32 offline celebration masters) and the packed flash
   image
@@ -142,9 +158,11 @@ The repository pins and includes everything needed for the installed result:
   `firmware/BUILD_MANIFEST.json`
 
 The deployment build does not need ffmpeg, a model service, or any private
-source. Those are needed only if an author deliberately regenerates the already
-checked-in audio or fonts. `python3 scripts/verify_repo.py` validates every audio
-asset, pack offset, manifest hash, and required deployment input.
+source. Deliberate accepted-asset regeneration is a separate authoring path;
+the public-media workflow below uses ffmpeg but no model service or private
+source. `python3 scripts/verify_repo.py` validates the audio pack and offsets,
+build manifest, selected card/font/replay reports and hashes, and every required
+deployment input.
 
 ## Development
 
@@ -154,10 +172,12 @@ asset, pack offset, manifest hash, and required deployment input.
 
 That command runs the host game/geometry, creature-reward rarity, four-way
 bubble selection, USB mute gesture, and audio-idle policy tests; byte-checks
-all 32 single-stream reward masters and validates the complete audio pack;
-installs the pinned toolchain if needed; and compiles the production firmware.
-CI runs the same path from a fresh Ubuntu checkout. The most recent
-physical-board verification snapshot is in [DEVICE_REPORT.md](DEVICE_REPORT.md).
+all 32 single-stream reward masters; verifies the stone-card roles, Atkinson
+glyph source and fit, packed Deep loop asset, README-capture alignment, and
+complete audio pack; installs the pinned toolchain if needed; and compiles the
+production firmware. CI runs the same path from a fresh Ubuntu checkout. The
+most recent physical-board verification snapshot is in
+[DEVICE_REPORT.md](DEVICE_REPORT.md).
 
 Production USB maintenance commands are `STATUS`, `REPLAY`, `MUTE`, `UNMUTE`,
 `REWARD`, `RARE`, `HOLD_CREATURE 0..7`, `HOLD_RARE_CREATURE 0..7`, `SLEEP`,
@@ -172,7 +192,7 @@ the exact production reward renderer for tethered camera inspection; send
 `GAME` to exit the loop and restore the active round. These diagnostic previews,
 `REWARD`, and `RARE` do not advance the hidden rarity counters. Mute can be
 entered only with an attached USB data host and is also available by
-double-tapping the visible replay circle.
+double-tapping the complete Deep loop replay target.
 
 Exhaustive evidence capture uses the deterministic USB-only command
 `ANIMATE_VARIANT CREATURE PALETTE PATTERN RARE SEED`. Palette ordinals follow
@@ -192,6 +212,15 @@ sheets, and a TSV index with `scripts/build_device_variant_evidence.py`.
 `scripts/build_device_walkthrough_evidence.py` provide the corresponding real
 replay/wrong/correct/transition timing capture. These tools create ignored
 evidence under `build/` and do not modify the accepted sprite assets.
+
+For a fresh public-media refresh, `scripts/capture_readme_walkthrough.py`
+records FaceTime HD and drives that real walkthrough in one recoverable session;
+`scripts/build_readme_media.py` hash-checks the session, regenerates the two
+source-faithful PNGs above, and makes the UTC-aligned physical GIF. Raw camera
+masters stay ignored under `build/`; only reviewed derivatives belong in
+`docs/images/`. This authoring-only path requires `ffmpeg` and `ffprobe` on
+`PATH` plus `python3 -m pip install -r requirements-authoring.txt`; none is
+needed for a normal deployment.
 
 ## Water-creature visual prototype
 

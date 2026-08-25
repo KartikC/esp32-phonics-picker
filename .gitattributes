@@ -1,4 +1,5 @@
 *.bin binary
+*.gif binary
 *.png binary
 *.wav binary
 *.sh text eol=lf

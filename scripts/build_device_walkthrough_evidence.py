@@ -62,6 +62,10 @@ def main() -> None:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--video-offset", required=True, type=float)
     parser.add_argument("--crop", default="600:850:660:100")
+    parser.add_argument(
+        "--camera-label", default="Physical V2 display + camera",
+        help="Public-safe label for the camera used to record the board",
+    )
     args = parser.parse_args()
 
     raw = args.video.resolve()
@@ -73,6 +77,7 @@ def main() -> None:
     replay_events = [event for event in timeline["events"] if event["command"] == "REPLAY"]
     wrong = events["WRONG"]
     status = events["STATUS"]
+    target = str(timeline.get("initial_status", {}).get("target", "?")).upper()
     reward_match = re.search(r"reward=([^ ]+).*palette=([^ ]+(?: [^ ]+)?) pattern=([0-3])",
                              str(correct["acknowledgement"]))
     reward_label = "recorded creature reward"
@@ -100,7 +105,7 @@ def main() -> None:
 
     phases = [
         (float(replay_events[0]["sent_seconds"]), float(wrong["sent_seconds"]),
-         "Replay prompt — target n"),
+         f"Replay prompt — target {target}"),
         (float(wrong["sent_seconds"]), float(replay_events[1]["sent_seconds"]),
          "Wrong choice — same round retained"),
         (float(replay_events[1]["sent_seconds"]), float(correct["sent_seconds"]),
@@ -132,7 +137,7 @@ def main() -> None:
             f"enable='between(t\\,{relative_start:.4f}\\,{relative_end:.4f})'"
         )
     filters.append(
-        f"drawtext=fontfile='{FONT_REGULAR}':text='Physical V2 display + Insta360 microphone':"
+        f"drawtext=fontfile='{FONT_REGULAR}':text='{ffmpeg_text(args.camera_label)}':"
         "fontcolor=0xaab8bd:fontsize=18:x=(w-text_w)/2:y=105"
     )
     run([

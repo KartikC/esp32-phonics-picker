@@ -64,6 +64,7 @@ def main() -> None:
     events: list[dict[str, object]] = []
     initial_status: dict[str, str] = {}
     final_status: dict[str, str] = {}
+    capture_started_at_utc = ""
     capture_zero = time.monotonic()
 
     def event(device: object, command: str, prefix: str) -> str:
@@ -104,6 +105,7 @@ def main() -> None:
             if mismatches:
                 raise RuntimeError("; ".join(mismatches))
 
+            capture_started_at_utc = dt.datetime.now(dt.timezone.utc).isoformat()
             capture_zero = time.monotonic()
             print("[walkthrough] camera should be recording", flush=True)
             time.sleep(args.lead_in)
@@ -158,7 +160,8 @@ def main() -> None:
         "schema_version": 1,
         "kind": "production-device-game-walkthrough",
         "port": args.port,
-        "started_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "started_at_utc": capture_started_at_utc,
+        "completed_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "lead_in_seconds": args.lead_in,
         "tail_seconds": args.tail,
         "initial_status": initial_status,
