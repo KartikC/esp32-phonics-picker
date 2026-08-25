@@ -29,9 +29,7 @@ fixed_now = dt.datetime(2026, 8, 25, 12, 34, 56, 123456, tzinfo=dt.timezone.utc)
 assert CAPTURE.session_directory(None, fixed_now) == (
     ROOT / "build/readme-media-captures/20260825T123456.123456Z"
 )
-assert CAPTURE.avfoundation_input("FaceTime HD Camera", "none") == (
-    "FaceTime HD Camera:none"
-)
+assert CAPTURE.avfoundation_input("0", "none") == "0:none"
 assert CAPTURE.default_device_python().is_file()
 assert BUILD.DEFAULT_MUTED.name == "phonics-picker-usb-mute.png"
 try:

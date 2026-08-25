@@ -4,11 +4,11 @@
 
 Target and install evidence:
 
-- The user visually confirmed the rear label says **V2**.
+- The rear label was visually confirmed as **V2** before flashing.
 - Read-only preflight identified an ESP32-S3 revision 0.2 with 8 MB embedded
   PSRAM, USB Serial/JTAG, and 16 MB flash.
-- The explicit serial target was `/dev/cu.usbmodem1401`; no ambiguous port was
-  selected.
+- A single explicit serial target was selected after read-only discovery; no
+  ambiguous port was used. The ephemeral local path is intentionally omitted.
 - `scripts/flash_ocean_demo.sh` wrote and esptool hash-verified the ocean-demo
   bootloader at `0x0`, partition table at `0x8000`, OTA selector at `0xe000`,
   and application at `0x10000`. It did not rewrite the phonics audio-pack
@@ -37,9 +37,9 @@ Physical AMOLED comparison:
   a shipping palette.
 - `TEST PROBE` retained normal creature coloring and added test dots only to
   the authored mantle-safe region.
-- After switching back to the identical frozen `COLOR` frame, the user
-  confirmed the test looked good. The protected eye, contour, mouth area, and
-  arms remained visually intact.
+- After switching back to the identical frozen `COLOR` frame, visual inspection
+  confirmed that the protected eye, contour, mouth area, and arms remained
+  intact.
 - The board was returned to `COLOR` with animation and automatic palette/species
   cycling enabled.
 

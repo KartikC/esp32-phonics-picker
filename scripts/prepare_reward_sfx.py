@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare the user-selected Venice reward SFX for the V2 speaker path."""
+"""Prepare the reviewed reward SFX for the V2 speaker path."""
 
 from __future__ import annotations
 
@@ -167,7 +167,7 @@ def probe(path: Path) -> dict[str, int | float]:
 
 
 def convert(source: Path, destination: Path, kind: str) -> None:
-    # Reproduce the matched audition level the user accepted. Creature cues
+    # Reproduce the accepted matched-audition level. Creature cues
     # then receive one shared +1.5 dB lift over the four randomized bubble beds.
     # Sparse animal gestures may still measure below the integrated target once
     # their isolated transient reaches the peak ceiling; they are never crushed
@@ -235,7 +235,7 @@ def prepare_reward_sfx() -> None:
     assets = existing + generated
     manifest["version"] = 2
     manifest["playback_status"] = (
-        "speech and phonics accepted; reward SFX user-selected and device-leveled"
+        "speech and phonics accepted; reward SFX reviewed and device-leveled"
     )
     manifest["asset_count"] = len(assets)
     manifest["total_bytes"] = sum(asset["bytes"] for asset in assets)

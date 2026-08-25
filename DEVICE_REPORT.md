@@ -217,7 +217,7 @@ allowed creature, palette, common pattern or authored-rare treatment, and
 representative seed. Production reward selection and child-facing behavior are
 unchanged.
 
-The same previously approved V2 board was flashed again
+The verified V2 board was flashed again
 through the canonical five-region path. Esptool identified the ESP32-S3 rev
 0.2, 8 MB PSRAM, and 16 MB flash, then hash-verified the bootloader, partition
 table, OTA selector, application, and unchanged audio pack. The final
@@ -303,10 +303,9 @@ common and rare rewards, all eight common render paths, all eight authored-rare
 paths, palette restrictions, serial mute/unmute, audio, PSRAM, IMU, and cleanup.
 The walkthrough naturally advanced progress to `clean=1`, `pity=1`; the final
 verifier left both counters unchanged and returned the board to
-`audio=ready`, `mute=off`, `preview=no`, and the normal game. Photo Booth was
-restored to its live Insta360 view.
+`audio=ready`, `mute=off`, `preview=no`, and the normal game.
 
-This closes the requested on-device creature/modifier catalog and visual game
+This completes the on-device creature/modifier catalog and visual game
 timing confirmation. It still does not substitute for a person's physical
 touch-alignment, replay-circle double-tap timing, sustained cable-removal
 auto-unmute, hand-tilt, PWR standby/wake, or perceptual speaker-quality checks.
@@ -318,7 +317,7 @@ It keeps the same child-facing pixels, brightness, motion rate, volume, audio
 assets, game timing, and eight-creature reward pack while removing avoidable
 awake-silent and standby work.
 
-The same previously approved V2 board was flashed through
+The verified V2 board was flashed through
 the canonical five-region path. Esptool identified ESP32-S3 rev 0.2, 8 MB
 PSRAM, and 16 MB flash, then hash-verified the bootloader, partition table, OTA
 selector, application, and unchanged audio pack. The installed application is
@@ -395,7 +394,7 @@ Diffusion seed `82412`, with a reviewed source-conditioned four-frame chomp.
 The giant octopus retains its existing silhouette and motion while replacing
 the oversized dark patch behind its eye with a mantle-tone shadow.
 
-The same previously approved V2 board was flashed through
+The verified V2 board was flashed through
 the canonical five-region path. Esptool identified ESP32-S3 rev 0.2, 8 MB
 PSRAM, and 16 MB flash, then hash-verified the bootloader, partition table, OTA
 selector, application, and unchanged audio pack. The installed application is
@@ -452,11 +451,9 @@ body. Across all 25 octopus variants, the former large dark eye-adjacent oval
 is absent, the small actual eye stays readable, and solid, spots, stripes,
 mottle, and rare Mantle rings remain attached through the sway.
 
-The five efficient review files were uploaded to the owner-verified Google
-Drive folder
+Published review copies are available in the
 [`ESP32 Phonics Picker - Device Review 2026-08-24`](https://drive.google.com/drive/folders/1xevtiQXXSPP0tzNQ_difdKQpp4dv6lIx)
-through the owner-verified account; Drive readback confirmed the exact parent
-folder and byte sizes:
+folder. Readback confirmed the exact parent folder and byte sizes:
 
 - [mobile shark/octopus video](https://drive.google.com/file/d/1DO-3VBwJ9SR2CXZXQwKyrIwATWjPdAfx/view?usp=drivesdk),
   21,087,342 bytes;
@@ -499,7 +496,7 @@ frame is drawn, the selected 84,480-byte PCM payload is copied into fixed
 internal DRAM; playback then uses the proven direct streamer with no runtime
 summation and no PSRAM reads competing with the animated framebuffer.
 
-The same user-confirmed V2 board was installed again. Esptool identified the
+The verified V2 board was installed again. Esptool identified the
 same ESP32-S3 rev 0.2, 8 MB PSRAM, and 16 MB flash. It wrote and hash-verified
 all five canonical regions:
 bootloader at `0x0`, partition table at `0x8000`, OTA selector at `0xe000`,
@@ -520,9 +517,9 @@ rarity counters, normal `idle -> on -> idle` audio transitions, and
 not claimed because simultaneous live touch interaction invalidated its idle
 touch-rate measurement.
 
-The owner manually inspected celebration playback on the onboard speaker and
-reported that it sounds good, closing the perceptual gate that the earlier
-automated checks could not. Final serial confirmation left the board in
+A manual listening check on the onboard speaker accepted celebration playback,
+closing the perceptual gate that the earlier automated checks could not. Final
+serial confirmation left the board in
 `standby=yes` with `audio=suspended`, `audio_power=suspended`, `mute=off`, and
 `audio_write_failures=0`.
 
@@ -535,7 +532,7 @@ lowercase glyphs, the native 64 x 64 Deep loop replay control, its warm-red
 maintenance-mute slash, and the offline single-stream celebration audio are all
 present together.
 
-The same user-confirmed V2 board was flashed through the canonical five-region
+The verified V2 board was flashed through the canonical five-region
 path. Esptool identified ESP32-S3 rev 0.2, 8 MB PSRAM, and 16 MB flash, then
 wrote and hash-verified the bootloader at `0x0`, partition table at `0x8000`,
 OTA selector at `0xe000`, application at `0x10000`, and audio pack at

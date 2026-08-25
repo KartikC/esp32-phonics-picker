@@ -93,7 +93,7 @@ agents are in [AGENTS.md](AGENTS.md).
 
 ![A physical V2 board transitions from the current letter cards through a rising-water moon-jelly reward and back to a fresh two-card round](docs/images/phonics-picker-gameplay.gif)
 
-*Fresh, unmirrored FaceTime HD capture of the checked-in build running on the
+*Fresh, unmirrored camera capture of the checked-in build running on the
 physical V2 board. A correct choice raises the water, reveals the named reward,
 and returns to a new round in 2.96 seconds.*
 
@@ -131,6 +131,74 @@ visible pixels.
 There are no scores, streaks, ads, accounts, network calls, microphone use, or
 runtime speech generation. See [PRODUCT_SPEC.md](PRODUCT_SPEC.md) for the full
 interaction contract.
+
+## Creature rewards and rarity
+
+Every correct answer earns one of eight animated water creatures. Reward
+selection has its own deterministic random stream, so creature variety never
+changes the phonics-round sequence. The game uses the word **rare** for two
+independent ideas:
+
+1. a creature's base frequency tier, which controls how often that species is
+   selected; and
+2. a hidden rare visual-treatment roll, which can decorate any species.
+
+The visual-treatment guarantees described below do **not** guarantee a shark,
+anglerfish, or eel. A low-frequency shark can have a normal treatment, while a
+frequent moon jelly can receive its authored rare treatment.
+
+### Creature frequency
+
+The immediately previous species is removed before the next weighted draw, so
+the same creature never appears twice in a row. That anti-repeat rule gives the
+following exact long-run shares:
+
+| Creature | Base tier | Weight | Long-run share | Authored rare treatment |
+|---|---:|---:|---:|---|
+| Moon jelly | Basic | 8 | 22.83% (`200/876`) | Celestial bell |
+| Reef shark | Rare | 1 | 3.65% (`32/876`) | Ancestral bands |
+| Giant octopus | Medium | 3 | 10.27% (`90/876`) | Mantle rings |
+| Seahorse | Basic | 8 | 22.83% (`200/876`) | Royal diamonds |
+| Glass squid | Basic | 8 | 22.83% (`200/876`) | Prismatic panes |
+| Anglerfish | Rare | 1 | 3.65% (`32/876`) | Abyssal constellation |
+| Sea angel | Medium | 3 | 10.27% (`90/876`) | Halo wings |
+| Deep-sea eel | Rare | 1 | 3.65% (`32/876`) | Ghost current |
+
+Combined, the basic tier accounts for 68.49% of rewards, medium for 20.55%,
+and rare-frequency species for 10.96%. The first draw after startup uses the
+raw weights out of 33; later draws renormalize the remaining weights after the
+previous species is excluded.
+
+### Hidden rare visual treatments
+
+Rare-treatment odds rise through an uninterrupted run of correct answers:
+
+| Correct answer in the clean run | Rare-treatment chance |
+|---|---:|
+| 1-5 | 1/64 (1.5625%) each |
+| 6-9 | 1/32 (3.125%) each |
+| 10-11 | 1/16 (6.25%) each |
+| 12 | Guaranteed if no earlier rare occurred |
+
+A separate pity counter guarantees a rare treatment on the 18th correct answer
+since the previous rare, even when wrong answers repeatedly break the clean
+run. A wrong answer resets only clean-run progress; it neither advances nor
+resets the pity counter. Any rare treatment resets both counters, and restarting
+the board begins them again at zero. Neither progress nor rarity is shown to the
+child, and a rare treatment adds no score or gameplay advantage.
+
+Normal rewards choose solid, spots, stripes, or mottle at 25% each. Both normal
+and rare rewards choose from Tide slate, Kelp green, Coral rust, Sand gold, and
+Moon pale without immediately repeating the previous palette; glass squid and
+sea angel use only Tide slate, Kelp green, and Moon pale to protect their
+translucent look. Plum deep remains authoring-only. A rare reward forces the
+procedural base pattern to solid, then applies the species-specific authored
+treatment listed above. Restrained sparkles are allowed where authored; sea
+angel deliberately remains sparkle-free.
+
+USB preview and forced-reward commands do not consume either rarity counter.
+Only the real correct-choice path advances them, which lets device verification
+inspect every treatment without altering ordinary play progress.
 
 ## Reproducibility
 
@@ -202,8 +270,8 @@ rare treatments with a non-solid procedural pattern, matching production
 selection policy exactly. It changes only the diagnostic preview and never the
 game’s reward counters or random streams.
 
-With Photo Booth or another camera already recording, the complete finite
-production matrix can be driven and timestamped with
+With a camera already recording, the complete finite production matrix can be
+driven and timestamped with
 `scripts/capture_device_variant_catalog.py`; one deterministic representative
 seed covers each categorical palette/texture combination. The untouched camera
 master and timeline can then be turned into labeled per-species clips, contact
@@ -214,7 +282,8 @@ replay/wrong/correct/transition timing capture. These tools create ignored
 evidence under `build/` and do not modify the accepted sprite assets.
 
 For a fresh public-media refresh, `scripts/capture_readme_walkthrough.py`
-records FaceTime HD and drives that real walkthrough in one recoverable session;
+records the configured camera and drives that real walkthrough in one
+recoverable session;
 `scripts/build_readme_media.py` hash-checks the session, regenerates the two
 source-faithful PNGs above, and makes the UTC-aligned physical GIF. Raw camera
 masters stay ignored under `build/`; only reviewed derivatives belong in
@@ -222,24 +291,14 @@ masters stay ignored under `build/`; only reviewed derivatives belong in
 `PATH` plus `python3 -m pip install -r requirements-authoring.txt`; none is
 needed for a normal deployment.
 
-## Water-creature visual prototype
+## Creature asset pipeline and visual-audit firmware
 
-The repository also contains a separate sprite-authoring and visual-audit demo
-for eight full-screen Evolutionary 16-bit species: moon jelly, reef shark,
-giant octopus, seahorse, glass squid, anglerfish, sea angel, and deep-sea eel.
-The squid is specifically a **glass squid**, not a vampire squid. It adapts the
-external game-sprite pipeline from the Dream Duel project, then turns reviewed
-art into semantic four-bit sprites with four-frame motion, safe procedural
-textures, and a separate authored rare treatment for every species.
-
-Base-species frequency and visual-treatment rarity are independent. Each basic
-species (jelly, seahorse, glass squid) has weight `8`, each medium species
-(octopus, sea angel) weight `3`, and each rare species (shark, anglerfish,
-deep-sea eel) weight `1`, with immediate species repeats removed. A rare-tier
-shark can therefore have a normal texture, while a basic jelly can receive its
-authored rare motif. Automatic rewards use five non-purple ramps, except the
-translucent glass squid and sea angel, which are limited to Tide slate, Kelp
-green, and Moon pale.
+The repository contains a self-contained sprite-authoring pipeline and a
+separate visual-audit firmware target for the same eight full-screen
+Evolutionary 16-bit creatures used by the game. It converts reviewed source art
+into semantic four-bit sprites with four-frame motion, bounded procedural
+textures, and one species-specific authored rare treatment. The generated asset
+pack, selection rules, and runtime renderer are all checked in and auditable.
 
 Each normal or rare modification retains the species' four-frame motion. The
 selected screen-filling banking shark uses a reviewed closed/half/open/half

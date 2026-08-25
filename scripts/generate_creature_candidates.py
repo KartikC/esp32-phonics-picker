@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate review candidates with the sprite-specific services used by Dream Duel.
+"""Generate review candidates with the configured sprite-generation services.
 
 This is an authoring command. The checked-in production pack remains sufficient
 for normal firmware builds; API keys are never needed at build or runtime.

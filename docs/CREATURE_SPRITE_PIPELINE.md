@@ -3,8 +3,8 @@
 This is the creature authoring pipeline and its separate visual-audit demo for
 the Waveshare ESP32-S3 V2 board. The demo never replaces the canonical Phonics
 Picker firmware; its reviewed generated header is also consumed by the
-Picker's bounded correct-answer reward. The pipeline proves a path from
-external game-sprite models to small, deterministic, offline firmware assets.
+Picker's bounded correct-answer reward. The pipeline turns reviewed source art
+into small, deterministic, offline firmware assets.
 
 ![Six semantic color ramps across the eight approved creatures](../creatures/variation/generated/palette_comparison.png)
 
@@ -43,7 +43,7 @@ pale translucent read survives. The other six species automatically use
 
 ## Pipeline
 
-The workflow adapts the proven Dream Duel sprite process:
+The repository uses a staged, auditable sprite workflow:
 
 1. `creatures/ART_BIBLE.md` fixes shape language, palette, screen scale, and
    rejection criteria.
@@ -62,10 +62,8 @@ The workflow adapts the proven Dream Duel sprite process:
 5. `scripts/generate_rare_creature_concepts.py` later produced a separate
    comparison pass. The production additions are the exact glass squid `4514`,
    anglerfish `4515`, sea angel `4519`, and gulper eel `4521` PNGs recorded in
-   `creatures/rare_concepts/SELECTED_RARE_CREATURES_HANDOFF.md`. The squid
-   decision is glass squid, not the unreferenced vampire-squid `4511`
-   candidate.
-6. The reef shark is the exact user-selected Retro Diffusion seed `82412`
+   `creatures/rare_concepts/SELECTED_RARE_CREATURES_HANDOFF.md`.
+6. The reef shark is the reviewed production Retro Diffusion seed `82412`
    banking pose. `scripts/generate_creature_animation.py` submits that source
    to `rd_advanced_animation__custom_action`; the checked-in provider output is
    review material, never direct firmware input. The offline
@@ -269,8 +267,8 @@ per combination. This focused evidence supersedes only the shark and octopus
 rows of the earlier 180-combination catalog; the previous footage remains
 historical evidence for the six unchanged species. A separate earlier recording
 covers replay, wrong-answer retention, correct choice, reward transition, and
-the next round with microphone audio. Exact installed, local evidence, and
-owner-verified Google Drive hashes and links are in
+the next round with microphone audio. Exact installation records, retained
+artifact hashes, and published review-copy links are in
 [`DEVICE_REPORT.md`](../DEVICE_REPORT.md).
 
 The completed historical Stage-1/Stage-2 V2 evidence for the original roster

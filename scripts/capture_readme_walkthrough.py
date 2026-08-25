@@ -28,7 +28,7 @@ CAPTURE_ROOT = ROOT / "build" / "readme-media-captures"
 LOCAL_DEVICE_PYTHON = ROOT / ".venv-device" / "bin" / "python"
 WALKTHROUGH = ROOT / "scripts" / "capture_device_game_walkthrough.py"
 SESSION_NAME = "capture-session.json"
-VIDEO_NAME = "facetime-hd-master.mp4"
+VIDEO_NAME = "camera-master.mp4"
 TIMELINE_NAME = "walkthrough-timeline.json"
 FFMPEG_LOG_NAME = "ffmpeg.log"
 
@@ -232,7 +232,7 @@ def default_device_python() -> Path:
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(
-        description="Record a FaceTime HD master synchronized to a real game walkthrough",
+        description="Record an AVFoundation camera master synchronized to a real game walkthrough",
     )
     result.add_argument("--port", required=True)
     result.add_argument(
@@ -249,7 +249,11 @@ def parser() -> argparse.ArgumentParser:
             "build/readme-media-captures/"
         ),
     )
-    result.add_argument("--camera-device", default="FaceTime HD Camera")
+    result.add_argument(
+        "--camera-device",
+        default="0",
+        help="AVFoundation video-device name or index; default: first camera",
+    )
     result.add_argument(
         "--audio-device",
         default="none",

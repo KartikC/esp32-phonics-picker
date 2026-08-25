@@ -18,4 +18,7 @@ source TTF files are needed only when deliberately regenerating those headers.
 
 Do not commit tool caches, build output, per-device flash backups, raw serial
 captures, microphone recordings, API credentials, personal identifiers, or
-local absolute paths. Preserve upstream files kept alongside vendored material.
+local absolute paths. Keep public prose self-contained: describe the reusable
+method directly instead of naming unrelated private prototypes, projects,
+accounts, reviewers, or machine-specific state. Preserve upstream files kept
+alongside vendored material.
