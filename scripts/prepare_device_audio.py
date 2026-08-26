@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -25,6 +26,8 @@ OUTPUT = ROOT / "audio/generated/device-pcm"
 MANIFEST = ROOT / "audio/generated/device-audio-manifest.json"
 TARGET_LUFS = -21
 TARGET_TRUE_PEAK = -4
+PHONICS_VOLUME_MULTIPLIER = 1.32
+PHONICS_VOLUME_BOOST_DB = 20 * math.log10(PHONICS_VOLUME_MULTIPLIER)
 SPEAKER_BANDPASS = "highpass=f=300:poles=2,lowpass=f=5000:poles=2"
 RESAMPLE = "aresample=16000:resampler=soxr:precision=28"
 LEADING_TRIM = (
@@ -129,7 +132,9 @@ def main() -> None:
         float(loudnorm_report(source, f"{SPEAKER_BANDPASS},{RESAMPLE}")["input_tp"])
         for source in phonics_sources
     )
-    phonics_gain_db = min(0.0, TARGET_TRUE_PEAK - phonics_peak)
+    phonics_gain_db = (
+        min(0.0, TARGET_TRUE_PEAK - phonics_peak) + PHONICS_VOLUME_BOOST_DB
+    )
     for letter in "abcdefghijklmnopqrstuvwxyz":
         source = PHONICS_SOUNDS / f"cowboy_{letter}.m4a"
         destination = OUTPUT / f"cowboy_{letter}.wav"
@@ -164,6 +169,7 @@ def main() -> None:
             "cue_silence": "leading trim only; internal cadence preserved",
             "normalization": "two-pass linear loudnorm",
             "phonics_gain_db": round(phonics_gain_db, 3),
+            "phonics_volume_multiplier": PHONICS_VOLUME_MULTIPLIER,
             "phonics_leveling": "reviewed relative levels preserved; shared peak ceiling",
             "loudness_lufs": TARGET_LUFS,
             "true_peak_dbtp": TARGET_TRUE_PEAK,

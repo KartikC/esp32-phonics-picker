@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture a camera master and serial-timed Phonics Picker walkthrough.
+"""Capture a camera master and serial-timed DEEP SEA PHONICS TOY V2 walkthrough.
 
 The camera starts before the existing walkthrough driver so its UTC start can
 be aligned with the driver's UTC timeline without hand-tuned video offsets.

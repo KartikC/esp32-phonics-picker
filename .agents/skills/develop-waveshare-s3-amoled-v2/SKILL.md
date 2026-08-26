@@ -1,23 +1,23 @@
 ---
 name: develop-waveshare-s3-amoled-v2
-description: Plan, build, flash, test, or troubleshoot applications for the exact Waveshare ESP32-S3-Touch-AMOLED-1.8 V2 with CO5300 display and CST820 touch, using this repository as either the Phonics Picker source or a reusable board reference. Do not use for the V1 revision or generic ESP32-S3 boards.
+description: Plan, build, flash, test, or troubleshoot applications for the exact Waveshare ESP32-S3-Touch-AMOLED-1.8 V2 with CO5300 display and CST820 touch, using this repository as either the DEEP SEA PHONICS TOY V2 source or a reusable board reference. Do not use for the V1 revision or generic ESP32-S3 boards.
 ---
 
 # Develop for the Waveshare ESP32-S3 AMOLED V2
 
 Use the repository's verified board knowledge without confusing it with the
-Phonics Picker product contract.
+DEEP SEA PHONICS TOY V2 product contract.
 
 ## Route the task
 
-- For deploying or changing Phonics Picker, read
+- For deploying or changing DEEP SEA PHONICS TOY V2, read
   [`../../../AGENTS.md`](../../../AGENTS.md) first, then the sources of truth it
   names. Its five-region flash and physical verification contract is binding.
 - For a different application on the same exact board, read
   [`../../../docs/WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md`](../../../docs/WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md).
   Treat this repository as a board/workflow reference, not as a generic game
   template.
-- For work whose purpose is improving Phonics Picker iteration speed, also read
+- For work whose purpose is improving DEEP SEA PHONICS TOY V2 iteration speed, also read
   [`../../../docs/DEVELOPMENT_SPEED_STRATEGY.md`](../../../docs/DEVELOPMENT_SPEED_STRATEGY.md).
   It distinguishes current commands from proposed work.
 
@@ -43,7 +43,7 @@ Reusable board knowledge includes controller choice, pins, initialization,
 power/audio/display/touch behavior, host-test seams, diagnostics patterns, and
 device qualification.
 
-The following are Phonics Picker-specific and must not be inherited by another
+The following are DEEP SEA PHONICS TOY V2-specific and must not be inherited by another
 application without an explicit new design:
 
 - its partition scheme and `0x610000` audio pack;

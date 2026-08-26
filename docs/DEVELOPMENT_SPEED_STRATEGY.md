@@ -1,6 +1,6 @@
 # Development speed strategy
 
-This is the living, project-specific plan for making Phonics Picker faster to
+This is the living, project-specific plan for making DEEP SEA PHONICS TOY V2 faster to
 develop without weakening its release or physical-device evidence. It records
 the 2026-08-25 audit so future contributors and agents do not need the original
 chat history to reconstruct the reasoning.
@@ -12,7 +12,7 @@ implementation-state table whenever a roadmap item ships.
 
 For practices that apply to a different application on the same board, use
 [`WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md`](WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md)
-instead. In particular, Phonics Picker's partition layout, audio-pack offset,
+instead. In particular, DEEP SEA PHONICS TOY V2's partition layout, audio-pack offset,
 asset locks, and product verification are application contracts, not general
 properties of the board.
 
@@ -44,7 +44,7 @@ Release remains:
 
 ```text
 clean build -> copied/canonicalized release artifacts -> exact manifest check
--> all five Phonics Picker regions -> exhaustive device verifier -> manual gates
+-> all five DEEP SEA PHONICS TOY V2 regions -> exhaustive device verifier -> manual gates
 ```
 
 ## Measured baseline
@@ -83,7 +83,7 @@ verification, and accepted-asset promotion dominate ordinary iteration.
 | P1 | Declarations-only generated asset headers | Proposed | Ordinary sketch edits no longer parse asset definitions from multiple units |
 | P1 | Nonblocking, versioned USB diagnostic protocol | Proposed | Partial input cannot stall rendering, touch, audio, or power handling |
 | P1 | Transactional asset experiment and promotion CLI | Proposed | Candidate review never mutates accepted assets; promotion has one explicit entrypoint |
-| P2 | Exact V2 board/platform layer and factory-qualification app | Proposed | Phonics Picker and OceanCreatureDemo consume the same board boundary |
+| P2 | Exact V2 board/platform layer and factory-qualification app | Proposed | DEEP SEA PHONICS TOY V2 and OceanCreatureDemo consume the same board boundary |
 | P2 | Shared immutable toolchain cache and reproducible slim dependency | Proposed | Multiple projects reuse one version-keyed cache and reconstruct the same source set |
 | P2 | Split and cached CI | Proposed | Fast host checks run on every change; firmware builds run only for affected or unknown paths |
 | P3 | Measured ESP-IDF or Arduino-as-component vertical slice | Proposed | A written parity/performance comparison supports any migration decision |
@@ -254,7 +254,7 @@ checks, and human evidence. Optimize the largest measured phase.
 
 ## Guardrails
 
-- Do not weaken the canonical five-region Phonics Picker release.
+- Do not weaken the canonical five-region DEEP SEA PHONICS TOY V2 release.
 - Do not report compilation, host rendering, serial state, or a partial flash
   as physical release verification.
 - Do not regenerate accepted assets merely to build or deploy.

@@ -49,8 +49,8 @@ class CreatureRewardSelector {
   static constexpr uint8_t kCreatureCount = 8;
   static constexpr uint8_t kPatternCount = 4;
   static constexpr uint8_t kAutomaticPaletteCount = 5;
-  static constexpr uint8_t kCleanStreakGuarantee = 12;
-  static constexpr uint8_t kCorrectPityGuarantee = 18;
+  static constexpr uint8_t kCleanStreakGuarantee = 10;
+  static constexpr uint8_t kCorrectPityGuarantee = 14;
 
   explicit CreatureRewardSelector(uint32_t seed) { reset(seed); }
 
@@ -129,9 +129,9 @@ class CreatureRewardSelector {
 
   static constexpr uint8_t rareOddsDenominator(
       uint8_t cleanProgressBeforeAnswer) {
-    return cleanProgressBeforeAnswer <= 4
-               ? 64
-               : (cleanProgressBeforeAnswer <= 8 ? 32 : 16);
+    return cleanProgressBeforeAnswer <= 3
+               ? 50
+               : (cleanProgressBeforeAnswer <= 7 ? 25 : 13);
   }
 
   static constexpr CreatureBaseTier speciesBaseTier(uint8_t creatureIndex) {
@@ -157,13 +157,13 @@ class CreatureRewardSelector {
   inline static constexpr uint8_t
       kAutomaticPaletteIndices[kAutomaticPaletteCount] = {0, 1, 2, 4, 5};
 
-  // Per-species weights are 8:3:1 for basic:medium:rare. With immediate
-  // repeats removed, the exact steady-state tier shares are 600/876 basic,
-  // 180/876 medium, and 96/876 rare (about 68.49%, 20.55%, and 10.96%).
+  // Per-species weights are 80:30:13 for basic:medium:rare. Compared with the
+  // preceding 80:30:11 policy, this makes rare-tier species about 14.7% more
+  // frequent after immediate repeats are removed: 12,714/93,414, or 13.61%.
   // Manifest order: jelly, shark, octopus, seahorse, glass squid, anglerfish,
   // sea angel, gulper eel.
   inline static constexpr uint8_t kCreatureBaseWeights[kCreatureCount] = {
-      8, 1, 3, 8, 8, 1, 3, 1};
+      80, 13, 30, 80, 80, 13, 30, 13};
 
   inline static constexpr uint32_t kRarityDomain = 0xA511E9B3u;
   inline static constexpr uint32_t kCreatureDomain = 0x43D2C8F1u;
@@ -184,25 +184,26 @@ class CreatureRewardSelector {
     return mix32(seed_ ^ domain ^ mix32(correctCount_ + 0x9E3779B9u));
   }
 
-  static uint8_t bounded(uint32_t value, uint8_t bound) {
-    return static_cast<uint8_t>((static_cast<uint64_t>(value) * bound) >> 32);
+  static uint16_t bounded(uint32_t value, uint16_t bound) {
+    return static_cast<uint16_t>(
+        (static_cast<uint64_t>(value) * bound) >> 32);
   }
 
   uint8_t chooseWeightedCreature(uint32_t value,
                                  uint8_t previousSlot) const {
-    uint8_t eligibleWeight = 0;
+    uint16_t eligibleWeight = 0;
     for (uint8_t slot = 0; slot < kCreatureCount; ++slot) {
       if (hasPreviousReward_ && slot == previousSlot) continue;
-      eligibleWeight = static_cast<uint8_t>(
+      eligibleWeight = static_cast<uint16_t>(
           eligibleWeight + kCreatureBaseWeights[slot]);
     }
 
-    uint8_t draw = bounded(value, eligibleWeight);
+    uint16_t draw = bounded(value, eligibleWeight);
     for (uint8_t slot = 0; slot < kCreatureCount; ++slot) {
       if (hasPreviousReward_ && slot == previousSlot) continue;
       const uint8_t weight = kCreatureBaseWeights[slot];
       if (draw < weight) return slot;
-      draw = static_cast<uint8_t>(draw - weight);
+      draw = static_cast<uint16_t>(draw - weight);
     }
     return 0;  // Unreachable for a non-empty, positive-weight table.
   }

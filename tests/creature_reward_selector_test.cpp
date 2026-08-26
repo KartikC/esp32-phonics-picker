@@ -49,7 +49,7 @@ uint32_t seedWithCommonPrefix(uint8_t commonCount, bool wrongAfterCorrect) {
 
 int main() {
   assert(CreatureRewardSelector::kCreatureCount == 8);
-  const uint8_t expectedWeights[8] = {8, 1, 3, 8, 8, 1, 3, 1};
+  const uint8_t expectedWeights[8] = {80, 13, 30, 80, 80, 13, 30, 13};
   for (uint8_t creature = 0; creature < 8; ++creature) {
     assert(CreatureRewardSelector::speciesBaseWeight(creature) ==
            expectedWeights[creature]);
@@ -77,12 +77,12 @@ int main() {
     }
   }
 
-  assert(CreatureRewardSelector::rareOddsDenominator(0) == 64);
-  assert(CreatureRewardSelector::rareOddsDenominator(4) == 64);
-  assert(CreatureRewardSelector::rareOddsDenominator(5) == 32);
-  assert(CreatureRewardSelector::rareOddsDenominator(8) == 32);
-  assert(CreatureRewardSelector::rareOddsDenominator(9) == 16);
-  assert(CreatureRewardSelector::rareOddsDenominator(11) == 16);
+  assert(CreatureRewardSelector::rareOddsDenominator(0) == 50);
+  assert(CreatureRewardSelector::rareOddsDenominator(3) == 50);
+  assert(CreatureRewardSelector::rareOddsDenominator(4) == 25);
+  assert(CreatureRewardSelector::rareOddsDenominator(7) == 25);
+  assert(CreatureRewardSelector::rareOddsDenominator(8) == 13);
+  assert(CreatureRewardSelector::rareOddsDenominator(9) == 13);
 
   // Identical seed and answer history must produce an identical, stable reward
   // stream.
@@ -116,7 +116,7 @@ int main() {
   uint32_t tierRare[3] = {};
   uint32_t tierTotal[3] = {};
   constexpr uint32_t kTierSeedCount = 65536;
-  constexpr uint8_t kTierPrefix[3] = {0, 5, 9};
+  constexpr uint8_t kTierPrefix[3] = {0, 4, 8};
   for (uint32_t seed = 0; seed < kTierSeedCount; ++seed) {
     for (uint8_t tier = 0; tier < 3; ++tier) {
       CreatureRewardSelector selector(seed);
@@ -187,7 +187,7 @@ int main() {
 
   // For transition P(i->j)=weight(j)/(total-weight(i)), detailed balance gives
   // stationary mass weight(i)*(total-weight(i)). Thus the exact tier shares
-  // are 600/876, 180/876, and 96/876. Check the deterministic stream stays
+  // are 62,160/93,414, 18,540/93,414, and 12,714/93,414. Check the stream stays
   // close to those values as well as enforcing zero immediate repeats above.
   uint32_t speciesTierCounts[3] = {};
   constexpr uint32_t kSpeciesSamples = 1000000;
@@ -197,24 +197,24 @@ int main() {
     ++speciesTierCounts[static_cast<uint8_t>(
         CreatureRewardSelector::speciesBaseTier(plan.creatureIndex))];
   }
-  constexpr uint32_t kExpectedNumerators[3] = {600, 180, 96};
+  constexpr uint32_t kExpectedNumerators[3] = {62160, 18540, 12714};
   for (uint8_t tier = 0; tier < 3; ++tier) {
     const uint64_t observedScaled =
-        static_cast<uint64_t>(speciesTierCounts[tier]) * 876;
+        static_cast<uint64_t>(speciesTierCounts[tier]) * 93414;
     const uint64_t expectedScaled =
         static_cast<uint64_t>(kSpeciesSamples) * kExpectedNumerators[tier];
     const uint64_t difference = observedScaled > expectedScaled
                                     ? observedScaled - expectedScaled
                                     : expectedScaled - observedScaled;
     assert(difference <
-           static_cast<uint64_t>(kSpeciesSamples) * 876 / 250);  // 0.4%.
+           static_cast<uint64_t>(kSpeciesSamples) * 93414 / 250);  // 0.4%.
   }
 
-  // A clean run guarantees its rare on the twelfth correct if random rarity
+  // A clean run guarantees its rare on the tenth correct if random rarity
   // has not already reset the run.
-  const uint32_t cleanSeed = seedWithCommonPrefix(11, false);
+  const uint32_t cleanSeed = seedWithCommonPrefix(9, false);
   CreatureRewardSelector cleanGuarantee(cleanSeed);
-  for (uint8_t answer = 1; answer <= 11; ++answer) {
+  for (uint8_t answer = 1; answer <= 9; ++answer) {
     assert(!cleanGuarantee.onCorrect().rare);
     assert(cleanGuarantee.cleanProgress() == answer);
   }
@@ -223,10 +223,10 @@ int main() {
   assert(cleanGuarantee.correctsSinceRare() == 0);
 
   // Errors reset the clean run but preserve lifetime progress toward the pity
-  // rare. With every answer made non-clean, the eighteenth correct is forced.
-  const uint32_t pitySeed = seedWithCommonPrefix(17, true);
+  // rare. With every answer made non-clean, the fourteenth correct is forced.
+  const uint32_t pitySeed = seedWithCommonPrefix(13, true);
   CreatureRewardSelector pityGuarantee(pitySeed);
-  for (uint8_t answer = 1; answer <= 17; ++answer) {
+  for (uint8_t answer = 1; answer <= 13; ++answer) {
     assert(!pityGuarantee.onCorrect().rare);
     assert(pityGuarantee.cleanProgress() == 1);
     assert(pityGuarantee.correctsSinceRare() == answer);
@@ -257,7 +257,7 @@ int main() {
   }
   if (currentGap > longestGap) longestGap = currentGap;
   assert(rareCount > kSampleCount / 20);  // More than 5%.
-  assert(rareCount < kSampleCount / 8);   // Less than 12.5%.
+  assert(rareCount < kSampleCount / 6);   // Less than 16.7%.
   assert(longestGap <= CreatureRewardSelector::kCleanStreakGuarantee - 1);
 
   return 0;

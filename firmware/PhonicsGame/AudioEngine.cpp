@@ -19,6 +19,10 @@ namespace {
 constexpr uint32_t kSampleRate = 16000;
 constexpr size_t kMonoChunkSamples = 256;  // 16 ms: keeps cancellation responsive.
 constexpr size_t kGapFrames = 640;         // 40 ms at 16 kHz.
+// The ES8311 and external PA need more than the 10 ms GPIO/codec setup delay
+// before speech is acoustically stable. Feed silence after unmuting so an
+// asset that begins at sample zero cannot lose its opening consonant.
+constexpr size_t kWakeSettleFrames = 1920;  // 120 ms at 16 kHz.
 constexpr uint32_t kEdgeFadeFrames = 64;   // 4 ms removes start/end ticks.
 constexpr uint8_t kMaxAudioLayers = 2;
 constexpr uint32_t kRewardMixFrames = 42240;  // 2.64 s at 16 kHz.
@@ -84,6 +88,19 @@ DRAM_ATTR int16_t rewardPlaybackBuffer[kRewardMixFrames];
 uint8_t verificationBuffer[4096];
 constexpr int16_t kStereoSilence[kMonoChunkSamples * 2] = {};
 
+bool writeSilenceFrames(size_t frames) {
+  while (frames > 0) {
+    const size_t chunkFrames = min(frames, kMonoChunkSamples);
+    const size_t bytes = chunkFrames * 2 * sizeof(int16_t);
+    if (i2s.write(kStereoSilence, bytes) != bytes) {
+      writeFailures.fetch_add(1, std::memory_order_relaxed);
+      return false;
+    }
+    frames -= chunkFrames;
+  }
+  return true;
+}
+
 bool current(uint32_t commandGeneration) {
   return generation.load(std::memory_order_acquire) == commandGeneration;
 }
@@ -146,6 +163,15 @@ bool powerUpOutput() {
   digitalWrite(PA, HIGH);
   delay(10);
   if (!codec || es8311_voice_mute(codec, false) != ESP_OK) {
+    digitalWrite(PA, LOW);
+    if (i2s_channel_disable(channel) == ESP_OK) i2sClocksStopped = true;
+    outputPowered = false;
+    outputFault = true;
+    outputNeedsRestore = true;
+    return false;
+  }
+  if (!writeSilenceFrames(kWakeSettleFrames)) {
+    es8311_voice_mute(codec, true);
     digitalWrite(PA, LOW);
     if (i2s_channel_disable(channel) == ESP_OK) i2sClocksStopped = true;
     outputPowered = false;
@@ -402,6 +428,12 @@ bool AudioEngine::begin() {
   delay(10);
   if (es8311_voice_mute(codec, false) != ESP_OK) {
     initialized = false;
+    digitalWrite(PA, LOW);
+    return false;
+  }
+  if (!writeSilenceFrames(kWakeSettleFrames)) {
+    initialized = false;
+    es8311_voice_mute(codec, true);
     digitalWrite(PA, LOW);
     return false;
   }

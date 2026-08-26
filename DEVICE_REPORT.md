@@ -452,7 +452,7 @@ is absent, the small actual eye stays readable, and solid, spots, stripes,
 mottle, and rare Mantle rings remain attached through the sway.
 
 Published review copies are available in the
-[`ESP32 Phonics Picker - Device Review 2026-08-24`](https://drive.google.com/drive/folders/1xevtiQXXSPP0tzNQ_difdKQpp4dv6lIx)
+[`DEEP SEA PHONICS TOY V2 - Device Review 2026-08-24`](https://drive.google.com/drive/folders/1xevtiQXXSPP0tzNQ_difdKQpp4dv6lIx)
 folder. Readback confirmed the exact parent folder and byte sizes:
 
 - [mobile shark/octopus video](https://drive.google.com/file/d/1DO-3VBwJ9SR2CXZXQwKyrIwATWjPdAfx/view?usp=drivesdk),
@@ -592,3 +592,142 @@ the real correct choice naturally advanced play progress to `clean=1`,
 `pity=2`. A final post-capture canonical verifier repeated the full automated
 runtime matrix, kept both counters unchanged, and again restored the awake,
 unmuted, non-preview game.
+
+## 2026-08-25 nine-letter phonics rerecording installation
+
+This append-only entry supersedes the installed application and audio-pack
+identities above. The rear label was confirmed as V2. Esptool then
+identified ESP32-S3 rev 0.2, 8 MB embedded PSRAM, and 16 MB flash before the
+canonical five-region install. It wrote and hash-verified the bootloader at
+`0x0`, partition table at `0x8000`, OTA selector at `0xe000`, application at
+`0x10000`, and audio pack at `0x610000`.
+
+The installed application is 1,522,400 bytes with SHA-256
+`77acc971b8c2977a1160d1bf51b3c3a41f5f09cab1dbeb434ded30e68e8215c1`.
+The installed 86-asset audio pack is 4,473,882 bytes with SHA-256
+`7a9fbe69a2f3b486c34bd7062be0640b6c8bdcc9138c0307d302d1295c89a3c6`.
+The pack replaces only the B, D, F, H, J, M, N, U, and V phonics WAVs; the
+other 17 phonics WAVs remain byte-identical to the preceding accepted pack.
+
+The complete serial verifier passed after the flash. It confirmed ready audio
+at logical volume 90, zero audio write failures, 8 MB PSRAM, a ready IMU,
+interrupt-gated touch polling, reduced idle I2C polling, distinct choices,
+idle/on/idle codec transitions, two complete production reward streams,
+four-way bubble selection, species-matched cues, serial mute/unmute, all eight
+common and all eight rare creature render paths, production palette
+restrictions, unchanged diagnostic rarity counters, and cleanup to the awake,
+unmuted, non-preview game with idle audio.
+
+This automated result proves the new pack is installed and streamable, but it
+does not claim perceptual acceptance of the nine rerecorded phonemes. A human
+must still listen to B, D, F, H, J, M, N, U, and V on the onboard speaker, as
+well as repeat the physical display, touch, tilt, USB double-tap/disconnect,
+and PWR standby/wake checks required by `AGENTS.md`.
+
+## 2026-08-25 cold audio-wake preroll installation
+
+This append-only entry supersedes the installed application identity above;
+the audio pack is unchanged. Reports that `Which one says` could begin as
+`hich one says` and `Great work` as `reat work` matched the source and runtime
+evidence: device speech begins at sample zero, while the codec and external
+speaker amplifier previously received only a 10 ms setup delay after an idle
+power-down.
+
+The installed application now feeds 120 ms of digital silence through I2S
+after every cold unmute and before exposing the first authored PCM frame. The
+canonical five-region install hash-verified all writes on the confirmed V2
+board. The installed application is 1,522,544 bytes with SHA-256
+`3199c9331f8ea4aa8cf663c861c94594e4edc9e39e838d371b1d1a52d73c0112`;
+the 4,473,882-byte audio pack remains
+`7a9fbe69a2f3b486c34bd7062be0640b6c8bdcc9138c0307d302d1295c89a3c6`.
+
+The canonical serial verifier passed after installation. Multiple real
+idle/on/idle codec transitions completed with `audio_write_failures=0`, and
+the full runtime, reward, mute, common/rare renderer, palette, counter, and
+cleanup gates passed. Human listening must still confirm that cold replay and
+cold reward playback retain the initial consonants. Separately, the current
+reward masters intentionally begin bubbles at 400 ms even though praise clips
+last up to 745 ms; any remaining complaint about the end of a praise sentence
+is therefore a mix-timing question, not the cold-wake defect fixed here.
+
+## 2026-08-25 phonics gain and easier-rarity installation
+
+This append-only entry supersedes both installed identities above. A source
+and final ELF symbol audit found no Wi-Fi or Bluetooth initialization in the
+production firmware, so both radios remain off without adding either radio
+stack merely to call its shutdown API.
+
+All 26 accepted phonics clips now have a 1.15x amplitude multiplier
+(+1.214 dB). Prompts, praise, bubbles, creature cues, and reward mixes are
+unchanged. The largest resulting phonics sample is 23,750, leaving 9,017
+counts of signed 16-bit headroom without clipping.
+
+Rare species now use base weights `80:30:11` for basic, medium, and rare
+tiers, giving an exact steady-state rare-species share of 11.87%. Rare
+treatments use odds of 1/58, 1/29, and 1/15 by tier. The clean-streak
+guarantee is now the 11th eligible answer and the general pity guarantee is
+the 16th correct answer. Host tests cover the exact distribution and both
+guarantees.
+
+The canonical five-region installer identified ESP32-S3 rev 0.2, 8 MB
+embedded PSRAM, and 16 MB flash, then wrote and hash-verified all five regions.
+The installed application is 1,522,544 bytes with SHA-256
+`729531037e8032ff8d0e0c72f17c1a53da0dc53fad687a500b0713366a7aef55`.
+The installed 86-asset audio pack is 4,473,882 bytes with SHA-256
+`00334b1ae16bb65bb025a979ac8801f0574df25e57d00757cc9479a02e596699`.
+
+The complete serial verifier passed after installation. It exercised real
+idle/on/idle audio transitions, two audible reward paths, four bubble
+selections, species-matched cues, mute/unmute, all common and rare render
+paths, palette restrictions, and cleanup to the awake game. Runtime reported
+8 MB PSRAM, ready audio and IMU, interrupt-gated touch, advancing touch and
+power polls, and zero audio write failures. Diagnostic rendering kept rarity
+counters unchanged.
+
+Automated evidence confirms the exact boosted samples are installed and
+streamable, but it cannot perceptually judge loudness or distortion. Human
+listening must still accept several phonics letters on the onboard speaker;
+the physical display, touch, tilt, USB double-tap/disconnect, and PWR
+standby/wake gates also remain manual.
+
+## 2026-08-25 second phonics-gain and rarity installation
+
+This append-only entry supersedes both installed identities above. All 26
+phonics clips now use a cumulative 1.32x amplitude multiplier over their
+originally accepted levels, equivalent to a further 14.8% increase over the
+preceding 1.15x pack. The largest signed 16-bit sample is 27,261, leaving 5,506
+counts of headroom without clipping. Non-phonics speech and effects remain
+unchanged.
+
+Base rarity now uses integer weights `80:30:13`, producing an exact 13.61%
+steady-state share for rare-tier species after immediate repeats are removed.
+Rare-treatment odds are 1/50 for clean answers 1-4, 1/25 for answers 5-8, and
+1/13 for answer 9; answer 10 is guaranteed. The mistake-resistant pity
+guarantee is answer 14. The weighted selector also retains 16-bit subtraction
+through the complete draw so totals above 255 remain exact.
+
+The canonical five-region installer re-identified ESP32-S3 rev 0.2, 8 MB
+embedded PSRAM, and 16 MB flash, then wrote and hash-verified all five regions.
+The installed application is 1,522,544 bytes with SHA-256
+`c06fb68793e8bd11224d716440faf29ae990d610f2448e5bc4000cfa60240687`.
+The installed 86-asset audio pack is 4,473,882 bytes with SHA-256
+`262858b9569618ca7bb901ba27fc0fd9034eb2f9e11a82176cda8ace7db19ba0`.
+
+The complete serial verifier passed after installation. It exercised real
+idle/on/idle audio transitions, two audible reward paths, four bubble
+selections, species-matched cues, mute/unmute, all common and rare render
+paths, palette restrictions, and cleanup to the awake game. Runtime reported
+ready audio and IMU, 8 MB PSRAM, advancing touch and power polls, and zero
+audio write failures. Human listening must still accept the increased phonics
+loudness on the onboard speaker, and the physical display, touch, tilt, USB
+double-tap/disconnect, and PWR standby/wake gates remain manual.
+
+## 2026-08-25 DEEP SEA PHONICS TOY V2 acceptance
+
+Hands-on family use found the installed build solid and a meaningful
+improvement over the previous version used by the child. This accepts the
+installed phonics loudness and overall child-facing experience as
+**DEEP SEA PHONICS TOY V2**. The product release label is intentionally kept distinct
+from the Waveshare board's separate V2 hardware-revision label. The immutable
+installed application and audio identities remain those in the immediately
+preceding entry.

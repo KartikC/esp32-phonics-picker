@@ -1,10 +1,10 @@
 # Developing for the Waveshare ESP32-S3-Touch-AMOLED-1.8 V2
 
-This is the reusable exact-board guide extracted from the Phonics Picker
+This is the reusable exact-board guide extracted from the DEEP SEA PHONICS TOY V2
 project. It is intended for people and coding agents building any application
 for the Waveshare **ESP32-S3-Touch-AMOLED-1.8 V2**.
 
-It does not turn Phonics Picker into a generic starter project. Instead, it
+It does not turn DEEP SEA PHONICS TOY V2 into a generic starter project. Instead, it
 identifies which knowledge and source paths are useful as a known-good board
 reference, which contracts must be redesigned per application, and how to keep
 the development loop fast without confusing development evidence with release
@@ -12,7 +12,7 @@ evidence.
 
 Agents should start with
 [`../.agents/skills/develop-waveshare-s3-amoled-v2/SKILL.md`](../.agents/skills/develop-waveshare-s3-amoled-v2/SKILL.md).
-For work on the Phonics Picker product itself, [`../AGENTS.md`](../AGENTS.md),
+For work on the DEEP SEA PHONICS TOY V2 product itself, [`../AGENTS.md`](../AGENTS.md),
 [`../PRODUCT_SPEC.md`](../PRODUCT_SPEC.md), and
 [`DEPLOYMENT.md`](DEPLOYMENT.md) remain authoritative.
 
@@ -148,7 +148,7 @@ into a product guarantee:
 - **Verified in this repository:** the exact V2 display and touch path, 8 MB
   PSRAM, 16 MB flash, native USB diagnostics, QMI8658 motion, ES8311/onboard
   speaker playback, AXP2101 battery reads, PWR handling, and the current
-  Phonics Picker standby path. See [`../DEVICE_REPORT.md`](../DEVICE_REPORT.md)
+  DEEP SEA PHONICS TOY V2 standby path. See [`../DEVICE_REPORT.md`](../DEVICE_REPORT.md)
   and [`POWER_AUDIT.md`](POWER_AUDIT.md) for their precise scopes and remaining
   physical gates.
 - **Vendor-documented or source-referenced:** RTC, microphone, microSD, exposed
@@ -173,7 +173,7 @@ into a product guarantee:
 
 ## What is not a board fact
 
-The following belong specifically to Phonics Picker and must not silently
+The following belong specifically to DEEP SEA PHONICS TOY V2 and must not silently
 become defaults for another application:
 
 - the `app3M_fat9M_16MB` partition scheme;
@@ -181,9 +181,9 @@ become defaults for another application:
 - the offline audio pack at `0x610000` and its format/index;
 - every value and hash in `firmware/BUILD_MANIFEST.json`;
 - the accepted card, font, replay, creature, phonics, speech, and reward assets;
-- Phonics Picker USB commands, gameplay behavior, volume, timeouts, and power
+- DEEP SEA PHONICS TOY V2 USB commands, gameplay behavior, volume, timeouts, and power
   policy; and
-- Phonics Picker's manual release checklist.
+- DEEP SEA PHONICS TOY V2's manual release checklist.
 
 Another application must define and verify its own partition table, resource
 ownership, compatibility rules, flash manifest, application identity,
@@ -418,7 +418,7 @@ Not implemented as reusable artifacts yet:
 Until those artifacts exist and are tested, inspect and adapt the named source
 paths, create application-specific tooling, and use the application's full
 validated install. Do not invent the proposed commands, claim that this is a
-drop-in board package, or bypass the existing Phonics Picker deployment
+drop-in board package, or bypass the existing DEEP SEA PHONICS TOY V2 deployment
 contract when working on this game.
 
 ## Prompt for another agent
@@ -430,7 +430,7 @@ Point an agent at the repository and use a request like:
 > application for the exact rear-labeled V2 board. Reuse only the board-level
 > integration and workflow patterns. Define a new application, partition and
 > resource contract, flash manifest, and verification plan; do not install or
-> inherit Phonics Picker's audio pack or product behavior.
+> inherit DEEP SEA PHONICS TOY V2's audio pack or product behavior.
 
 That gives the agent the accumulated board knowledge while preserving the new
 application's product identity and deployment safety.

@@ -1,4 +1,8 @@
-# ESP32 Phonics Picker
+# DEEP SEA PHONICS TOY V2
+
+**Current accepted product release: [DEEP SEA PHONICS TOY V2](CURRENT_RELEASE.md).**
+This product name is distinct from the supported Waveshare board's own V2
+hardware revision.
 
 An offline, toddler-friendly listening game for the **Waveshare
 ESP32-S3-Touch-AMOLED-1.8 V2**. The child hears a lowercase phonics sound and
@@ -12,7 +16,7 @@ has not yet been measured, and battery/charge-only PWR wake remains a separate
 physical gate, so the repository claims structural savings rather than mA or a
 percentage.
 
-![Current Phonics Picker listening round with the Deep loop replay control, two yellow battery dots, and centered Atkinson lowercase letters on tone-on-tone carved tide-stone cards](docs/images/phonics-picker-ui.png)
+![Current DEEP SEA PHONICS TOY V2 listening round with the Deep loop replay control, two yellow battery dots, and centered Atkinson lowercase letters on tone-on-tone carved tide-stone cards](docs/images/phonics-picker-ui.png)
 
 *Source-faithful 368 x 448 render of the checked-in card, font, and replay
 assets. The listening round stays deliberately spare: one replay control and
@@ -53,7 +57,7 @@ They explain what can be reused, how to build a fast development/release split,
 and which partition, resource, product, and verification decisions must be new
 for the other application.
 
-Do not use this game's flash script for another product: the Phonics Picker
+Do not use this game's flash script for another product: the DEEP SEA PHONICS TOY V2
 audio pack at `0x610000` and its five-region bundle are application contracts,
 not board defaults. A useful agent prompt is:
 
@@ -61,7 +65,7 @@ not board defaults. A useful agent prompt is:
 > exact-board guide. Build a separate application for my rear-labeled V2 board,
 > reusing only board-level integration and workflow patterns. Define a new
 > partition/resource contract, flash manifest, diagnostics, and verification
-> plan; do not inherit or install the Phonics Picker audio pack.
+> plan; do not inherit or install the DEEP SEA PHONICS TOY V2 audio pack.
 
 ## Materials
 
@@ -129,7 +133,7 @@ For bench work with a USB data cable attached, double-tap inside the complete
 across the control shows mute. A charge-only cable cannot enable this gesture,
 and a sustained data disconnect clears mute.
 
-![Source-faithful Phonics Picker maintenance-mute state with a warm-red slash across the Deep loop replay control](docs/images/phonics-picker-usb-mute.png)
+![Source-faithful DEEP SEA PHONICS TOY V2 maintenance-mute state with a warm-red slash across the Deep loop replay control](docs/images/phonics-picker-usb-mute.png)
 
 *The maintenance-mute overlay is painted over the same replay asset, so it adds
 no second full-screen image to the firmware.*
@@ -177,18 +181,18 @@ following exact long-run shares:
 
 | Creature | Base tier | Weight | Long-run share | Authored rare treatment |
 |---|---:|---:|---:|---|
-| Moon jelly | Basic | 8 | 22.83% (`200/876`) | Celestial bell |
-| Reef shark | Rare | 1 | 3.65% (`32/876`) | Ancestral bands |
-| Giant octopus | Medium | 3 | 10.27% (`90/876`) | Mantle rings |
-| Seahorse | Basic | 8 | 22.83% (`200/876`) | Royal diamonds |
-| Glass squid | Basic | 8 | 22.83% (`200/876`) | Prismatic panes |
-| Anglerfish | Rare | 1 | 3.65% (`32/876`) | Abyssal constellation |
-| Sea angel | Medium | 3 | 10.27% (`90/876`) | Halo wings |
-| Deep-sea eel | Rare | 1 | 3.65% (`32/876`) | Ghost current |
+| Moon jelly | Basic | 80 | 22.18% (`20720/93414`) | Celestial bell |
+| Reef shark | Rare | 13 | 4.54% (`4238/93414`) | Ancestral bands |
+| Giant octopus | Medium | 30 | 9.92% (`9270/93414`) | Mantle rings |
+| Seahorse | Basic | 80 | 22.18% (`20720/93414`) | Royal diamonds |
+| Glass squid | Basic | 80 | 22.18% (`20720/93414`) | Prismatic panes |
+| Anglerfish | Rare | 13 | 4.54% (`4238/93414`) | Abyssal constellation |
+| Sea angel | Medium | 30 | 9.92% (`9270/93414`) | Halo wings |
+| Deep-sea eel | Rare | 13 | 4.54% (`4238/93414`) | Ghost current |
 
-Combined, the basic tier accounts for 68.49% of rewards, medium for 20.55%,
-and rare-frequency species for 10.96%. The first draw after startup uses the
-raw weights out of 33; later draws renormalize the remaining weights after the
+Combined, the basic tier accounts for 66.54% of rewards, medium for 19.85%,
+and rare-frequency species for 13.61%. The first draw after startup uses the
+raw weights out of 339; later draws renormalize the remaining weights after the
 previous species is excluded.
 
 ### Hidden rare visual treatments
@@ -197,12 +201,12 @@ Rare-treatment odds rise through an uninterrupted run of correct answers:
 
 | Correct answer in the clean run | Rare-treatment chance |
 |---|---:|
-| 1-5 | 1/64 (1.5625%) each |
-| 6-9 | 1/32 (3.125%) each |
-| 10-11 | 1/16 (6.25%) each |
-| 12 | Guaranteed if no earlier rare occurred |
+| 1-4 | 1/50 (2.000%) each |
+| 5-8 | 1/25 (4.000%) each |
+| 9 | 1/13 (7.692%) |
+| 10 | Guaranteed if no earlier rare occurred |
 
-A separate pity counter guarantees a rare treatment on the 18th correct answer
+A separate pity counter guarantees a rare treatment on the 14th correct answer
 since the previous rare, even when wrong answers repeatedly break the clean
 run. A wrong answer resets only clean-run progress; it neither advances nor
 resets the pity counter. Any rare treatment resets both counters, and restarting
@@ -332,7 +336,7 @@ Each normal or rare modification retains the species' four-frame motion. The
 selected screen-filling banking shark uses a reviewed closed/half/open/half
 Retro Diffusion sprite-sheet chomp plus a short lunge, and the anglerfish's
 lure pulses through warm dim, medium, bright, and medium light. The same
-reviewed header powers the Phonics Picker's correct-answer reward; the
+reviewed header powers the DEEP SEA PHONICS TOY V2's correct-answer reward; the
 standalone demo remains a separate flash target. Host tests and compilation do
 not by themselves constitute physical-display verification. See
 [Water-creature sprite pipeline](docs/CREATURE_SPRITE_PIPELINE.md).

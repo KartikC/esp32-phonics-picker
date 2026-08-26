@@ -26,7 +26,7 @@ the runtime roster is now eight creatures.
 At the time this handoff was first written, each selection existed as exactly
 one Retro Diffusion review candidate. Those images were preview-only, were not
 referenced by the production variation manifest, generated runtime header,
-Phonics Picker, or Ocean demo, and had not been flashed. They were correctly
+DEEP SEA PHONICS TOY V2, or Ocean demo, and had not been flashed. They were correctly
 described as neither production-ready nor device-verified.
 
 That history remains important: the raw PNGs and adjacent metadata are
@@ -42,7 +42,7 @@ The complete one-pass comparison is here:
 
 The four selected sources are now integrated into
 `creatures/variation/variation_manifest.json`, the deterministic generated
-header, the Ocean demo, and the Phonics Picker's bounded correct-answer reward.
+header, the Ocean demo, and the DEEP SEA PHONICS TOY V2's bounded correct-answer reward.
 Each of the eight species has four complete frames, for 32 generated frames in
 total.
 

@@ -9,7 +9,7 @@ ESP32-C6, the V1 SH8601/FT3168 revision, or a generic ESP32-S3 display board.
 
 ## Task routing
 
-For deployment or changes to Phonics Picker, continue with this file and the
+For deployment or changes to DEEP SEA PHONICS TOY V2, continue with this file and the
 product sources of truth below.
 
 For a **different application on the same exact V2 board**, read
@@ -17,9 +17,9 @@ For a **different application on the same exact V2 board**, read
 `docs/WAVESHARE_S3_AMOLED_V2_DEVELOPMENT.md`. Reuse the board integration and
 workflow patterns, but create a separate application, partition/resource
 layout, flash manifest, diagnostic protocol, and verification plan. The
-Phonics Picker audio pack, `0x610000` resource offset, USB commands, product
+DEEP SEA PHONICS TOY V2 audio pack, `0x610000` resource offset, USB commands, product
 behavior, and five-region bundle are not generic board defaults. Do not use the
-canonical Phonics Picker flash script to install a different product.
+canonical DEEP SEA PHONICS TOY V2 flash script to install a different product.
 
 The project-specific iteration roadmap is in
 `docs/DEVELOPMENT_SPEED_STRATEGY.md`. Proposed modes and commands there are not

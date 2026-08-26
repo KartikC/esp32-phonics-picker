@@ -1,4 +1,7 @@
-# ESP32 Phonics Picker
+# DEEP SEA PHONICS TOY V2
+
+This contract describes the accepted **DEEP SEA PHONICS TOY V2** product release.
+That release name is distinct from the Waveshare board's V2 hardware revision.
 
 ## Product contract
 
@@ -54,7 +57,7 @@ listing that described the original SH8601 + FT3168 revision.
   rise, terminal black beat, and choice round.
 - Every correct answer earns one of exactly eight creatures: moon jelly, reef
   shark, giant octopus, seahorse, glass squid, anglerfish, sea angel, or gulper
-  eel (displayed as "Deep-sea eel"). Base species selection uses 8:3:1 weights
+  eel (displayed as "Deep-sea eel"). Base species selection uses 80:30:13 weights
   for three tiers: basic contains moon jelly, seahorse, and glass squid; medium
   contains giant octopus and sea angel; rare contains reef shark, anglerfish,
   and gulper eel. The reward selector owns a separate random stream, never
@@ -77,10 +80,9 @@ listing that described the original SH8601 + FT3168 revision.
   treatment and, where that species permits it, restrained sparkles. Sea angel
   explicitly keeps its clean translucent silhouette with no generic sparkles.
   Rare treatments do not add a score or gameplay advantage. In a clean run, correct
-  answers 1-5 have 1/64 hidden
-  odds, answers 6-9 have 1/32 odds, answers 10-11 have 1/16 odds, and answer
-  12 is guaranteed rare. A
-  separate 18-correct pity counter survives mistakes, so errors cannot make a
+  answers 1-4 have 1/50 hidden
+  odds, answers 5-8 have 1/25 odds, answer 9 has 1/13 odds, and answer 10 is
+  guaranteed rare. A separate 14-correct pity counter survives mistakes, so errors cannot make a
   rare unreachable. A wrong answer resets only clean progress. Neither counter
   nor rarity is printed on the child-facing screen.
 - There are no visible scores, stars, streak counters, applause, badges,
@@ -189,7 +191,9 @@ listing that described the original SH8601 + FT3168 revision.
   the path while muted, preloads silence, enables the amplifier, waits 10 ms,
   and unmutes before queuing its first PCM frame. This power transition is
   transparent to replay, wrong-answer, praise, next-round, standby, and
-  maintenance-mute behavior.
+  maintenance-mute behavior. After unmuting, every cold wake feeds 120 ms of
+  digital silence through I2S before the first authored PCM frame so the ES8311
+  and speaker amplifier cannot swallow an opening consonant.
 - Codec initialization matches the current Waveshare V2 managed path, including
   a deterministic reset, 16 kHz DAC OSR `0x20`, and the complete reference and
   system-register sequence.
@@ -197,8 +201,10 @@ listing that described the original SH8601 + FT3168 revision.
   and 5 kHz low-pass; there are no resonance notches or presence boosts.
   Longer speech cues use leading-silence trim only, preserving internal
   cadence, followed by two-pass -21 LUFS / -4 dBTP normalization. Short
-  phonics masters retain their reviewed relative dynamics and share one
-  peak-safe -2.06 dB gain.
+  phonics masters retain their reviewed relative dynamics. All 26 device
+  phonics clips receive one shared 1.32x amplitude boost (+2.411 dB) over their
+  originally accepted levels, with a measured peak sample of 27,261 and no
+  clipping; speech, praise, bubble beds, and creature effects are unchanged.
 - Reward effects use the same speaker filter and PCM path. Bubble beds are
   authored around -28 LUFS with a -9 dBTP ceiling; every creature master gets
   one shared +1.5 dB lift, with sparse transient cues left uncompressed to

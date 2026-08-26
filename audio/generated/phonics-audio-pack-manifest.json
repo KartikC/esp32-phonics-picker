@@ -4,8 +4,8 @@
   "sample_rate": 16000,
   "format": "PCM signed 16-bit little-endian, mono",
   "asset_count": 86,
-  "bytes": 4422336,
-  "sha256": "bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9",
+  "bytes": 4473882,
+  "sha256": "262858b9569618ca7bb901ba27fc0fd9034eb2f9e11a82176cda8ace7db19ba0",
   "flash_partition": {
     "label": "ffat",
     "offset": "0x610000",
@@ -20,426 +20,426 @@
     {
       "id": "cowboy_b",
       "offset": 26656,
-      "length": 15018
+      "length": 13760
     },
     {
       "id": "cowboy_c",
-      "offset": 41674,
+      "offset": 40416,
       "length": 15018
     },
     {
       "id": "cowboy_d",
-      "offset": 56692,
-      "length": 15018
+      "offset": 55434,
+      "length": 14720
     },
     {
       "id": "cowboy_e",
-      "offset": 71710,
+      "offset": 70154,
       "length": 26624
     },
     {
       "id": "cowboy_f",
-      "offset": 98334,
-      "length": 15018
+      "offset": 96778,
+      "length": 32000
     },
     {
       "id": "cowboy_g",
-      "offset": 113352,
+      "offset": 128778,
       "length": 15018
     },
     {
       "id": "cowboy_h",
-      "offset": 128370,
-      "length": 15018
+      "offset": 143796,
+      "length": 17920
     },
     {
       "id": "cowboy_i",
-      "offset": 143388,
+      "offset": 161716,
       "length": 26624
     },
     {
       "id": "cowboy_j",
-      "offset": 170012,
-      "length": 15018
+      "offset": 188340,
+      "length": 14720
     },
     {
       "id": "cowboy_k",
-      "offset": 185030,
+      "offset": 203060,
       "length": 15018
     },
     {
       "id": "cowboy_l",
-      "offset": 200048,
+      "offset": 218078,
       "length": 17066
     },
     {
       "id": "cowboy_m",
-      "offset": 217114,
-      "length": 15018
+      "offset": 235144,
+      "length": 24960
     },
     {
       "id": "cowboy_n",
-      "offset": 232132,
-      "length": 15018
+      "offset": 260104,
+      "length": 28480
     },
     {
       "id": "cowboy_o",
-      "offset": 247150,
+      "offset": 288584,
       "length": 26624
     },
     {
       "id": "cowboy_p",
-      "offset": 273774,
+      "offset": 315208,
       "length": 15018
     },
     {
       "id": "cowboy_q",
-      "offset": 288792,
+      "offset": 330226,
       "length": 15018
     },
     {
       "id": "cowboy_r",
-      "offset": 303810,
+      "offset": 345244,
       "length": 16384
     },
     {
       "id": "cowboy_s",
-      "offset": 320194,
+      "offset": 361628,
       "length": 15018
     },
     {
       "id": "cowboy_t",
-      "offset": 335212,
+      "offset": 376646,
       "length": 15018
     },
     {
       "id": "cowboy_u",
-      "offset": 350230,
-      "length": 27990
+      "offset": 391664,
+      "length": 25600
     },
     {
       "id": "cowboy_v",
-      "offset": 378220,
-      "length": 15018
+      "offset": 417264,
+      "length": 27520
     },
     {
       "id": "cowboy_w",
-      "offset": 393238,
+      "offset": 444784,
       "length": 15018
     },
     {
       "id": "cowboy_x",
-      "offset": 408256,
+      "offset": 459802,
       "length": 15018
     },
     {
       "id": "cowboy_y",
-      "offset": 423274,
+      "offset": 474820,
       "length": 18432
     },
     {
       "id": "cowboy_z",
-      "offset": 441706,
+      "offset": 493252,
       "length": 15018
     },
     {
       "id": "prompt_which_one_says",
-      "offset": 456724,
+      "offset": 508270,
       "length": 30422
     },
     {
       "id": "prompt_can_you_find",
-      "offset": 487146,
+      "offset": 538692,
       "length": 19154
     },
     {
       "id": "prompt_which_letter_makes",
-      "offset": 506300,
+      "offset": 557846,
       "length": 28152
     },
     {
       "id": "prompt_tap_the_one_that_says",
-      "offset": 534452,
+      "offset": 585998,
       "length": 38978
     },
     {
       "id": "prompt_listen_which_one_says",
-      "offset": 573430,
+      "offset": 624976,
       "length": 39370
     },
     {
       "id": "nudge_have_another_listen",
-      "offset": 612800,
+      "offset": 664346,
       "length": 27254
     },
     {
       "id": "nudge_take_your_time",
-      "offset": 640054,
+      "offset": 691600,
       "length": 67042
     },
     {
       "id": "nudge_listen_once_more",
-      "offset": 707096,
+      "offset": 758642,
       "length": 29684
     },
     {
       "id": "nudge_which_one_do_you_think",
-      "offset": 736780,
+      "offset": 788326,
       "length": 29646
     },
     {
       "id": "wrong_no_no",
-      "offset": 766426,
+      "offset": 817972,
       "length": 26562
     },
     {
       "id": "wrong_not_it_try_again",
-      "offset": 792988,
+      "offset": 844534,
       "length": 48942
     },
     {
       "id": "wrong_try_the_other_one",
-      "offset": 841930,
+      "offset": 893476,
       "length": 26518
     },
     {
       "id": "praise_nice_job",
-      "offset": 868448,
+      "offset": 919994,
       "length": 23834
     },
     {
       "id": "praise_great_work",
-      "offset": 892282,
+      "offset": 943828,
       "length": 20918
     },
     {
       "id": "praise_you_got_it",
-      "offset": 913200,
+      "offset": 964746,
       "length": 21970
     },
     {
       "id": "praise_thats_it",
-      "offset": 935170,
+      "offset": 986716,
       "length": 15806
     },
     {
       "id": "sfx_bubble_round",
-      "offset": 950976,
+      "offset": 1002522,
       "length": 64000
     },
     {
       "id": "sfx_bubble_even",
-      "offset": 1014976,
+      "offset": 1066522,
       "length": 64000
     },
     {
       "id": "sfx_bubble_hollow",
-      "offset": 1078976,
+      "offset": 1130522,
       "length": 64000
     },
     {
       "id": "sfx_bubble_cascade",
-      "offset": 1142976,
+      "offset": 1194522,
       "length": 64000
     },
     {
       "id": "sfx_creature_moon_jelly",
-      "offset": 1206976,
+      "offset": 1258522,
       "length": 64000
     },
     {
       "id": "sfx_creature_reef_shark",
-      "offset": 1270976,
+      "offset": 1322522,
       "length": 64000
     },
     {
       "id": "sfx_creature_giant_octopus",
-      "offset": 1334976,
+      "offset": 1386522,
       "length": 64000
     },
     {
       "id": "sfx_creature_seahorse",
-      "offset": 1398976,
+      "offset": 1450522,
       "length": 64000
     },
     {
       "id": "sfx_creature_glass_squid",
-      "offset": 1462976,
+      "offset": 1514522,
       "length": 64000
     },
     {
       "id": "sfx_creature_anglerfish",
-      "offset": 1526976,
+      "offset": 1578522,
       "length": 64000
     },
     {
       "id": "sfx_creature_sea_angel",
-      "offset": 1590976,
+      "offset": 1642522,
       "length": 64000
     },
     {
       "id": "sfx_creature_gulper_eel",
-      "offset": 1654976,
+      "offset": 1706522,
       "length": 64000
     },
     {
       "id": "reward_mix_b0_c0",
-      "offset": 1718976,
+      "offset": 1770522,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c1",
-      "offset": 1803456,
+      "offset": 1855002,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c2",
-      "offset": 1887936,
+      "offset": 1939482,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c3",
-      "offset": 1972416,
+      "offset": 2023962,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c4",
-      "offset": 2056896,
+      "offset": 2108442,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c5",
-      "offset": 2141376,
+      "offset": 2192922,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c6",
-      "offset": 2225856,
+      "offset": 2277402,
       "length": 84480
     },
     {
       "id": "reward_mix_b0_c7",
-      "offset": 2310336,
+      "offset": 2361882,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c0",
-      "offset": 2394816,
+      "offset": 2446362,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c1",
-      "offset": 2479296,
+      "offset": 2530842,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c2",
-      "offset": 2563776,
+      "offset": 2615322,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c3",
-      "offset": 2648256,
+      "offset": 2699802,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c4",
-      "offset": 2732736,
+      "offset": 2784282,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c5",
-      "offset": 2817216,
+      "offset": 2868762,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c6",
-      "offset": 2901696,
+      "offset": 2953242,
       "length": 84480
     },
     {
       "id": "reward_mix_b1_c7",
-      "offset": 2986176,
+      "offset": 3037722,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c0",
-      "offset": 3070656,
+      "offset": 3122202,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c1",
-      "offset": 3155136,
+      "offset": 3206682,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c2",
-      "offset": 3239616,
+      "offset": 3291162,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c3",
-      "offset": 3324096,
+      "offset": 3375642,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c4",
-      "offset": 3408576,
+      "offset": 3460122,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c5",
-      "offset": 3493056,
+      "offset": 3544602,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c6",
-      "offset": 3577536,
+      "offset": 3629082,
       "length": 84480
     },
     {
       "id": "reward_mix_b2_c7",
-      "offset": 3662016,
+      "offset": 3713562,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c0",
-      "offset": 3746496,
+      "offset": 3798042,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c1",
-      "offset": 3830976,
+      "offset": 3882522,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c2",
-      "offset": 3915456,
+      "offset": 3967002,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c3",
-      "offset": 3999936,
+      "offset": 4051482,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c4",
-      "offset": 4084416,
+      "offset": 4135962,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c5",
-      "offset": 4168896,
+      "offset": 4220442,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c6",
-      "offset": 4253376,
+      "offset": 4304922,
       "length": 84480
     },
     {
       "id": "reward_mix_b3_c7",
-      "offset": 4337856,
+      "offset": 4389402,
       "length": 84480
     }
   ]

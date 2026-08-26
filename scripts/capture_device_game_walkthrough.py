@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Drive and timestamp one representative real Phonics Picker round."""
+"""Drive and timestamp one representative real DEEP SEA PHONICS TOY V2 round."""
 
 from __future__ import annotations
 

@@ -45,7 +45,7 @@ esp32:esp32:esp32s3:FlashSize=16M,PartitionScheme=app3M_fat9M_16MB,PSRAM=opi,CDC
 ```
 
 The accepted audio image has SHA-256
-`bf7249df09e758b96c037b917afb633d796e409ecb6ad6da60cdac45d0f16be9`.
+`262858b9569618ca7bb901ba27fc0fd9034eb2f9e11a82176cda8ace7db19ba0`.
 The verifier checks that value, every individual WAV hash and format, every
 packed offset, the generated C++ index, all 32 offline reward masters, and the
 firmware partition table.
@@ -82,7 +82,7 @@ then requests confirmation and writes verified data at these exact offsets:
 | `0x0` | bootloader |
 | `0x8000` | partition table |
 | `0xe000` | OTA selector |
-| `0x10000` | Phonics Picker application |
+| `0x10000` | DEEP SEA PHONICS TOY V2 application |
 | `0x610000` | offline audio pack |
 
 It does not erase unrelated flash sectors. This preserves a user's factory
