@@ -731,3 +731,52 @@ installed phonics loudness and overall child-facing experience as
 from the Waveshare board's separate V2 hardware-revision label. The immutable
 installed application and audio identities remain those in the immediately
 preceding entry.
+
+## 2026-08-28 timer and reward-flow validation installation
+
+This append-only entry supersedes the installed application identity above,
+but it does not supersede the child-tested acceptance decision. The installed
+source through commit `fdd8da4` combines these changes:
+
+- the creature-visible window is 2.52 seconds, the closest 40 ms device frame
+  step to a 15% increase, including 2.24 seconds at full water and 280 ms of
+  recede, for a 3.28-second complete correct-answer reward;
+- rare-tier species have a 16.04% exact steady-state share, 17.87% above the
+  preceding policy, while the device-rounded treatment policy raises effective
+  incidence by 24.26% in clean play and 16.45% in mistake-heavy play;
+- a wrong choice locks the answered round, plays only its neutral response,
+  shows a framebuffer-acknowledged 120 ms black beat, and advances to a
+  different target instead of offering a retry; and
+- ten accumulated awake minutes lead into a 30-minute elapsed rest screen with
+  the selected shell-inlay tideglass before a fresh spoken challenge.
+
+The previously rear-label-confirmed V2 board was the sole connected USB serial
+target. Live preflight again identified an ESP32-S3 QFN56 rev 0.2 with 8 MB
+embedded PSRAM, 16 MB flash, and USB Serial/JTAG. The canonical installer built
+the pinned receipt and wrote and hash-verified all five regions: bootloader at
+`0x0`, partition table at `0x8000`, OTA selector at `0xe000`, application at
+`0x10000`, and audio pack at `0x610000`.
+
+The installed application is 1,535,408 bytes with SHA-256
+`019fcb5243c5c0fa7cef535bcc7d540dbb016de4616a5136e1ceff4fe11af93e`.
+The unchanged 4,473,882-byte audio pack has SHA-256
+`262858b9569618ca7bb901ba27fc0fd9034eb2f9e11a82176cda8ace7db19ba0`.
+
+The complete post-flash serial verifier passed. It reported 8 MB PSRAM, ready
+audio at logical volume 90, a ready IMU, interrupt-gated touch with advancing
+touch and power polls, distinct choices, and zero audio write failures. It
+exercised replay plus real `idle -> on -> idle` audio transitions; a locked
+neutral wrong answer with the timed black beat and a different next target;
+one complete common and one complete rare single-stream reward with four-way
+bubble selection and species-matched effects; serial mute/unmute; the
+production rest-screen diagnostic at `15:00`; all eight common and all eight
+authored-rare render paths; palette restrictions; and unchanged rarity counters
+during diagnostics. Cleanup restored the awake, unmuted, non-preview game.
+
+This run did not include a fresh camera capture or person-at-device acceptance.
+Serial evidence cannot certify the real ten-minute trigger, a complete
+30-minute countdown, standby aging, touch/tilt/replay/audio lockout, expiry into
+a fresh spoken challenge, the physical maintenance double-tap and disconnect
+behavior, PWR sleep/wake, AMOLED appearance, the longer reward timing by eye,
+or speaker quality. Those remain the manual gates in `AGENTS.md` before this
+validation build can replace the accepted release above.

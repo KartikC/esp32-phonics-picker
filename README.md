@@ -166,11 +166,13 @@ this implementation does not persist the timer across loss of power. Standby's
 fail-safe audio shutdown cancels a cue already in flight while preserving its
 visual transition deadline; wake does not restart the partially heard cue.
 
-The timer source and renderer are host-tested in this checkout, but the
-accepted installed build in [CURRENT_RELEASE.md](CURRENT_RELEASE.md) and the
-hands-on evidence in [DEVICE_REPORT.md](DEVICE_REPORT.md) predate this feature.
-Treat the timer as physically unverified until the five-region flash, serial
-verifier, and manual timer gates in [AGENTS.md](AGENTS.md) are completed.
+The current timer build was installed through the five-region flash path and
+passed the serial verifier on the supported V2 board on 2026-08-28, including
+its production rest-screen diagnostic path. The full ten-minute trigger,
+thirty-minute elapsed countdown, standby aging, gameplay lockout, expiry, and
+hands-on display/listening checks remain manual gates in
+[AGENTS.md](AGENTS.md); the child-tested accepted release in
+[CURRENT_RELEASE.md](CURRENT_RELEASE.md) is therefore unchanged.
 
 During ordinary silent play, the codec, speaker amplifier, and I2S transmitter
 power down after a guarded 750 ms idle tail and wake before the next cue. Idle
@@ -308,9 +310,11 @@ all 32 single-stream reward masters; verifies the stone-card roles, Atkinson
 glyph source and fit, packed Deep loop and tideglass assets, README-capture
 alignment, and complete audio pack; installs the pinned toolchain if needed;
 and compiles the production firmware. CI runs the same path from a fresh
-Ubuntu checkout. The most recent physical-board verification snapshot is in
-[DEVICE_REPORT.md](DEVICE_REPORT.md); it identifies the older installed binary
-and does not certify newer compiled-only source changes such as the rest timer.
+Ubuntu checkout. The most recent board-install and serial-verification evidence
+is in [DEVICE_REPORT.md](DEVICE_REPORT.md). It identifies the current validation
+binary separately from the older child-tested accepted release and lists the
+timer, display, touch, tilt, maintenance-gesture, PWR, and listening checks
+that still require hands-on observation.
 
 Production USB maintenance commands are `STATUS`, `REPLAY`, `MUTE`, `UNMUTE`,
 `REWARD`, `RARE`, `HOLD_BREAK 1..1800`, `HOLD_CREATURE 0..7`,

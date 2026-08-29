@@ -20,3 +20,21 @@ written and hash-verified, and the complete serial device verifier passed with
 zero audio write failures. Hands-on family use then found the installed
 experience solid and a meaningful improvement over the prior version used by
 the child.
+
+## Newer connected-device validation
+
+On 2026-08-28, the supported V2 board was updated to source through commit
+`fdd8da4` for the ten-minute play/30-minute rest timer, longer creature reward,
+higher rare-species and rare-treatment incidence, and locked wrong-answer
+advance to a different challenge. The application is 1,535,408 bytes with
+SHA-256
+`019fcb5243c5c0fa7cef535bcc7d540dbb016de4616a5136e1ceff4fe11af93e`;
+the accepted audio-pack identity above is unchanged. All five flash regions
+were hash-verified and the complete serial verifier passed with zero audio
+write failures.
+
+This is a newer installed validation build, not a replacement acceptance
+claim. The full ten-minute/30-minute timer cycle and the hands-on display,
+touch, tilt, maintenance double-tap/disconnect, PWR, timing, and listening gates
+remain outstanding, so `v2.0.0` remains the current child-tested accepted
+release.
