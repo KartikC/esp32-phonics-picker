@@ -104,10 +104,10 @@ for relative in AGENT_GUIDES:
 
 for required in (
     "## Creature rewards and rarity",
-    "22.18% (`20720/93414`)",
-    "1/50 (2.000%)",
-    "10 | Guaranteed",
-    "14th correct answer",
+    "21.58% (`21440/99336`)",
+    "1/43 (2.326%)",
+    "8 | Guaranteed",
+    "12th correct answer",
     "rare visual-treatment roll",
 ):
     if required not in readme:

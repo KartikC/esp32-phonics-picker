@@ -11,12 +11,15 @@
 #include "esp_sleep.h"
 
 #include "AudioPlan.h"
+#include "BreakTimerAsset.h"
+#include "BreakTimerRendering.h"
 #include "CardStoneAsset.h"
 #include "CardStoneRendering.h"
 #include "CreatureRewardSelector.h"
 #include "GameEngine.h"
 #include "LayoutGeometry.h"
 #include "MaintenanceMuteController.h"
+#include "PlayBreakTimer.h"
 #include "RewardAudioSelector.h"
 #include "RewardTransition.h"
 #include "ReplayButtonAsset.h"
@@ -60,6 +63,7 @@ std::unique_ptr<Arduino_IIC> touch(new Arduino_CST816x(
     touchBus, CST816T_DEVICE_ADDRESS, DRIVEBUS_DEFAULT_VALUE, TP_INT, onTouchInterrupt));
 
 GameEngine game(1);
+PlayBreakTimer playBreakTimer;
 CreatureRewardSelector rewardSelector(1);
 RewardAudioSelector rewardAudioSelector(1);
 CreatureRewardPlan activeReward{};
@@ -123,6 +127,13 @@ uint32_t powerRawChangedAtMs = 0;
 uint32_t powerPressedAtMs = 0;
 uint32_t lastPowerPollMs = 0;
 uint32_t powerPollCount = 0;
+uint32_t lastBreakTimerSecond = UINT32_MAX;
+bool freshRoundAfterBreak = false;
+Event deferredRoundAfterBreak{};
+bool hasDeferredRoundAfterBreak = false;
+
+void dispatch(const Event& event);
+void drawBatteryIndicator();
 
 struct BatteryState {
   bool valid = false;
@@ -237,6 +248,69 @@ uint16_t pack565(uint8_t red, uint8_t green, uint8_t blue) {
   return static_cast<uint16_t>(((red & 0xF8) << 8) |
                                ((green & 0xFC) << 3) |
                                (blue >> 3));
+}
+
+void drawCenteredBuiltin(const char* text, int16_t centerX, int16_t centerY,
+                         uint8_t textSize, uint16_t color) {
+  int16_t boundsX = 0;
+  int16_t boundsY = 0;
+  uint16_t width = 0;
+  uint16_t height = 0;
+  gfx->setFont(nullptr);
+  gfx->setTextSize(textSize);
+  gfx->getTextBounds(text, 0, 0, &boundsX, &boundsY, &width, &height);
+  gfx->setCursor(centerX - boundsX - static_cast<int16_t>(width / 2),
+                 centerY - boundsY - static_cast<int16_t>(height / 2));
+  gfx->setTextColor(color);
+  gfx->print(text);
+  gfx->setTextSize(1);
+}
+
+void drawBreakTimerAsset() {
+  constexpr int16_t originX =
+      (LCD_WIDTH - static_cast<int16_t>(kBreakTimerWidth)) / 2;
+  uint16_t* framebuffer = gfx->getFramebuffer();
+  for (uint16_t localY = 0; localY < kBreakTimerHeight; ++localY) {
+    for (uint16_t localX = 0; localX < kBreakTimerWidth; ++localX) {
+      const uint8_t role = breakTimerRoleAt(localX, localY);
+      if (role == kBreakTimerTransparent) continue;
+      framebuffer[static_cast<uint32_t>(kBreakTimerIconTop + localY) *
+                      LCD_WIDTH +
+                  originX + localX] = kBreakTimerPalette[role];
+    }
+  }
+}
+
+void drawBreakTimer(uint32_t remainingMs) {
+  drawBackground();
+  drawBreakTimerAsset();
+
+  const uint32_t remainingSeconds =
+      remainingMs == 0 ? 0 : (remainingMs - 1u) / 1000u + 1u;
+  char countdown[6];
+  formatBreakCountdown(remainingSeconds, countdown);
+  drawCenteredBuiltin(countdown, kBreakCountdownCenterX,
+                      kBreakCountdownCenterY, kBreakCountdownTextSize,
+                      0xDF7E);
+
+  gfx->fillRoundRect(kBreakProgressLeft, kBreakProgressTop,
+                     kBreakProgressWidth, kBreakProgressHeight,
+                     kBreakProgressHeight / 2, 0x0947);
+  const uint16_t progress = breakProgressPixels(remainingMs);
+  if (progress > 0) {
+    gfx->fillRoundRect(kBreakProgressLeft, kBreakProgressTop, progress,
+                       kBreakProgressHeight, kBreakProgressHeight / 2,
+                       0xF713);
+  }
+  const int16_t pearlX = kBreakProgressLeft +
+      static_cast<int16_t>(progress < kBreakProgressWidth ? progress :
+                                                        kBreakProgressWidth - 1);
+  gfx->fillCircle(pearlX, kBreakProgressTop + kBreakProgressHeight / 2,
+                  5, 0xF713);
+  drawCenteredBuiltin("rest", LCD_WIDTH / 2, kBreakLabelCenterY,
+                      kBreakLabelTextSize, 0x5C74);
+  drawBatteryIndicator();
+  gfx->flush();
 }
 
 void drawRewardWater(uint32_t elapsed) {
@@ -698,8 +772,77 @@ bool replayCurrentPrompt(uint32_t now) {
 }
 
 bool syncAudioGate() {
-  if (standbyMode || maintenanceMute.muted()) return AudioPlan::suspend();
+  if (standbyMode || playBreakTimer.onBreak() || maintenanceMute.muted()) {
+    return AudioPlan::suspend();
+  }
   return AudioPlan::resume();
+}
+
+const char* playBreakStateName() {
+  switch (playBreakTimer.state()) {
+    case PlayBreakState::playing:
+      return "playing";
+    case PlayBreakState::breakPending:
+      return "pending";
+    case PlayBreakState::onBreak:
+      return "break";
+  }
+  return "unknown";
+}
+
+void startPlayBreak(uint32_t now, bool render) {
+  maintenanceMute.cancelPending();
+  game.suspend(now);
+  const bool audioQuiet = syncAudioGate();
+  lastBreakTimerSecond = UINT32_MAX;
+  if (render && !standbyMode && !previewMode) {
+    drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+    lastBreakTimerSecond = playBreakTimer.breakRemainingSeconds(now);
+  }
+  USBSerial.printf("[break] started remaining_s=%lu audio=%s\n",
+                   static_cast<unsigned long>(
+                       playBreakTimer.breakRemainingSeconds(now)),
+                   audioQuiet ? "powered-down" : "muted-with-warning");
+}
+
+void resumePlayAfterBreak(uint32_t now) {
+  freshRoundAfterBreak = false;
+  Event freshRound{};
+  if (hasDeferredRoundAfterBreak) {
+    // A just-finished answer transition may already have selected the next
+    // challenge at the play-limit boundary. Preserve that unseen round so the
+    // post-break target still differs from the answered one.
+    game.resume(now);
+    freshRound = deferredRoundAfterBreak;
+  } else {
+    freshRound = game.begin(now);
+  }
+  deferredRoundAfterBreak = Event{};
+  hasDeferredRoundAfterBreak = false;
+  // A press that began during the final locked-out instant must not select a
+  // card in the newly spoken round. Require one observed zero-finger sample.
+  awaitingTouchRelease = true;
+  touchWasDown = true;
+  const bool audioReady = syncAudioGate();
+  lastBreakTimerSecond = UINT32_MAX;
+  dispatch(freshRound);
+  // Start the next allowance only after the complete challenge framebuffer is
+  // installed and its prompt is queued; rendering time is not child play time.
+  playBreakTimer.resumePlay(millis());
+  USBSerial.printf("[break] complete audio=%s\n",
+                   audioReady ? "ready" : "FAILED-muted");
+}
+
+void handlePlayBreakEvent(PlayBreakEvent event, uint32_t now,
+                          bool canResumePlay) {
+  if (event == PlayBreakEvent::breakStarted) {
+    startPlayBreak(now, canResumePlay);
+  } else if (event == PlayBreakEvent::playResumed) {
+    freshRoundAfterBreak = true;
+  }
+  if (freshRoundAfterBreak && canResumePlay && !standbyMode && !previewMode) {
+    resumePlayAfterBreak(now);
+  }
 }
 
 void handleMaintenanceMuteEvent(MaintenanceMuteEvent event, uint32_t now) {
@@ -709,8 +852,9 @@ void handleMaintenanceMuteEvent(MaintenanceMuteEvent event, uint32_t now) {
     // maintenance mute. Reconcile the physical audio gate before handling the
     // replay so controller state and codec/PA state can never diverge.
     syncAudioGate();
-    if (!standbyMode && !previewMode && !replayCurrentPrompt(now)) {
-      USBSerial.println("[replay] unavailable during celebration");
+    if (!standbyMode && !previewMode && !playBreakTimer.onBreak() &&
+        !replayCurrentPrompt(now)) {
+      USBSerial.println("[replay] unavailable during transition");
     }
     return;
   }
@@ -720,7 +864,12 @@ void handleMaintenanceMuteEvent(MaintenanceMuteEvent event, uint32_t now) {
                    maintenanceMute.muted() ? "on" : "off",
                    usbDataConnected ? "yes" : "no",
                    audioStateApplied ? "ok" : "FAILED-safe");
-  if (!standbyMode && !previewMode && !game.celebrating()) drawRound();
+  if (!standbyMode && !previewMode && !playBreakTimer.onBreak() &&
+      (!game.transitioning() || game.wrongFeedback())) {
+    // Wrong feedback freezes the challenge geometry, but a maintenance mute
+    // change should still update the Deep-loop slash on that held frame.
+    drawRound();
+  }
 }
 
 void pollMaintenanceMute(uint32_t now) {
@@ -731,8 +880,8 @@ void pollMaintenanceMute(uint32_t now) {
   usbDataConnected = effectiveConnection;
   handleMaintenanceMuteEvent(event, now);
   if (connectionChanged && event != MaintenanceMuteEvent::toggled &&
-      !standbyMode && !previewMode &&
-      !game.celebrating()) {
+      !standbyMode && !previewMode && !playBreakTimer.onBreak() &&
+      (!game.transitioning() || game.wrongFeedback())) {
     drawRound();
   }
 }
@@ -741,6 +890,12 @@ void setStandby(bool enabled, uint32_t now) {
   if (enabled == standbyMode) return;
   if (enabled) {
     maintenanceMute.cancelPending();
+    if (!previewMode) {
+      const PlayBreakEvent timerEvent =
+          playBreakTimer.update(now, !game.transitioning());
+      handlePlayBreakEvent(timerEvent, now, false);
+      playBreakTimer.pausePlay(now);
+    }
     standbyMode = true;
     game.suspend(now);
     const bool audioQuiet = syncAudioGate();
@@ -759,10 +914,18 @@ void setStandby(bool enabled, uint32_t now) {
   panel->setBrightness(0);
   panel->displayOn();
   standbyMode = false;
-  // Recompose a normal round while the panel is still dark. Mute or USB-data
-  // state may have changed while asleep, and flushing the retained framebuffer
-  // would otherwise expose a stale replay/mute icon on wake.
-  if (!previewMode && !game.celebrating()) {
+  if (!previewMode) {
+    const PlayBreakEvent timerEvent =
+        playBreakTimer.update(now, !game.transitioning());
+    handlePlayBreakEvent(timerEvent, now, true);
+  }
+  // Recompose the current complete product state while the panel is dark.
+  // Both the countdown and the USB mute mark may have changed during standby.
+  if (!previewMode && playBreakTimer.onBreak()) {
+    drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+    lastBreakTimerSecond = playBreakTimer.breakRemainingSeconds(now);
+  } else if (!previewMode &&
+             (!game.transitioning() || game.wrongFeedback())) {
     drawRound();
   } else {
     gfx->flush();
@@ -780,15 +943,23 @@ void setStandby(bool enabled, uint32_t now) {
   panel->setBrightness(kDisplayBrightness);
   // A USB preview owns a separate pause. Waking the panel must not restart
   // the game clock behind a held or animated camera-inspection frame.
-  if (!previewMode) game.resume(millis());
+  if (!previewMode && !playBreakTimer.onBreak()) {
+    game.resume(now);
+    playBreakTimer.resumePlay(now);
+  }
   awaitingTouchRelease = true;
   touchWasDown = true;
   USBSerial.printf("[power] awake; audio=%s\n",
                    maintenanceMute.muted() ? "maintenance-muted" :
-                   (audioReady ? "ready" : "FAILED-muted"));
+                   (playBreakTimer.onBreak() ? "break-muted" :
+                    (audioReady ? "ready" : "FAILED-muted")));
 }
 
 void idleStandby() {
+  const uint32_t now = millis();
+  const PlayBreakEvent timerEvent =
+      playBreakTimer.update(now, !game.transitioning());
+  handlePlayBreakEvent(timerEvent, now, false);
   // Native USB Serial/JTAG is not guaranteed to survive light sleep. Keep the
   // CPU awake when a data host is attached so maintenance commands and the
   // verifier remain reliable; a charger-only cable still uses light sleep.
@@ -906,20 +1077,49 @@ CreatureRewardPlan makeDiagnosticReward(bool rare,
   return plan;
 }
 
-void enterPreviewMode(uint32_t now) {
-  if (!previewMode) game.suspend(now);
+bool enterPreviewMode(uint32_t now) {
+  if (previewMode) return true;
+  const PlayBreakEvent timerEvent =
+      playBreakTimer.update(now, !game.transitioning());
+  handlePlayBreakEvent(timerEvent, now, false);
+  if (playBreakTimer.onBreak()) {
+    drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+    lastBreakTimerSecond = playBreakTimer.breakRemainingSeconds(now);
+    return false;
+  }
+  // A due limit may be waiting for an answer transition to finish. A USB
+  // preview must not pause that transition and hide the mandatory break.
+  if (playBreakTimer.breakPending()) return false;
+  playBreakTimer.pausePlay(now);
+  game.suspend(now);
   previewMode = true;
+  return true;
 }
 
-void exitPreviewMode(uint32_t now) {
+bool exitPreviewMode(uint32_t now) {
   previewMode = false;
   animatedRewardPreview = false;
-  if (!standbyMode) game.resume(now);
+  if (standbyMode) return false;
+  const PlayBreakEvent timerEvent =
+      playBreakTimer.update(now, !game.transitioning());
+  handlePlayBreakEvent(timerEvent, now, true);
+  if (playBreakTimer.onBreak()) {
+    drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+    lastBreakTimerSecond = playBreakTimer.breakRemainingSeconds(now);
+    return false;
+  } else {
+    game.resume(now);
+    playBreakTimer.resumePlay(now);
+  }
+  return !playBreakTimer.breakPending();
 }
 
 void showHeldReward(bool rare, int16_t requestedCreature = -1) {
   activeReward = makeDiagnosticReward(rare, requestedCreature);
-  enterPreviewMode(millis());
+  if (!enterPreviewMode(millis())) {
+    USBSerial.println("[break] diagnostic preview rejected");
+    return;
+  }
   animatedRewardPreview = false;
   // Use a point inside the full-water creature hold. This is the exact runtime
   // renderer, frozen for camera/display inspection until GAME.
@@ -940,7 +1140,10 @@ void showHeldReward(bool rare, int16_t requestedCreature = -1) {
 void showAnimatedReward(const CreatureRewardPlan& plan) {
   activeReward = plan;
   const uint32_t now = millis();
-  enterPreviewMode(now);
+  if (!enterPreviewMode(now)) {
+    USBSerial.println("[break] diagnostic preview rejected");
+    return;
+  }
   animatedRewardPreview = true;
   animatedRewardPreviewStartedAtMs = now;
   lastAnimatedRewardPreviewFrame = 0xffff;
@@ -984,16 +1187,23 @@ void handlePreviewCommands() {
                      usbDataConnected ? "yes" : "no");
     return;
   }
+  const uint32_t commandNow = millis();
+  const PlayBreakEvent commandTimerEvent =
+      playBreakTimer.update(commandNow, !game.transitioning());
+  handlePlayBreakEvent(commandTimerEvent, commandNow,
+                       !standbyMode && !previewMode);
   if (command == "STATUS") {
     reportBattery();
     const Round& round = game.round();
-    const char* audioState = standbyMode ? "suspended" :
+    const char* audioState = (standbyMode || playBreakTimer.onBreak()) ?
+                             "suspended" :
                              (maintenanceMute.muted() ? "muted" :
                              (AudioPlan::ready() ? "ready" : "FAILED"));
     USBSerial.printf(
         "[status] psram=%u audio=%s audio_power=%s audio_idle_downs=%u "
         "audio_write_failures=%u volume=%u imu=%s preview=%s standby=%s "
-        "mute=%s usb_data=%s reward_clean=%u reward_pity=%u "
+        "mute=%s usb_data=%s play_state=%s play_remaining_s=%lu "
+        "break_remaining_s=%lu reward_clean=%u reward_pity=%u "
         "target=%c distractor=%c distinct=%s slide_left=%d,%d "
         "slide_right=%d,%d motion_rate=%u,%u touch_irq_gate=%s touch_polls=%u "
         "power_polls=%u\n",
@@ -1004,7 +1214,11 @@ void handlePreviewCommands() {
         imuAvailable ? "ready" : "FAILED", previewMode ? "yes" : "no",
         standbyMode ? "yes" : "no",
         maintenanceMute.muted() ? "on" : "off",
-        usbDataConnected ? "yes" : "no", rewardSelector.cleanProgress(),
+        usbDataConnected ? "yes" : "no", playBreakStateName(),
+        static_cast<unsigned long>(playBreakTimer.playRemainingSeconds()),
+        static_cast<unsigned long>(
+            playBreakTimer.breakRemainingSeconds(millis())),
+        rewardSelector.cleanProgress(),
         rewardSelector.correctsSinceRare(), GameEngine::letter(round.target),
         GameEngine::letter(round.distractor),
         round.target != round.distractor ? "yes" : "NO",
@@ -1016,17 +1230,55 @@ void handlePreviewCommands() {
         static_cast<unsigned>(powerPollCount));
     return;
   }
-  if (standbyMode) {
-    USBSerial.println("[power] asleep; send WAKE before other commands");
-    return;
-  }
-
   if (command == "FRAME") {
+    constexpr size_t frameBytes = LCD_WIDTH * LCD_HEIGHT * sizeof(uint16_t);
+    if (standbyMode || game.wrongTransitioning() ||
+        playBreakTimer.onBreak()) {
+      // The established FRAME sender streams its fixed-size payload directly
+      // after the command. Drain it even when the display must reject the
+      // preview, or binary pixels would desynchronize later line commands.
+      uint8_t discard[256];
+      size_t received = 0;
+      while (received < frameBytes) {
+        const size_t remaining = frameBytes - received;
+        const size_t chunkBytes =
+            remaining < sizeof(discard) ? remaining : sizeof(discard);
+        const size_t chunk = USBSerial.readBytes(
+            reinterpret_cast<char*>(discard), chunkBytes);
+        received += chunk;
+        if (chunk != chunkBytes) break;
+      }
+      USBSerial.printf(
+          standbyMode ? "[preview] frame discarded while asleep: %u/%u\n" :
+          (game.wrongTransitioning() ?
+               "[preview] frame discarded during wrong-answer advance: "
+               "%u/%u\n" :
+               "[preview] frame discarded during active break: %u/%u\n"),
+          static_cast<unsigned>(received),
+          static_cast<unsigned>(frameBytes));
+      return;
+    }
     maintenanceMute.cancelPending();
     const bool alreadyPreviewing = previewMode;
-    enterPreviewMode(millis());
+    if (!enterPreviewMode(millis())) {
+      uint8_t discard[256];
+      size_t received = 0;
+      while (received < frameBytes) {
+        const size_t remaining = frameBytes - received;
+        const size_t chunkBytes =
+            remaining < sizeof(discard) ? remaining : sizeof(discard);
+        const size_t chunk = USBSerial.readBytes(
+            reinterpret_cast<char*>(discard), chunkBytes);
+        received += chunk;
+        if (chunk != chunkBytes) break;
+      }
+      USBSerial.printf(
+          "[preview] frame discarded as break became due: %u/%u\n",
+          static_cast<unsigned>(received),
+          static_cast<unsigned>(frameBytes));
+      return;
+    }
     animatedRewardPreview = false;
-    constexpr size_t frameBytes = LCD_WIDTH * LCD_HEIGHT * sizeof(uint16_t);
     const size_t received = USBSerial.readBytes(
         reinterpret_cast<char*>(gfx->getFramebuffer()), frameBytes);
     if (received == frameBytes) {
@@ -1038,18 +1290,80 @@ void handlePreviewCommands() {
                        static_cast<unsigned>(received),
                        static_cast<unsigned>(frameBytes));
     }
-  } else if (command == "GAME") {
+    return;
+  }
+  if (standbyMode) {
+    USBSerial.println("[power] asleep; send WAKE before other commands");
+    return;
+  }
+  if (game.wrongTransitioning()) {
+    USBSerial.println("[transition] wrong-answer advance in progress");
+    return;
+  }
+
+  if (command == "HOLD_BREAK" || command.startsWith("HOLD_BREAK ")) {
+    uint32_t remainingSeconds = kPlayBreakDurationMs / 1000u;
+    if (command.startsWith("HOLD_BREAK ")) {
+      String value = command.substring(String("HOLD_BREAK ").length());
+      value.trim();
+      bool valid = value.length() > 0;
+      for (uint16_t index = 0; index < value.length(); ++index) {
+        valid &= value[index] >= '0' && value[index] <= '9';
+      }
+      const long requestedValue = valid ? value.toInt() : -1;
+      if (requestedValue < 1 || requestedValue > 1800) {
+        USBSerial.println("[test] usage: HOLD_BREAK seconds(1..1800)");
+        return;
+      }
+      remainingSeconds = static_cast<uint32_t>(requestedValue);
+    }
     maintenanceMute.cancelPending();
-    exitPreviewMode(millis());
-    drawRound();
-    USBSerial.println("[preview] game resumed");
-  } else if (command == "AUDIO" || command == "REPLAY") {
+    if (!enterPreviewMode(millis())) {
+      USBSerial.println("[break] timer preview rejected as break became due");
+      return;
+    }
+    animatedRewardPreview = false;
+    drawBreakTimer(remainingSeconds * 1000u);
+    char countdown[6];
+    formatBreakCountdown(remainingSeconds, countdown);
+    USBSerial.printf(
+        "[test] held break=%s remaining_s=%lu; send GAME to resume\n",
+        countdown, static_cast<unsigned long>(remainingSeconds));
+    return;
+  }
+  if (command == "GAME") {
+    maintenanceMute.cancelPending();
+    const uint32_t now = millis();
+    const bool gameplayAvailable = exitPreviewMode(now);
+    if (playBreakTimer.onBreak()) {
+      drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+      lastBreakTimerSecond = playBreakTimer.breakRemainingSeconds(now);
+      USBSerial.println("[preview] break timer restored");
+    } else if (!gameplayAvailable) {
+      USBSerial.println("[break] pending until answer transition completes");
+    } else {
+      if (!game.transitioning()) drawRound();
+      USBSerial.println("[preview] game resumed");
+    }
+    return;
+  }
+  if (playBreakTimer.onBreak()) {
+    USBSerial.printf("[break] active remaining_s=%lu\n",
+                     static_cast<unsigned long>(
+                         playBreakTimer.breakRemainingSeconds(millis())));
+    return;
+  }
+
+  if (command == "AUDIO" || command == "REPLAY") {
     if (!replayCurrentPrompt(millis())) {
-      USBSerial.println("[replay] unavailable during celebration");
+      USBSerial.println("[replay] unavailable during transition");
     }
   } else if (command == "ANIMATE") {
     maintenanceMute.cancelPending();
-    exitPreviewMode(millis());
+    if (!exitPreviewMode(millis())) {
+      USBSerial.println("[break] correct-choice diagnostic rejected");
+      return;
+    }
     dispatch(game.choose(game.round().targetOnLeft, millis()));
     USBSerial.println("[test] correct-choice animation triggered");
   } else if (command.startsWith("ANIMATE_VARIANT ")) {
@@ -1146,7 +1460,11 @@ void handlePreviewCommands() {
     showHeldReward(command == "HOLD_RARE");
   } else if (command == "REWARD" || command == "RARE") {
     maintenanceMute.cancelPending();
-    exitPreviewMode(millis());
+    if (!exitPreviewMode(millis())) {
+      forcedRewardMode = ForcedRewardMode::none;
+      USBSerial.println("[break] reward diagnostic rejected");
+      return;
+    }
     if (game.celebrating()) {
       forcedRewardMode = ForcedRewardMode::none;
       USBSerial.println("[test] reward unavailable during celebration");
@@ -1159,11 +1477,17 @@ void handlePreviewCommands() {
                      command == "RARE" ? "rare" : "common");
   } else if (command == "WRONG") {
     maintenanceMute.cancelPending();
-    exitPreviewMode(millis());
+    if (!exitPreviewMode(millis())) {
+      USBSerial.println("[break] wrong-choice diagnostic rejected");
+      return;
+    }
     dispatch(game.choose(!game.round().targetOnLeft, millis()));
     USBSerial.println("[test] wrong-choice response triggered");
   } else if (command == "TILT" || command == "MOTION") {
-    exitPreviewMode(millis());
+    if (!exitPreviewMode(millis())) {
+      USBSerial.println("[break] motion diagnostic rejected");
+      return;
+    }
     leftSlideX = leftSlideX >= 0 ? -kMaxTileSlideX : kMaxTileSlideX;
     leftSlideY = leftSlideY >= 0 ? kMaxTileSlideY : -kMaxTileSlideY;
     rightSlideX = leftSlideX;
@@ -1197,6 +1521,12 @@ void dispatch(const Event& event) {
       rewardSelector.onWrong();
       USBSerial.printf("[choice] wrong variant=%u\n", event.variant);
       AudioPlan::wrong(event.variant);
+      break;
+    case EventType::wrongBlackBeat:
+      drawBackground();
+      gfx->flush();
+      game.acknowledgeWrongBlackFrame(millis());
+      USBSerial.println("[transition] wrong black");
       break;
     case EventType::correctChoice: {
       maintenanceMute.cancelPending();
@@ -1311,12 +1641,21 @@ void setup() {
   } else {
     USBSerial.println("[boot] phonics game; audio=MUTED");
   }
-  dispatch(game.begin(millis()));
+  const uint32_t gameStartedAtMs = millis();
+  playBreakTimer.begin(gameStartedAtMs);
+  dispatch(game.begin(gameStartedAtMs));
 }
 
 void loop() {
   const uint32_t loopNow = millis();
   pollPowerButton(loopNow);
+  // Maintenance replay events mature before the main gameplay update. Bring
+  // the play clock current first so a USB single tap cannot replay across the
+  // exact ten-minute boundary.
+  const PlayBreakEvent loopTimerEvent =
+      playBreakTimer.update(loopNow, !game.transitioning());
+  handlePlayBreakEvent(loopTimerEvent, loopNow,
+                       !standbyMode && !previewMode);
   pollMaintenanceMute(loopNow);
   AudioPlan::service(loopNow);
   handlePreviewCommands();
@@ -1352,9 +1691,38 @@ void loop() {
   }
   const uint32_t now = millis();
   if (now - lastBatterySampleMs >= kBatterySampleMs) sampleBattery(now);
-  dispatch(game.update(now));
 
-  if (game.celebrating()) {
+  // Let an answer transition finish, but never let its newly-created round
+  // leak past an already-due play limit. During ordinary play the limit is
+  // checked first so nudges and other game events cannot race the boundary.
+  Event gameEvent{};
+  PlayBreakEvent timerEvent = PlayBreakEvent::none;
+  if (game.transitioning()) {
+    gameEvent = game.update(now);
+    timerEvent = playBreakTimer.update(now, !game.transitioning());
+  } else {
+    timerEvent = playBreakTimer.update(now, true);
+    if (timerEvent == PlayBreakEvent::none && !playBreakTimer.onBreak()) {
+      gameEvent = game.update(now);
+    }
+  }
+  if (timerEvent == PlayBreakEvent::breakStarted) {
+    hasDeferredRoundAfterBreak = gameEvent.type == EventType::roundStarted;
+    deferredRoundAfterBreak = hasDeferredRoundAfterBreak ? gameEvent : Event{};
+  }
+  handlePlayBreakEvent(timerEvent, now, true);
+  if (timerEvent == PlayBreakEvent::none && !playBreakTimer.onBreak()) {
+    dispatch(gameEvent);
+  }
+
+  if (playBreakTimer.onBreak()) {
+    const uint32_t remainingSeconds =
+        playBreakTimer.breakRemainingSeconds(now);
+    if (remainingSeconds != lastBreakTimerSecond || batteryVisualDirty) {
+      drawBreakTimer(playBreakTimer.breakRemainingMs(now));
+      lastBreakTimerSecond = remainingSeconds;
+    }
+  } else if (game.celebrating()) {
     const uint32_t elapsed = game.celebrationElapsed(now);
     uint16_t frame;
     if (elapsed < kCorrectPulseEndMs) {
@@ -1387,7 +1755,7 @@ void loop() {
                            activeReward.patternSeed, activeReward.rare);
       }
     }
-  } else if (!game.celebrating()) {
+  } else if (!game.transitioning()) {
     const bool motionChanged = updateMotion(now);
     if (motionChanged || batteryVisualDirty) drawRound();
   }
@@ -1411,7 +1779,21 @@ void loop() {
         awaitingTouchRelease = false;
         touchWasDown = false;
       }
-    } else if (touchDown && !touchWasDown && !game.celebrating()) {
+    } else if (touchDown && !touchWasDown) {
+      // Rendering and I/O may have crossed the play-limit boundary since the
+      // loop's earlier time sample. Re-check at the actual hit-dispatch moment
+      // so a late touch cannot buy one extra answer transition.
+      const uint32_t inputNow = millis();
+      const PlayBreakEvent inputTimerEvent =
+          playBreakTimer.update(inputNow, !game.transitioning());
+      handlePlayBreakEvent(inputTimerEvent, inputNow, true);
+      if (awaitingTouchRelease || !game.acceptingInput() ||
+          playBreakTimer.breakPending() ||
+          playBreakTimer.onBreak()) {
+        touchWasDown = touchDown;
+        delay(8);
+        return;
+      }
       const int32_t x = touch->IIC_Read_Device_Value(
           touch->Arduino_IIC_Touch::Value_Information::TOUCH_COORDINATE_X);
       const int32_t y = touch->IIC_Read_Device_Value(
@@ -1428,15 +1810,15 @@ void loop() {
         // ordinary edge taps replay immediately and cancel an otherwise
         // natural second tap.
         const MaintenanceMuteEvent event = usbDataConnected ?
-            maintenanceMute.innerReplayTap(now) :
+            maintenanceMute.innerReplayTap(inputNow) :
             maintenanceMute.outerReplayTap();
-        handleMaintenanceMuteEvent(event, now);
+        handleMaintenanceMuteEvent(event, inputNow);
       } else if (contains(left, x, y)) {
         maintenanceMute.cancelPending();
-        dispatch(game.choose(true, now));
+        dispatch(game.choose(true, inputNow));
       } else if (contains(right, x, y)) {
         maintenanceMute.cancelPending();
-        dispatch(game.choose(false, now));
+        dispatch(game.choose(false, inputNow));
       }
       touchWasDown = touchDown;
     } else {

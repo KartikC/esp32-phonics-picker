@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "selected_direction": "2 - Shell-inlay glass",
+  "selection_reason": "clearest complete child-readable tideglass at device scale; transparent corners and one connected opaque component",
+  "rejected_directions": [
+    {
+      "label": "1 - Tide-stone glass",
+      "reason": "side pillars read as a separate gate and weaken the hourglass silhouette"
+    },
+    {
+      "label": "3 - Deep-current glass",
+      "reason": "failed the transparent-corner gate and is visibly cropped"
+    }
+  ],
+  "production_asset": true,
+  "vendor": "retrodiffusion",
+  "provider_model": "rd_pro",
+  "prompt_style": "rd_pro__simple",
+  "seed": 82802,
+  "task_id": "58783246-31be-4cac-bafc-9226bd75ee44",
+  "provider_reported_balance_cost": 0.18,
+  "candidate_generation_calls": 3,
+  "candidate_generation_balance_cost_total": 0.54,
+  "selection_evidence": [
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/generate.py",
+      "sha256": "16aa0a9fa2b1170aff6689dfedf37920603bc78d5c4f2c8f6ea6ff42cd1a6b23"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/tasks.json",
+      "sha256": "884e61bebb6870a2f6957fb04d560a4997c50d141da8314815787a905b1d2fe8"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/generation_summary.json",
+      "sha256": "49458d77847cfde1cc3a7d27d2f02ef3b3805270b74f08cc59da950aa09845a6"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/contact_sheet.png",
+      "sha256": "ce699d4616cd521483b5c6864f49ca9a02bb2484ca72d83e5f8765042e3e4d35"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_stone__82801.png",
+      "sha256": "7fa3f27def4571eb173b132c93b500fe89280aa476a3ab03bddf8139578b3d63"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_stone__82801.json",
+      "sha256": "ee3718934911f62079e0e22a3b1839570301826562b173bac78b146769ca8f0e"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_shell__82802.png",
+      "sha256": "a47483a3503dc8615ae95a0797677ac0a14cd2fcf938a2f19fdfa181632d0b83"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_shell__82802.json",
+      "sha256": "18c75543bf65415507781a88a9502168350fa00bb2f20c4e5d82134120d4373b"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_current__82803.png",
+      "sha256": "08ae84bd9d36f7bf7f77ad0172a6c107cc3f27e188c564461febe6ad26c293da"
+    },
+    {
+      "path": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_current__82803.json",
+      "sha256": "95f08649886703370da8bfc43b3951f09cfca9a9002505f74e992b8f6df9babf"
+    }
+  ],
+  "openai_image_generation_used": false,
+  "usage_rights": "not recorded locally; consult Retro Diffusion provider terms",
+  "postprocess": "none before deterministic indexed packing",
+  "builder": "scripts/build_break_timer_asset.py",
+  "builder_sha256": "bc94e2b252b682c6a6626e0a28d8d67ef9bf5e0f9b8848731b1d20bf94b5f4b2",
+  "source": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_shell__82802.png",
+  "source_sha256": "a47483a3503dc8615ae95a0797677ac0a14cd2fcf938a2f19fdfa181632d0b83",
+  "source_metadata": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_shell__82802.json",
+  "source_metadata_sha256": "18c75543bf65415507781a88a9502168350fa00bb2f20c4e5d82134120d4373b",
+  "source_size": [
+    128,
+    128
+  ],
+  "alpha_bbox": [
+    23,
+    1,
+    105,
+    128
+  ],
+  "accepted_edge_contact": "bottom frame reaches row 127 but is visually complete",
+  "opaque_pixels": 8078,
+  "transparent_pixels": 8306,
+  "connected_opaque_components": 1,
+  "packed_bytes": 8192,
+  "packed_sha256": "844f5b4ed579267908656aa2ae817025307befd341f48216c03b1198f01b3dd7",
+  "header": "firmware/PhonicsGame/BreakTimerAsset.h",
+  "header_sha256": "0c6a6ece42d6d26461ee0df7f6572ba0d9b83331ff790e87eef4517e0ea0e66a",
+  "preview_renderer": "scripts/preview_break_timer.py",
+  "preview_renderer_sha256": "0a70cafc57539157e91f993709a371927ee2d1569b0ba8673bff53b7017c0af2",
+  "palette_rgb565": [
+    "0x0000",
+    "0x00A4",
+    "0x0947",
+    "0x124C",
+    "0x332F",
+    "0x5C74",
+    "0x95B7",
+    "0xDF7E",
+    "0xF5AD",
+    "0xF713"
+  ],
+  "role_pixel_counts": [
+    8306,
+    1885,
+    283,
+    1338,
+    2280,
+    506,
+    152,
+    316,
+    1313,
+    5
+  ]
+}

@@ -27,8 +27,6 @@ constexpr const char* kNudgePromptIds[] = {
 
 constexpr const char* kWrongPromptIds[] = {
     "wrong_no_no",
-    "wrong_not_it_try_again",
-    "wrong_try_the_other_one",
 };
 
 constexpr const char* kPraisePromptIds[] = {

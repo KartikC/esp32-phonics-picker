@@ -45,11 +45,25 @@ uint32_t seedWithCommonPrefix(uint8_t commonCount, bool wrongAfterCorrect) {
   return 0;
 }
 
+double renewalRate(const uint8_t* denominators, uint8_t randomAnswerCount) {
+  double survival = 1.0;
+  double expectedCycleAnswers = 0.0;
+  for (uint8_t answer = 0; answer < randomAnswerCount; ++answer) {
+    expectedCycleAnswers += survival;
+    survival *= static_cast<double>(denominators[answer] - 1) /
+                denominators[answer];
+  }
+  // The guaranteed answer is reached only when every earlier random roll was
+  // common, and it always ends the renewal cycle.
+  expectedCycleAnswers += survival;
+  return 1.0 / expectedCycleAnswers;
+}
+
 }  // namespace
 
 int main() {
   assert(CreatureRewardSelector::kCreatureCount == 8);
-  const uint8_t expectedWeights[8] = {80, 13, 30, 80, 80, 13, 30, 13};
+  const uint8_t expectedWeights[8] = {80, 16, 30, 80, 80, 16, 30, 16};
   for (uint8_t creature = 0; creature < 8; ++creature) {
     assert(CreatureRewardSelector::speciesBaseWeight(creature) ==
            expectedWeights[creature]);
@@ -77,12 +91,26 @@ int main() {
     }
   }
 
-  assert(CreatureRewardSelector::rareOddsDenominator(0) == 50);
-  assert(CreatureRewardSelector::rareOddsDenominator(3) == 50);
-  assert(CreatureRewardSelector::rareOddsDenominator(4) == 25);
-  assert(CreatureRewardSelector::rareOddsDenominator(7) == 25);
-  assert(CreatureRewardSelector::rareOddsDenominator(8) == 13);
-  assert(CreatureRewardSelector::rareOddsDenominator(9) == 13);
+  assert(CreatureRewardSelector::rareOddsDenominator(0) == 43);
+  assert(CreatureRewardSelector::rareOddsDenominator(2) == 43);
+  assert(CreatureRewardSelector::rareOddsDenominator(3) == 21);
+  assert(CreatureRewardSelector::rareOddsDenominator(5) == 21);
+  assert(CreatureRewardSelector::rareOddsDenominator(6) == 11);
+  assert(CreatureRewardSelector::rareOddsDenominator(7) == 11);
+
+  // Prove the complete device-rounded policy, including guarantees, clears a
+  // 15% effective-incidence increase in both clean and mistake-heavy play.
+  constexpr uint8_t kPreviousCleanOdds[] = {
+      50, 50, 50, 50, 25, 25, 25, 25, 13};
+  constexpr uint8_t kCurrentCleanOdds[] = {43, 43, 43, 21, 21, 21, 11};
+  constexpr uint8_t kPreviousMistakeOdds[] = {
+      50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+  constexpr uint8_t kCurrentMistakeOdds[] = {
+      43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43};
+  assert(renewalRate(kCurrentCleanOdds, 7) >=
+         renewalRate(kPreviousCleanOdds, 9) * 1.15);
+  assert(renewalRate(kCurrentMistakeOdds, 11) >=
+         renewalRate(kPreviousMistakeOdds, 13) * 1.15);
 
   // Identical seed and answer history must produce an identical, stable reward
   // stream.
@@ -116,7 +144,7 @@ int main() {
   uint32_t tierRare[3] = {};
   uint32_t tierTotal[3] = {};
   constexpr uint32_t kTierSeedCount = 65536;
-  constexpr uint8_t kTierPrefix[3] = {0, 4, 8};
+  constexpr uint8_t kTierPrefix[3] = {0, 3, 6};
   for (uint32_t seed = 0; seed < kTierSeedCount; ++seed) {
     for (uint8_t tier = 0; tier < 3; ++tier) {
       CreatureRewardSelector selector(seed);
@@ -187,7 +215,7 @@ int main() {
 
   // For transition P(i->j)=weight(j)/(total-weight(i)), detailed balance gives
   // stationary mass weight(i)*(total-weight(i)). Thus the exact tier shares
-  // are 62,160/93,414, 18,540/93,414, and 12,714/93,414. Check the stream stays
+  // are 64,320/99,336, 19,080/99,336, and 15,936/99,336. Check the stream stays
   // close to those values as well as enforcing zero immediate repeats above.
   uint32_t speciesTierCounts[3] = {};
   constexpr uint32_t kSpeciesSamples = 1000000;
@@ -197,24 +225,24 @@ int main() {
     ++speciesTierCounts[static_cast<uint8_t>(
         CreatureRewardSelector::speciesBaseTier(plan.creatureIndex))];
   }
-  constexpr uint32_t kExpectedNumerators[3] = {62160, 18540, 12714};
+  constexpr uint32_t kExpectedNumerators[3] = {64320, 19080, 15936};
   for (uint8_t tier = 0; tier < 3; ++tier) {
     const uint64_t observedScaled =
-        static_cast<uint64_t>(speciesTierCounts[tier]) * 93414;
+        static_cast<uint64_t>(speciesTierCounts[tier]) * 99336;
     const uint64_t expectedScaled =
         static_cast<uint64_t>(kSpeciesSamples) * kExpectedNumerators[tier];
     const uint64_t difference = observedScaled > expectedScaled
                                     ? observedScaled - expectedScaled
                                     : expectedScaled - observedScaled;
     assert(difference <
-           static_cast<uint64_t>(kSpeciesSamples) * 93414 / 250);  // 0.4%.
+           static_cast<uint64_t>(kSpeciesSamples) * 99336 / 250);  // 0.4%.
   }
 
-  // A clean run guarantees its rare on the tenth correct if random rarity
+  // A clean run guarantees its rare on the eighth correct if random rarity
   // has not already reset the run.
-  const uint32_t cleanSeed = seedWithCommonPrefix(9, false);
+  const uint32_t cleanSeed = seedWithCommonPrefix(7, false);
   CreatureRewardSelector cleanGuarantee(cleanSeed);
-  for (uint8_t answer = 1; answer <= 9; ++answer) {
+  for (uint8_t answer = 1; answer <= 7; ++answer) {
     assert(!cleanGuarantee.onCorrect().rare);
     assert(cleanGuarantee.cleanProgress() == answer);
   }
@@ -223,10 +251,10 @@ int main() {
   assert(cleanGuarantee.correctsSinceRare() == 0);
 
   // Errors reset the clean run but preserve lifetime progress toward the pity
-  // rare. With every answer made non-clean, the fourteenth correct is forced.
-  const uint32_t pitySeed = seedWithCommonPrefix(13, true);
+  // rare. With every answer made non-clean, the twelfth correct is forced.
+  const uint32_t pitySeed = seedWithCommonPrefix(11, true);
   CreatureRewardSelector pityGuarantee(pitySeed);
-  for (uint8_t answer = 1; answer <= 13; ++answer) {
+  for (uint8_t answer = 1; answer <= 11; ++answer) {
     assert(!pityGuarantee.onCorrect().rare);
     assert(pityGuarantee.cleanProgress() == 1);
     assert(pityGuarantee.correctsSinceRare() == answer);

@@ -42,10 +42,12 @@ CREATURE_INDEX = {
 COMPLETE_STATUS_KEYS = frozenset({
     "psram", "audio", "audio_power", "audio_idle_downs",
     "audio_write_failures", "volume", "imu", "preview", "standby", "mute",
-    "usb_data", "reward_clean", "reward_pity", "target", "distractor",
-    "distinct", "slide_left", "slide_right", "motion_rate",
+    "usb_data", "play_state", "play_remaining_s", "break_remaining_s",
+    "reward_clean", "reward_pity", "target", "distractor", "distinct",
+    "slide_left", "slide_right", "motion_rate",
     "touch_irq_gate", "touch_polls", "power_polls",
 })
+MINIMUM_VERIFIER_PLAY_REMAINING_SECONDS = 60
 
 def choose_port(requested: str | None, available_ports: object) -> str:
     if requested:
@@ -89,17 +91,38 @@ def request_line(
             device.write(command)
             device.flush()
             next_send = now + (resend_interval or timeout + 1.0)
-        pending.extend(device.read(1024))
-        while b"\n" in pending:
-            raw, _, pending = pending.partition(b"\n")
-            line = raw.rstrip(b"\r").decode("utf-8", "replace")
-            if line:
-                print(line)
-            if line.startswith(prefix):
-                return line
+        pending.extend(device.read_until(b"\n"))
+        if b"\n" not in pending:
+            continue
+        line = bytes(pending).rstrip(b"\r\n").decode("utf-8", "replace")
+        pending.clear()
+        if line:
+            print(line)
+        if line.startswith(prefix):
+            return line
     raise RuntimeError(
         f"No {prefix.strip()} response after {command.decode().strip()}"
     )
+
+
+def wait_for_line(device: object, prefix: str, timeout: float) -> str:
+    """Read an unsolicited transition line without disturbing the device."""
+    deadline = time.monotonic() + timeout
+    pending = bytearray()
+    while time.monotonic() < deadline:
+        # Stop at one newline so a closely following [round] record remains
+        # available to the next wait instead of being dropped with this call's
+        # local buffer.
+        pending.extend(device.read_until(b"\n"))
+        if b"\n" not in pending:
+            continue
+        line = bytes(pending).rstrip(b"\r\n").decode("utf-8", "replace")
+        pending.clear()
+        if line:
+            print(line)
+        if line.startswith(prefix):
+            return line
+    raise RuntimeError(f"No unsolicited {prefix.strip()} transition")
 
 
 def require_status(status: dict[str, str], expected: dict[str, str]) -> None:
@@ -205,15 +228,31 @@ def main() -> None:
                     "standby": "no",
                     "mute": "off",
                     "usb_data": "yes",
+                    "play_state": "playing",
+                    "break_remaining_s": "0",
                     "distinct": "yes",
                     "touch_irq_gate": "yes",
                 }, args.timeout, COMPLETE_STATUS_KEYS)
                 for counter in (
                     "reward_clean", "reward_pity", "audio_idle_downs",
-                    "touch_polls", "power_polls",
+                    "play_remaining_s", "touch_polls", "power_polls",
                 ):
                     if counter not in initial:
                         raise RuntimeError(f"STATUS is missing {counter}")
+                play_remaining_seconds = int(initial["play_remaining_s"])
+                if not 1 <= play_remaining_seconds <= 600:
+                    raise RuntimeError(
+                        "play allowance is outside the expected 1..600 seconds"
+                    )
+                if play_remaining_seconds < (
+                    MINIMUM_VERIFIER_PLAY_REMAINING_SECONDS
+                ):
+                    raise RuntimeError(
+                        "only "
+                        f"{play_remaining_seconds}s of play allowance remains; "
+                        "power-cycle the device before verification so the "
+                        "30-minute break cannot begin during this test"
+                    )
                 if initial.get("audio_power") not in {"on", "idle"}:
                     raise RuntimeError(
                         f"unexpected initial audio_power={initial.get('audio_power')}"
@@ -262,6 +301,48 @@ def main() -> None:
                         f"{power_rate:.1f} reads/s over {poll_interval:.2f}s"
                     )
 
+                # A real wrong choice must play the neutral cue once, lock the
+                # answered round, expose the complete black transition, and
+                # then announce a different target. It resets clean progress
+                # exactly once while preserving the slower pity counter.
+                previous_target = initial["target"]
+                previous_pity = initial["reward_pity"]
+                wrong_line = request_line(
+                    device, b"WRONG\n", "[choice] wrong", 4.0
+                )
+                if " variant=0" not in wrong_line:
+                    raise RuntimeError(
+                        "wrong choice did not use the neutral response"
+                    )
+                request_line(
+                    device, b"REPLAY\n",
+                    "[transition] wrong-answer advance in progress", 2.0
+                )
+                wait_for_line(device, "[transition] wrong black", 4.0)
+                wrong_black_observed_at = time.monotonic()
+                next_round_line = wait_for_line(device, "[round] ", 4.0)
+                observed_black_seconds = (
+                    time.monotonic() - wrong_black_observed_at
+                )
+                if observed_black_seconds < 0.10:
+                    raise RuntimeError(
+                        "wrong-answer black beat was too short: "
+                        f"{observed_black_seconds * 1000:.1f} ms observed"
+                    )
+                next_round = parse_status(
+                    next_round_line.replace("[round] ", "[status] ", 1)
+                )
+                next_target = next_round.get("target")
+                if not next_target or next_target == previous_target:
+                    raise RuntimeError(
+                        "wrong choice did not advance to a different target"
+                    )
+                rarity_baseline = wait_for_status(device, {
+                    "audio": "ready", "audio_power": "idle",
+                    "audio_write_failures": "0", "reward_clean": "0",
+                    "reward_pity": previous_pity, "target": next_target,
+                }, 8.0, COMPLETE_STATUS_KEYS)
+
                 # Exercise two complete, audible production celebrations. The
                 # line proves the selected four-way bubble, species-matched
                 # creature cue, and offline master; audio_power=on proves the
@@ -305,6 +386,18 @@ def main() -> None:
                     "audio": "muted", "audio_power": "suspended",
                     "mute": "on", "usb_data": "yes"
                 }, 4.0)
+
+                # Exercise the exact production break renderer without aging
+                # or clearing the real play-limit state. GAME exits this USB
+                # preview but can never bypass an actual break.
+                held_break = request_line(
+                    device, b"HOLD_BREAK 900\n", "[test] held break=", 4.0
+                )
+                if "held break=15:00 remaining_s=900" not in held_break:
+                    raise RuntimeError("held break renderer reported the wrong time")
+                request_line(
+                    device, b"GAME\n", "[preview] game resumed", 4.0
+                )
 
                 # Exercise the exact production renderer for every base
                 # species and every authored rare treatment. These commands
@@ -369,10 +462,10 @@ def main() -> None:
                     "audio_write_failures": "0",
                 }, 4.0, {"reward_clean", "reward_pity"})
                 for counter in ("reward_clean", "reward_pity"):
-                    if final_status.get(counter) != initial.get(counter):
+                    if final_status.get(counter) != rarity_baseline.get(counter):
                         raise RuntimeError(
                             f"diagnostic rewards changed {counter}: "
-                            f"{initial.get(counter, 'missing')} -> "
+                            f"{rarity_baseline.get(counter, 'missing')} -> "
                             f"{final_status.get(counter, 'missing')}"
                         )
             finally:
@@ -389,13 +482,16 @@ def main() -> None:
         raise SystemExit("Production verification did not reach its final status gate.")
     print(
         "Device runtime, audio wake/idle state transition, reduced idle "
-        "I2C polling, "
+        "I2C polling, locked neutral wrong-answer advancement with a timed "
+        "black beat, "
         "two audible single-stream reward paths, four-way bubble selection, "
-        "species-matched SFX, serial mute path, all eight common/rare render "
+        "species-matched SFX, serial mute path, break-timer diagnostic path, "
+        "all eight common/rare render "
         "paths, palette "
         "restrictions, and unchanged rarity counters verified; "
-        "complete the manual disconnect, double-tap, display, touch, motion, "
-        "and listening checks."
+        "complete the manual disconnect, double-tap, display, ten-minute "
+        "trigger, lockout, standby aging, expiry, touch, motion, and listening "
+        "checks."
     )
 
 

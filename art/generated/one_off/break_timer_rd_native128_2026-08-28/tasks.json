@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tasks": {
+    "tideglass_stone": {
+      "task_id": "878bf6e5-51b0-432d-8aa3-b104b614d593"
+    },
+    "tideglass_shell": {
+      "task_id": "58783246-31be-4cac-bafc-9226bd75ee44"
+    },
+    "tideglass_current": {
+      "task_id": "edb4d62a-cd78-41d2-afef-8121f2f0c7c5"
+    }
+  }
+}

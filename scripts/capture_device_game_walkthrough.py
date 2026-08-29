@@ -25,15 +25,35 @@ def request_line(device: object, command: str, prefix: str,
             device.write((command + "\n").encode())
             device.flush()
             next_send = now + (resend_interval or timeout + 1.0)
-        pending.extend(device.read(1024))
-        while b"\n" in pending:
-            raw, _, pending = pending.partition(b"\n")
-            line = raw.rstrip(b"\r").decode("utf-8", "replace")
-            if line:
-                print(line, flush=True)
-            if line.startswith(prefix):
-                return line
+        pending.extend(device.read_until(b"\n"))
+        if b"\n" not in pending:
+            continue
+        line = bytes(pending).rstrip(b"\r\n").decode("utf-8", "replace")
+        pending.clear()
+        if line:
+            print(line, flush=True)
+        if line.startswith(prefix):
+            return line
     raise RuntimeError(f"No {prefix!r} response after {command!r}")
+
+
+def wait_line(device: object, prefix: str, timeout: float = 5.0) -> str:
+    """Wait for an unsolicited runtime transition without sending a command."""
+    deadline = time.monotonic() + timeout
+    pending = bytearray()
+    while time.monotonic() < deadline:
+        # read_until consumes exactly one serial record, leaving a following
+        # [round] line buffered for the next transition wait.
+        pending.extend(device.read_until(b"\n"))
+        if b"\n" not in pending:
+            continue
+        line = bytes(pending).rstrip(b"\r\n").decode("utf-8", "replace")
+        pending.clear()
+        if line:
+            print(line, flush=True)
+        if line.startswith(prefix):
+            return line
+    raise RuntimeError(f"No unsolicited {prefix!r} response")
 
 
 def parse_status(line: str) -> dict[str, str]:
@@ -88,7 +108,7 @@ def main() -> None:
             if preflight.get("standby") == "yes":
                 request_line(device, "WAKE", "[power] awake", 6.0)
             request_line(device, "GAME", "[preview] game resumed")
-            time.sleep(3.2)
+            time.sleep(3.6)
             request_line(device, "UNMUTE", "[mute] requested=")
             initial_status = parse_status(
                 request_line(device, "STATUS", "[status] ", 6.0, 1.0)
@@ -112,7 +132,24 @@ def main() -> None:
             event(device, "REPLAY", "[replay]")
             time.sleep(3.0)
             wrong_line = event(device, "WRONG", "[choice] wrong")
-            time.sleep(2.5)
+            wrong_sent_seconds = float(events[-1]["sent_seconds"])
+            wrong_black_line = wait_line(
+                device, "[transition] wrong black", 3.0
+            )
+            events.append({
+                "command": "WRONG_BLACK",
+                "sent_seconds": wrong_sent_seconds,
+                "ack_seconds": round(time.monotonic() - capture_zero, 6),
+                "acknowledgement": wrong_black_line,
+            })
+            next_round_line = wait_line(device, "[round] ", 3.0)
+            events.append({
+                "command": "WRONG_NEXT_ROUND",
+                "sent_seconds": wrong_sent_seconds,
+                "ack_seconds": round(time.monotonic() - capture_zero, 6),
+                "acknowledgement": next_round_line,
+            })
+            time.sleep(2.0)
             event(device, "REPLAY", "[replay]")
             time.sleep(3.0)
             correct_line = event(device, "ANIMATE", "[choice] correct")
@@ -134,6 +171,14 @@ def main() -> None:
                 raise RuntimeError("correct-choice log omitted reward identity")
             if not wrong_line.startswith("[choice] wrong"):
                 raise RuntimeError("wrong-choice path was not exercised")
+            previous_target = initial_status.get("target")
+            next_target = parse_status(
+                next_round_line.replace("[round] ", "[status] ", 1)
+            ).get("target")
+            if not next_target or next_target == previous_target:
+                raise RuntimeError(
+                    "wrong choice did not advance to a different target"
+                )
             final_required = {
                 "audio": "ready", "preview": "no", "standby": "no",
                 "mute": "off", "usb_data": "yes", "distinct": "yes",
@@ -169,9 +214,13 @@ def main() -> None:
         "transition_contract_ms": {
             "correct_pulse_end": 400,
             "water_rise_end": 640,
-            "full_water_end": 2560,
-            "water_recede_end": 2840,
-            "next_round": 2960,
+            "full_water_end": 2880,
+            "water_recede_end": 3160,
+            "next_round": 3280,
+        },
+        "wrong_transition_contract_ms": {
+            "feedback_end": 1100,
+            "black_beat_duration": 120,
         },
         "events": events,
     }

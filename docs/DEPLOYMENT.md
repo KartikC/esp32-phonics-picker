@@ -98,19 +98,22 @@ python3 scripts/verify_device.py --port /dev/cu.usbmodemXXXX
 ```
 
 A pass requires 8 MB PSRAM, ready audio, volume 90, a ready IMU, two distinct
-choices, no preview frame, an awake game, and a working CST820 interrupt gate.
-It proves audio wake/playback followed by the guarded idle power-down, plays
-two complete single-stream rewards, checks nonrepeating four-way bubble selection
-and the species-to-cue mapping, checks
-the reduced idle touch and awake PWR polling cadences, temporarily mutes audio,
-forces one timed common and one timed rare reward, then renders all eight
-species in both common and authored-rare modes without moving the rarity
-counters. It also checks the translucent-species palette restrictions and
-leaves the board unmuted with `audio_power=idle`. Complete every manual UI
-check listed in
-[AGENTS.md](../AGENTS.md); serial output cannot prove reward appearance,
-double-tap/disconnect behavior, visible pixels, touch alignment, motion
-direction, or audible quality.
+choices, no preview frame, an awake `playing` state with at least 60 seconds of
+allowance remaining, and a working CST820 interrupt gate. It proves audio
+wake/playback followed by the guarded idle power-down; exercises one real
+neutral wrong answer, its locked black beat, and a different next target; plays
+two complete single-stream rewards; checks nonrepeating four-way bubble
+selection and the species-to-cue mapping; checks the reduced idle touch and
+awake PWR polling cadences; temporarily mutes audio; and renders the production
+rest screen at `15:00` without aging the real timer. It then forces one timed
+common and one timed rare reward and renders all eight species in both common
+and authored-rare modes without moving the rarity counters. It also checks the
+translucent-species palette restrictions and leaves the board unmuted with
+`audio_power=idle`. Complete every manual UI check listed in
+[AGENTS.md](../AGENTS.md); the diagnostic rest preview does not prove the real
+ten-minute trigger, thirty-minute elapsed countdown, standby aging, or expiry,
+and serial output cannot prove reward appearance, double-tap/disconnect
+behavior, visible pixels, touch alignment, motion direction, or audible quality.
 
 For a camera or slow live-preview inspection, send `HOLD_REWARD` or
 `HOLD_RARE`; the device freezes the exact full-water runtime renderer until

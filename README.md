@@ -111,17 +111,29 @@ agents are in [AGENTS.md](AGENTS.md).
 
 1. The board speaks a prompt and one target phonics sound.
 2. The child taps one of the two lowercase letter cards.
-3. A wrong choice gets a calm spoken response and keeps the same round.
+3. A wrong choice gets a neutral "No, no." response, briefly freezes input,
+   shows a clean black beat, and moves to a fresh challenge without a retry.
 4. A correct choice confirms the card, raises a short animated water scene, and
    shows one large varied sea creature as the reward before the next round. A
    small centered name at the bottom identifies the creature during its
    appearance.
+5. After ten accumulated awake minutes, play pauses on a calm `30:00` rest
+   screen. Its on-brand shell-inlay tideglass is fixed-seed Retro Diffusion
+   pixel art; the live countdown and progress track are rendered by firmware.
+   Thirty elapsed minutes later, the board speaks a fresh challenge and begins
+   the next ten-minute play period.
+
+![Source-faithful 30-minute rest timer with the selected shell-inlay tideglass](docs/images/phonics-picker-rest-timer.png)
+
+*Source-faithful 368 x 448 render of the checked-in timer asset and production
+layout. It is not a photograph or physical-AMOLED verification.*
 
 ![A physical V2 board transitions from the current letter cards through a rising-water moon-jelly reward and back to a fresh two-card round](docs/images/phonics-picker-gameplay.gif)
 
-*Fresh, unmirrored camera capture of the checked-in build running on the
-physical V2 board. A correct choice raises the water, reveals the named reward,
-and returns to a new round in 2.96 seconds.*
+*Fresh, unmirrored camera capture of the same transition path on the physical
+V2 board before the current timing increase. The checked-in source now keeps
+the creature visible for 2.52 seconds and returns to a new round in 3.28
+seconds; that longer timing still needs a fresh physical capture.*
 
 The round never prints or otherwise reveals the answer. The fixed ocean-current
 **Deep loop** play button at the top repeats the exact current prompt. Gently
@@ -147,6 +159,18 @@ The tiny dots at the top are parent-facing battery status:
 A short press and release of **PWR** toggles quiet standby and resumes the same
 round. Hold PWR for about six seconds for the board's hardware power-off; click
 PWR once to start again. The **BOOT** button is not part of the game.
+Standby pauses the ten-minute play allowance. If the rest timer is already
+running, its deadline continues with the screen off and wake restores the
+correct remaining time. A hard-off or cold boot begins a new play allowance;
+this implementation does not persist the timer across loss of power. Standby's
+fail-safe audio shutdown cancels a cue already in flight while preserving its
+visual transition deadline; wake does not restart the partially heard cue.
+
+The timer source and renderer are host-tested in this checkout, but the
+accepted installed build in [CURRENT_RELEASE.md](CURRENT_RELEASE.md) and the
+hands-on evidence in [DEVICE_REPORT.md](DEVICE_REPORT.md) predate this feature.
+Treat the timer as physically unverified until the five-region flash, serial
+verifier, and manual timer gates in [AGENTS.md](AGENTS.md) are completed.
 
 During ordinary silent play, the codec, speaker amplifier, and I2S transmitter
 power down after a guarded 750 ms idle tail and wake before the next cue. Idle
@@ -181,18 +205,20 @@ following exact long-run shares:
 
 | Creature | Base tier | Weight | Long-run share | Authored rare treatment |
 |---|---:|---:|---:|---|
-| Moon jelly | Basic | 80 | 22.18% (`20720/93414`) | Celestial bell |
-| Reef shark | Rare | 13 | 4.54% (`4238/93414`) | Ancestral bands |
-| Giant octopus | Medium | 30 | 9.92% (`9270/93414`) | Mantle rings |
-| Seahorse | Basic | 80 | 22.18% (`20720/93414`) | Royal diamonds |
-| Glass squid | Basic | 80 | 22.18% (`20720/93414`) | Prismatic panes |
-| Anglerfish | Rare | 13 | 4.54% (`4238/93414`) | Abyssal constellation |
-| Sea angel | Medium | 30 | 9.92% (`9270/93414`) | Halo wings |
-| Deep-sea eel | Rare | 13 | 4.54% (`4238/93414`) | Ghost current |
+| Moon jelly | Basic | 80 | 21.58% (`21440/99336`) | Celestial bell |
+| Reef shark | Rare | 16 | 5.35% (`5312/99336`) | Ancestral bands |
+| Giant octopus | Medium | 30 | 9.60% (`9540/99336`) | Mantle rings |
+| Seahorse | Basic | 80 | 21.58% (`21440/99336`) | Royal diamonds |
+| Glass squid | Basic | 80 | 21.58% (`21440/99336`) | Prismatic panes |
+| Anglerfish | Rare | 16 | 5.35% (`5312/99336`) | Abyssal constellation |
+| Sea angel | Medium | 30 | 9.60% (`9540/99336`) | Halo wings |
+| Deep-sea eel | Rare | 16 | 5.35% (`5312/99336`) | Ghost current |
 
-Combined, the basic tier accounts for 66.54% of rewards, medium for 19.85%,
-and rare-frequency species for 13.61%. The first draw after startup uses the
-raw weights out of 339; later draws renormalize the remaining weights after the
+Combined, the basic tier accounts for 64.75% of rewards, medium for 19.21%,
+and rare-frequency species for 16.04%. That rare share is 17.87% higher than
+the prior 13.61% policy; weight 15 would have produced only a 12.08% effective
+increase after anti-repeat removal. The first draw after startup uses the raw
+weights out of 348; later draws renormalize the remaining weights after the
 previous species is excluded.
 
 ### Hidden rare visual treatments
@@ -201,17 +227,21 @@ Rare-treatment odds rise through an uninterrupted run of correct answers:
 
 | Correct answer in the clean run | Rare-treatment chance |
 |---|---:|
-| 1-4 | 1/50 (2.000%) each |
-| 5-8 | 1/25 (4.000%) each |
-| 9 | 1/13 (7.692%) |
-| 10 | Guaranteed if no earlier rare occurred |
+| 1-3 | 1/43 (2.326%) each |
+| 4-6 | 1/21 (4.762%) each |
+| 7 | 1/11 (9.091%) |
+| 8 | Guaranteed if no earlier rare occurred |
 
-A separate pity counter guarantees a rare treatment on the 14th correct answer
+A separate pity counter guarantees a rare treatment on the 12th correct answer
 since the previous rare, even when wrong answers repeatedly break the clean
 run. A wrong answer resets only clean-run progress; it neither advances nor
-resets the pity counter. Any rare treatment resets both counters, and restarting
-the board begins them again at zero. Neither progress nor rarity is shown to the
-child, and a rare treatment adds no score or gameplay advantage.
+resets the pity counter, and the game then moves to a fresh challenge. Any rare
+treatment resets both counters, and restarting the board begins them again at
+zero. The complete device-rounded policy raises effective treatment incidence
+from 11.284% to 14.021% in clean play (+24.26%) and from 8.118% to 9.453% when
+every correct answer is separated by a mistake (+16.45%). Neither progress nor
+rarity is shown to the child, and a rare treatment adds no score or gameplay
+advantage.
 
 Normal rewards choose solid, spots, stripes, or mottle at 25% each. Both normal
 and rare rewards choose from Tide slate, Kelp green, Coral rust, Sand gold, and
@@ -228,8 +258,7 @@ inspect every treatment without altering ordinary play progress.
 
 ## Reproducibility
 
-The repository pins and includes everything needed for the checked-in,
-physically installed result:
+The repository pins and includes everything needed for the checked-in build:
 
 - Arduino CLI 1.5.1, downloaded with an official SHA-256 check
 - Arduino-ESP32 core 3.3.11
@@ -239,6 +268,9 @@ physically installed result:
   tone-on-tone mineral-role policy
 - the selected untouched native 64x64 Retro Diffusion `82563` Deep loop replay
   button, its exact indexed runtime map, source hash, and generation provenance
+- the selected untouched native 128x128 Retro Diffusion `82802` Shell-inlay
+  tideglass, its exact indexed runtime map, source hash, and generation
+  provenance
 - a fixed build epoch taken from the hardware-verified firmware commit, so the
   application binary is byte-reproducible across clean builds
 - the slim display, touch, and IMU sources used by the build
@@ -255,8 +287,8 @@ The deployment build does not need ffmpeg, a model service, or any private
 source. Deliberate accepted-asset regeneration is a separate authoring path;
 the public-media workflow below uses ffmpeg but no model service or private
 source. `python3 scripts/verify_repo.py` validates the audio pack and offsets,
-build manifest, selected card/font/replay reports and hashes, and every required
-deployment input.
+build manifest, selected card/font/replay/tideglass reports and hashes, and
+every required deployment input.
 
 ## Development
 
@@ -273,14 +305,16 @@ verification path.
 That command runs the host game/geometry, creature-reward rarity, four-way
 bubble selection, USB mute gesture, and audio-idle policy tests; byte-checks
 all 32 single-stream reward masters; verifies the stone-card roles, Atkinson
-glyph source and fit, packed Deep loop asset, README-capture alignment, and
-complete audio pack; installs the pinned toolchain if needed; and compiles the
-production firmware. CI runs the same path from a fresh Ubuntu checkout. The
-most recent physical-board verification snapshot is in
-[DEVICE_REPORT.md](DEVICE_REPORT.md).
+glyph source and fit, packed Deep loop and tideglass assets, README-capture
+alignment, and complete audio pack; installs the pinned toolchain if needed;
+and compiles the production firmware. CI runs the same path from a fresh
+Ubuntu checkout. The most recent physical-board verification snapshot is in
+[DEVICE_REPORT.md](DEVICE_REPORT.md); it identifies the older installed binary
+and does not certify newer compiled-only source changes such as the rest timer.
 
 Production USB maintenance commands are `STATUS`, `REPLAY`, `MUTE`, `UNMUTE`,
-`REWARD`, `RARE`, `HOLD_CREATURE 0..7`, `HOLD_RARE_CREATURE 0..7`, `SLEEP`,
+`REWARD`, `RARE`, `HOLD_BREAK 1..1800`, `HOLD_CREATURE 0..7`,
+`HOLD_RARE_CREATURE 0..7`, `SLEEP`,
 `ANIMATE_CREATURE 0..7`, `ANIMATE_RARE_CREATURE 0..7`, `WAKE`, and `GAME`, each
 followed by a newline at 115200 baud. Creature indices are moon jelly `0`, reef
 shark `1`, giant octopus `2`, seahorse `3`, glass squid `4`, anglerfish `5`, sea
@@ -293,6 +327,16 @@ the exact production reward renderer for tethered camera inspection; send
 `REWARD`, and `RARE` do not advance the hidden rarity counters. Mute can be
 entered only with an attached USB data host and is also available by
 double-tapping the complete Deep loop replay target.
+
+`STATUS` reports `play_state`, `play_remaining_s`, and `break_remaining_s`.
+`HOLD_BREAK 900` displays the exact production rest renderer at `15:00` without
+aging or clearing the real play-limit state; `GAME` exits that USB-only preview,
+but cannot bypass an actual break.
+For an off-device visual check, the authoring-only command
+`python3 scripts/preview_break_timer.py --remaining-seconds 900` renders that
+same selected source, RGB565 palette, classic GFX countdown, and layout at
+368x448. It requires the pinned Pillow authoring dependency and is not physical
+AMOLED evidence.
 
 Exhaustive evidence capture uses the deterministic USB-only command
 `ANIMATE_VARIANT CREATURE PALETTE PATTERN RARE SEED`. Palette ordinals follow

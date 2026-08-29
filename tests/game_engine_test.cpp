@@ -59,10 +59,53 @@ int main() {
   const Round original = wrongGame.round();
   event = wrongGame.choose(!original.targetOnLeft, 600);
   assert(event.type == EventType::wrongChoice);
+  assert(event.variant == 0);
+  assert(wrongGame.wrongFeedback());
+  assert(wrongGame.transitioning());
+  assert(!wrongGame.acceptingInput());
   assert(wrongGame.round().target == original.target);
   assert(wrongGame.round().distractor == original.distractor);
-  assert(wrongGame.update(600 + kFirstNudgeDelayMs - 1).type == EventType::none);
-  assert(wrongGame.update(600 + kFirstNudgeDelayMs).type == EventType::nudge);
+  assert(wrongGame.choose(original.targetOnLeft, 700).type == EventType::none);
+  assert(!wrongGame.replay(700));
+  assert(wrongGame.update(600 + kWrongFeedbackDurationMs - 1).type ==
+         EventType::none);
+  event = wrongGame.update(600 + kWrongFeedbackDurationMs);
+  assert(event.type == EventType::wrongBlackBeat);
+  assert(wrongGame.wrongBlackBeat());
+  assert(wrongGame.round().target == original.target);
+  const uint32_t wrongBlackPresentedAt =
+      600 + kWrongFeedbackDurationMs + 1000;
+  assert(wrongGame.update(wrongBlackPresentedAt).type == EventType::none);
+  wrongGame.acknowledgeWrongBlackFrame(wrongBlackPresentedAt);
+  assert(wrongGame.update(wrongBlackPresentedAt +
+                          kWrongBlackBeatDurationMs - 1).type ==
+         EventType::none);
+  const uint32_t wrongRoundStartedAt =
+      wrongBlackPresentedAt + kWrongBlackBeatDurationMs;
+  event = wrongGame.update(wrongRoundStartedAt);
+  assert(event.type == EventType::roundStarted);
+  assert(!wrongGame.transitioning());
+  assert(wrongGame.acceptingInput());
+  assert(wrongGame.round().target != original.target);
+  assert(wrongGame.update(wrongRoundStartedAt + kFirstNudgeDelayMs - 1).type ==
+         EventType::none);
+  assert(wrongGame.update(wrongRoundStartedAt + kFirstNudgeDelayMs).type ==
+         EventType::nudge);
+
+  // A delayed loop may postpone the black frame, but it must still preserve a
+  // complete black beat instead of jumping directly to the fresh round.
+  GameEngine stalledWrongGame(78);
+  stalledWrongGame.begin(0);
+  assert(stalledWrongGame.choose(
+             !stalledWrongGame.round().targetOnLeft, 10).type ==
+         EventType::wrongChoice);
+  event = stalledWrongGame.update(5000);
+  assert(event.type == EventType::wrongBlackBeat);
+  stalledWrongGame.acknowledgeWrongBlackFrame(5000);
+  assert(stalledWrongGame.update(5000 + kWrongBlackBeatDurationMs - 1).type ==
+         EventType::none);
+  assert(stalledWrongGame.update(5000 + kWrongBlackBeatDurationMs).type ==
+         EventType::roundStarted);
 
   GameEngine replayGame(81);
   replayGame.begin(1000);
@@ -104,6 +147,31 @@ int main() {
   assert(pausedCelebrationGame.update(resumedCelebrationEnd).type ==
          EventType::roundStarted);
 
+  GameEngine pausedWrongGame(93);
+  pausedWrongGame.begin(100);
+  assert(pausedWrongGame.choose(
+             !pausedWrongGame.round().targetOnLeft, 200).type ==
+         EventType::wrongChoice);
+  pausedWrongGame.suspend(500);
+  assert(pausedWrongGame.suspended());
+  pausedWrongGame.resume(10500);
+  const uint32_t resumedWrongFeedbackEnd =
+      10500 + (kWrongFeedbackDurationMs - 300);
+  assert(pausedWrongGame.update(resumedWrongFeedbackEnd - 1).type ==
+         EventType::none);
+  assert(pausedWrongGame.update(resumedWrongFeedbackEnd).type ==
+         EventType::wrongBlackBeat);
+  pausedWrongGame.acknowledgeWrongBlackFrame(resumedWrongFeedbackEnd);
+  pausedWrongGame.suspend(resumedWrongFeedbackEnd + 40);
+  pausedWrongGame.resume(resumedWrongFeedbackEnd + 5040);
+  const uint32_t resumedWrongBlackEnd =
+      resumedWrongFeedbackEnd + 5040 +
+      (kWrongBlackBeatDurationMs - 40);
+  assert(pausedWrongGame.update(resumedWrongBlackEnd - 1).type ==
+         EventType::none);
+  assert(pausedWrongGame.update(resumedWrongBlackEnd).type ==
+         EventType::roundStarted);
+
   static_assert(kCorrectPulseEndMs < kWaterRiseEndMs,
                 "the water transition must follow card confirmation");
   static_assert(kWaterRiseEndMs < kCreatureRewardEndMs,
@@ -122,16 +190,18 @@ int main() {
                 "the established water-recede pacing must stay unchanged");
   static_assert(kCelebrationDurationMs - kWaterRecedeEndMs == 120,
                 "the terminal black beat must remain 120 ms");
-  constexpr uint32_t kPreviousCreatureOnScreenMs = 1840;
+  static_assert(kWrongBlackBeatDurationMs == 120,
+                "wrong advancement uses the same proven black beat");
+  constexpr uint32_t kPreviousCreatureOnScreenMs = 2200;
   constexpr uint32_t kCreatureOnScreenMs =
       kWaterRecedeEndMs - kWaterRiseEndMs;
-  static_assert(kCreatureOnScreenMs == 2200,
-                "the creature should now remain on screen for 2200 ms");
+  static_assert(kCreatureOnScreenMs == 2520,
+                "the creature should now remain on screen for 2520 ms");
   static_assert(kCreatureOnScreenMs * 100 >=
-                    kPreviousCreatureOnScreenMs * 118 &&
+                    kPreviousCreatureOnScreenMs * 114 &&
                 kCreatureOnScreenMs * 100 <=
-                    kPreviousCreatureOnScreenMs * 122,
-                "the creature window should grow by approximately 20 percent");
+                    kPreviousCreatureOnScreenMs * 116,
+                "the creature window should grow by approximately 15 percent");
 
   constexpr uint16_t kTestDisplayHeight = 450;
   assert(!rewardCreatureVisible(kWaterRiseEndMs - 1));

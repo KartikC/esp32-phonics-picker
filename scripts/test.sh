@@ -20,6 +20,7 @@ fi
 
 "$python_bin" scripts/verify_repo.py
 "$python_bin" tests/verify_device_status_test.py
+"$python_bin" tests/break_timer_preview_test.py
 "$python_bin" tests/readme_media_tools_test.py
 "$python_bin" tests/public_repository_context_test.py
 
@@ -32,6 +33,9 @@ test_dir=$(mktemp -d "${TMPDIR:-/tmp}/phonics-tests.XXXXXX")
 trap 'rm -rf "$test_dir"' EXIT
 for test_source in \
   tests/game_engine_test.cpp \
+  tests/play_break_timer_test.cpp \
+  tests/break_timer_rendering_test.cpp \
+  tests/break_timer_asset_test.cpp \
   tests/card_stone_asset_test.cpp \
   tests/replay_button_asset_test.cpp \
   tests/creature_reward_selector_test.cpp \

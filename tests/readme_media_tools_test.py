@@ -87,13 +87,13 @@ assert recorder.signals == []
 session = {"camera_started_at_utc": "2026-08-25T12:00:00+00:00"}
 timeline = {
     "started_at_utc": "2026-08-25T12:00:02.125000+00:00",
-    "transition_contract_ms": {"next_round": 2960},
+    "transition_contract_ms": {"next_round": 3280},
     "events": [{"command": "ANIMATE", "sent_seconds": 10.25}],
 }
 assert BUILD.animate_video_seconds(session, timeline) == 12.375
 start, end, animate = BUILD.gif_window(session, timeline)
 assert abs(start - 11.825) < 1e-9
-assert abs(end - 16.185) < 1e-9
+assert abs(end - 16.505) < 1e-9
 assert animate == 12.375
 session_with_stop = {
     "camera_started_at_utc": "2026-08-25T12:00:00+00:00",
@@ -104,7 +104,7 @@ start, end, animate = BUILD.gif_window(
     session_with_stop, timeline, source_duration=18.0
 )
 assert abs(start - 9.825) < 1e-9
-assert abs(end - 14.185) < 1e-9
+assert abs(end - 14.505) < 1e-9
 assert animate == 10.375
 assert BUILD.parse_crop("280:340:480:190") == (280, 340, 480, 190)
 

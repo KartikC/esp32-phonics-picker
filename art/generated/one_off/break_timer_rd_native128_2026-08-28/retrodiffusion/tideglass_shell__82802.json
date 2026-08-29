@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "tideglass_shell",
+  "label": "2 - Shell-inlay glass",
+  "seed": 82802,
+  "task_id": "58783246-31be-4cac-bafc-9226bd75ee44",
+  "prompt": "A single complete 128 by 128 low-resolution pixel-art ocean tideglass icon for the rest screen of a toddler phonics toy. One large unmistakable hourglass centered on a genuinely transparent canvas, filling most of the canvas while keeping every outline pixel visible. Flat front view, child-readable silhouette, broad clean pixel clusters, dark navy contour, deep teal glass, moon-pale highlights, and restrained warm sand. Original game UI design matching a calm deep-sea stone-and-current visual family. Strictly one connected object. No text, letters, numbers, colon, clock face, animal, face, scenery, seabed, plants, loose bubbles, cast shadow, detached pixels, checkerboard, colored square, glow, multiple objects, crop, clipping, antialiasing, or one-pixel noise. A rounded dark-slate hourglass frame with two subtle shell-ridge inlays contained inside its broad top and base. Deep teal glass, one narrow sand stream, and a large warm sand mound. Soft, sturdy proportions with no ornate curls, pearls, or decorative objects.",
+  "prompt_style": "rd_pro__simple",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "source_mode": "RGBA",
+  "alpha_bbox": [
+    23,
+    1,
+    105,
+    128
+  ],
+  "alpha_values": [
+    0,
+    255
+  ],
+  "corner_transparency_gate_passed": true,
+  "postprocess": "none; PNG bytes are the untouched Retro Diffusion task result",
+  "png_sha256": "a47483a3503dc8615ae95a0797677ac0a14cd2fcf938a2f19fdfa181632d0b83",
+  "generated_at": "2026-08-28T21:23:48Z",
+  "png": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_shell__82802.png"
+}

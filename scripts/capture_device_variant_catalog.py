@@ -128,8 +128,8 @@ def main() -> None:
                 request_line(device, "WAKE", "[power] awake", 6.0)
             request_line(device, "GAME", "[preview] game resumed")
             # GAME intentionally preserves a real celebration. Waiting longer
-            # than its 2.96 s maximum guarantees a settled choice round.
-            time.sleep(3.2)
+            # than its 3.28 s maximum guarantees a settled choice round.
+            time.sleep(3.6)
             request_line(device, "UNMUTE", "[mute] requested=")
             initial_status = parse_status(
                 request_line(device, "STATUS", "[status] ", 6.0, 1.0)

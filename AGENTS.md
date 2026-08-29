@@ -68,6 +68,9 @@ preflight checks and uses the offsets above.
 - selected replay control: `firmware/PhonicsGame/ReplayButtonAsset.h` generated
   from the audited source recorded in
   `art/replay_button/generated/deep_loop_report.json`
+- selected rest timer: `firmware/PhonicsGame/BreakTimerAsset.h` and
+  `firmware/PhonicsGame/BreakTimerRendering.h`, generated from the audited
+  source recorded in `art/break_timer/generated/tideglass_report.json`
 - reviewed creature runtime assets: `firmware/CreatureAssets/` generated from
   `creatures/variation/variation_manifest.json`
 - accepted audio: `audio/generated/device-pcm/`
@@ -79,9 +82,10 @@ preflight checks and uses the offsets above.
 - exact output hashes and flash offsets: `firmware/BUILD_MANIFEST.json`
 - physical validation evidence: `DEVICE_REPORT.md`
 - source-faithful public still renderer: `scripts/preview_on_device.py`
+- source-faithful rest-timer renderer: `scripts/preview_break_timer.py`
 
-Checked-in generated audio, the pack, card/replay data, and font headers are
-authoritative for a normal build. Do not regenerate them merely to deploy.
+Checked-in generated audio, the pack, card/replay/timer data, and font headers
+are authoritative for a normal build. Do not regenerate them merely to deploy.
 Regeneration depends on external authoring sources and can change the accepted
 experience.
 
@@ -98,8 +102,13 @@ also run `scripts/verify_device.py` and manually confirm:
 - a correct reward audibly plays praise, then bubbles, then the matching
   creature gesture; the creature is slightly louder than the bubble bed;
 - both cards respond to tilt;
-- a wrong tap retains the round and a correct tap shows one large water-creature
-  reward before advancing;
+- a wrong tap plays only the neutral response, locks input on the answered
+  round, shows a complete black beat, and advances smoothly to a different
+  target; a correct tap shows one large water-creature reward before advancing;
+- after ten accumulated awake minutes, the selected Shell-inlay tideglass and
+  `30:00` rest timer replace gameplay; touches, tilt, replay, and audio stay
+  blocked, a mid-countdown second is accurate after standby/wake, and expiry
+  starts a fresh spoken challenge with a reset ten-minute allowance;
 - with USB data attached, a double tap anywhere in the complete Deep loop
   replay target mutes with a warm-red slash across the control, a second double
   tap unmutes, and disconnect clears mute;
@@ -109,15 +118,18 @@ Never report a hardware deployment as verified from compilation alone.
 
 ## Public media
 
-Regenerate the README stills whenever the accepted card, letter-font, or replay
-asset changes. `scripts/preview_on_device.py` is an exact source-faithful
-renderer, not physical framebuffer evidence. For a physical README GIF, use a
-fresh `scripts/capture_readme_walkthrough.py` session from the currently
-installed application, then `scripts/build_readme_media.py`; inspect its first,
-reward, and final frames before publication. Keep raw camera masters and serial
-timelines under ignored `build/`, and commit only reviewed derivatives under
-`docs/images/`. This media-authoring path requires `ffmpeg` and `ffprobe` on
-`PATH` plus `python3 -m pip install -r requirements-authoring.txt`.
+Regenerate the corresponding README still whenever the accepted card,
+letter-font, replay, or rest-timer asset changes. Use
+`scripts/preview_on_device.py` for the game and mute states and
+`scripts/preview_break_timer.py` for the rest screen; both are exact
+source-faithful renderers, not physical framebuffer evidence. For a physical
+README GIF, use a fresh `scripts/capture_readme_walkthrough.py` session from the
+currently installed application, then `scripts/build_readme_media.py`; inspect
+its first, reward, and final frames before publication. Keep raw camera masters
+and serial timelines under ignored `build/`, and commit only reviewed
+derivatives under `docs/images/`. This media-authoring path requires `ffmpeg`
+and `ffprobe` on `PATH` plus
+`python3 -m pip install -r requirements-authoring.txt`.
 
 ## Separate ocean-creature prototype
 

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "vendor": "retrodiffusion",
+  "asset_id": "tideglass_stone",
+  "label": "1 - Tide-stone glass",
+  "seed": 82801,
+  "task_id": "878bf6e5-51b0-432d-8aa3-b104b614d593",
+  "prompt": "A single complete 128 by 128 low-resolution pixel-art ocean tideglass icon for the rest screen of a toddler phonics toy. One large unmistakable hourglass centered on a genuinely transparent canvas, filling most of the canvas while keeping every outline pixel visible. Flat front view, child-readable silhouette, broad clean pixel clusters, dark navy contour, deep teal glass, moon-pale highlights, and restrained warm sand. Original game UI design matching a calm deep-sea stone-and-current visual family. Strictly one connected object. No text, letters, numbers, colon, clock face, animal, face, scenery, seabed, plants, loose bubbles, cast shadow, detached pixels, checkerboard, colored square, glow, multiple objects, crop, clipping, antialiasing, or one-pixel noise. A chunky carved tide-stone top and base joined by two gently curved side pillars. A broad transparent teal glass chamber holds one clear mound of pale golden sand below and a smaller amount above. Quiet asymmetrical chips echo the accepted stone letter cards without making the silhouette busy.",
+  "prompt_style": "rd_pro__simple",
+  "response": {
+    "balance_cost": 0.18,
+    "model": "rd_pro"
+  },
+  "source_size": [
+    128,
+    128
+  ],
+  "source_mode": "RGBA",
+  "alpha_bbox": [
+    6,
+    0,
+    122,
+    128
+  ],
+  "alpha_values": [
+    0,
+    255
+  ],
+  "corner_transparency_gate_passed": true,
+  "postprocess": "none; PNG bytes are the untouched Retro Diffusion task result",
+  "png_sha256": "7fa3f27def4571eb173b132c93b500fe89280aa476a3ab03bddf8139578b3d63",
+  "generated_at": "2026-08-28T21:23:47Z",
+  "png": "art/generated/one_off/break_timer_rd_native128_2026-08-28/retrodiffusion/tideglass_stone__82801.png"
+}

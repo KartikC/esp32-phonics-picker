@@ -26,6 +26,10 @@ EXPECTED_REPLAY_SOURCE_SHA256 = "33badbf1df0a9035a86e611eca44715dafbe1bf5c4b5390
 EXPECTED_REPLAY_METADATA_SHA256 = "98cdbddb1fb07d9abc9588888cfee6cd9a8436c9ce7ab22f0f8aaf290a6d2833"
 EXPECTED_REPLAY_PACKED_SHA256 = "580ea7cf5f1a563093ba1b8900754bee75372d800e3ec6399baca52d5c9e2569"
 EXPECTED_REPLAY_HEADER_SHA256 = "dae8475ec4bcf33bf35be5df1da838d8ca09833a1d3afbbccc4967dc28684509"
+EXPECTED_BREAK_TIMER_SOURCE_SHA256 = "a47483a3503dc8615ae95a0797677ac0a14cd2fcf938a2f19fdfa181632d0b83"
+EXPECTED_BREAK_TIMER_METADATA_SHA256 = "18c75543bf65415507781a88a9502168350fa00bb2f20c4e5d82134120d4373b"
+EXPECTED_BREAK_TIMER_PACKED_SHA256 = "844f5b4ed579267908656aa2ae817025307befd341f48216c03b1198f01b3dd7"
+EXPECTED_BREAK_TIMER_HEADER_SHA256 = "0c6a6ece42d6d26461ee0df7f6572ba0d9b83331ff790e87eef4517e0ea0e66a"
 EXPECTED_ATKINSON_SOURCE_SHA256 = "5a455d1cfa099b601ab70751bb9673e8fe1854dc4500c80e1a220d0d75e31745"
 EXPECTED_ATKINSON_CONTACT_SHA256 = "f7581b20245bc02a4b27528c525dcdfee38697adee9fdff41d852b1e727ef795"
 EXPECTED_AUDIO_COUNTS = {
@@ -443,6 +447,65 @@ def verify_replay_button_asset() -> None:
         fail("selected Deep loop replay-button packing contract changed")
 
 
+def verify_break_timer_asset() -> None:
+    report_path = ROOT / "art/break_timer/generated/tideglass_report.json"
+    require(report_path)
+    report = json.loads(report_path.read_text())
+    if (report.get("status") != "passed" or
+            report.get("selected_direction") != "2 - Shell-inlay glass" or
+            report.get("production_asset") is not True or
+            report.get("vendor") != "retrodiffusion" or
+            report.get("provider_model") != "rd_pro" or
+            report.get("prompt_style") != "rd_pro__simple" or
+            report.get("seed") != 82802 or
+            report.get("task_id") !=
+            "58783246-31be-4cac-bafc-9226bd75ee44" or
+            report.get("openai_image_generation_used") is not False or
+            report.get("provider_reported_balance_cost") != 0.18 or
+            report.get("candidate_generation_calls") != 3 or
+            report.get("candidate_generation_balance_cost_total") != 0.54):
+        fail("selected break-timer report is invalid")
+    if (report.get("source_sha256") != EXPECTED_BREAK_TIMER_SOURCE_SHA256 or
+            report.get("source_metadata_sha256") !=
+            EXPECTED_BREAK_TIMER_METADATA_SHA256 or
+            report.get("header_sha256") != EXPECTED_BREAK_TIMER_HEADER_SHA256):
+        fail("selected break-timer identity changed")
+    for path_key, hash_key in (
+        ("builder", "builder_sha256"),
+        ("source", "source_sha256"),
+        ("source_metadata", "source_metadata_sha256"),
+        ("header", "header_sha256"),
+        ("preview_renderer", "preview_renderer_sha256"),
+    ):
+        path = ROOT / report[path_key]
+        require(path)
+        if sha256_file(path) != report[hash_key]:
+            fail(f"break-timer {path_key} differs from its audited report")
+    evidence = report.get("selection_evidence", [])
+    if (len(evidence) != 10 or
+            len({item.get("path") for item in evidence}) != 10):
+        fail("break-timer selection evidence roster is invalid")
+    for item in evidence:
+        path = ROOT / item["path"]
+        require(path)
+        if sha256_file(path) != item.get("sha256"):
+            fail(f"break-timer selection evidence changed: {item['path']}")
+    if (report.get("source_size") != [128, 128] or
+            report.get("alpha_bbox") != [23, 1, 105, 128] or
+            report.get("opaque_pixels") != 8078 or
+            report.get("transparent_pixels") != 8306 or
+            report.get("connected_opaque_components") != 1 or
+            report.get("packed_bytes") != 8192 or
+            report.get("packed_sha256") != EXPECTED_BREAK_TIMER_PACKED_SHA256 or
+            report.get("palette_rgb565") != [
+                "0x0000", "0x00A4", "0x0947", "0x124C", "0x332F",
+                "0x5C74", "0x95B7", "0xDF7E", "0xF5AD", "0xF713",
+            ] or
+            report.get("role_pixel_counts") !=
+            [8306, 1885, 283, 1338, 2280, 506, 152, 316, 1313, 5]):
+        fail("selected break-timer packing contract changed")
+
+
 def verify_build(build_dir: Path) -> None:
     required = [
         "PhonicsGame.ino.bin",
@@ -505,6 +568,8 @@ def main() -> None:
         "firmware/PhonicsGame/PhonicsGame.ino",
         "firmware/PhonicsGame/CardStoneRendering.h",
         "firmware/PhonicsGame/ReplayButtonAsset.h",
+        "firmware/PhonicsGame/BreakTimerAsset.h",
+        "scripts/preview_break_timer.py",
         "firmware/PhonicsGame/fonts/AtkinsonHyperlegibleNextExtraBold112.h",
         "firmware/PhonicsGame/fonts/NunitoBold28.h",
         "config/toolchain.env",
@@ -520,6 +585,7 @@ def main() -> None:
     verify_letter_card_asset()
     verify_selected_letter_font()
     verify_replay_button_asset()
+    verify_break_timer_asset()
     if args.build_dir:
         verify_build(args.build_dir.resolve())
     print("Repository payload verified")

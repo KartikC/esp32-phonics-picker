@@ -76,6 +76,9 @@ def main() -> None:
     transitions = timeline["transition_contract_ms"]
     replay_events = [event for event in timeline["events"] if event["command"] == "REPLAY"]
     wrong = events["WRONG"]
+    wrong_black = events.get("WRONG_BLACK")
+    wrong_next = events.get("WRONG_NEXT_ROUND")
+    wrong_transition = timeline.get("wrong_transition_contract_ms", {})
     status = events["STATUS"]
     target = str(timeline.get("initial_status", {}).get("target", "?")).upper()
     reward_match = re.search(r"reward=([^ ]+).*palette=([^ ]+(?: [^ ]+)?) pattern=([0-3])",
@@ -103,28 +106,53 @@ def main() -> None:
         ),
     ]
 
+    wrong_black_start = (
+        float(wrong_black["ack_seconds"])
+        if wrong_black is not None
+        else float(wrong["sent_seconds"]) +
+        float(wrong_transition.get("feedback_end", 1100)) / 1000.0
+    )
+    wrong_next_round = (
+        float(wrong_next["ack_seconds"])
+        if wrong_next is not None
+        else wrong_black_start +
+        float(wrong_transition.get("black_beat_duration", 120)) / 1000.0
+    )
+    correct_pulse_end = float(transitions["correct_pulse_end"]) / 1000.0
+    water_rise_end = float(transitions["water_rise_end"]) / 1000.0
+    full_water_end = float(transitions["full_water_end"]) / 1000.0
+    water_recede_end = float(transitions["water_recede_end"]) / 1000.0
+    next_round = float(transitions["next_round"]) / 1000.0
     phases = [
         (float(replay_events[0]["sent_seconds"]), float(wrong["sent_seconds"]),
          f"Replay prompt — target {target}"),
-        (float(wrong["sent_seconds"]), float(replay_events[1]["sent_seconds"]),
-         "Wrong choice — same round retained"),
+        (float(wrong["sent_seconds"]), wrong_black_start,
+         "Neutral wrong feedback — input locked"),
+        (wrong_black_start, wrong_next_round,
+         "Black beat — new challenge prepared"),
+        (wrong_next_round, float(replay_events[1]["sent_seconds"]),
+         "Fresh challenge after wrong choice"),
         (float(replay_events[1]["sent_seconds"]), float(correct["sent_seconds"]),
-         "Replay confirms unchanged round"),
-        (float(correct["sent_seconds"]), float(correct["sent_seconds"]) + 0.400,
-         "Correct card pulse | 0–400 ms"),
-        (float(correct["sent_seconds"]) + 0.400,
-         float(correct["sent_seconds"]) + 0.640,
-         "Water rise | 400–640 ms"),
-        (float(correct["sent_seconds"]) + 0.640,
-         float(correct["sent_seconds"]) + 2.560,
+         "Replay confirms fresh challenge"),
+        (float(correct["sent_seconds"]),
+         float(correct["sent_seconds"]) + correct_pulse_end,
+         f"Correct card pulse | 0–{transitions['correct_pulse_end']} ms"),
+        (float(correct["sent_seconds"]) + correct_pulse_end,
+         float(correct["sent_seconds"]) + water_rise_end,
+         f"Water rise | {transitions['correct_pulse_end']}–"
+         f"{transitions['water_rise_end']} ms"),
+        (float(correct["sent_seconds"]) + water_rise_end,
+         float(correct["sent_seconds"]) + full_water_end,
          f"{reward_label} + name | full water"),
-        (float(correct["sent_seconds"]) + 2.560,
-         float(correct["sent_seconds"]) + 2.840,
-         "Creature and name recede | 2560–2840 ms"),
-        (float(correct["sent_seconds"]) + 2.840,
-         float(correct["sent_seconds"]) + 2.960,
-         "Fully black beat | 120 ms"),
-        (float(correct["sent_seconds"]) + 2.960,
+        (float(correct["sent_seconds"]) + full_water_end,
+         float(correct["sent_seconds"]) + water_recede_end,
+         f"Creature and name recede | {transitions['full_water_end']}–"
+         f"{transitions['water_recede_end']} ms"),
+        (float(correct["sent_seconds"]) + water_recede_end,
+         float(correct["sent_seconds"]) + next_round,
+         f"Fully black beat | "
+         f"{transitions['next_round'] - transitions['water_recede_end']} ms"),
+        (float(correct["sent_seconds"]) + next_round,
          float(status["ack_seconds"]) + 2.0,
          "Fresh next round"),
     ]
@@ -149,15 +177,21 @@ def main() -> None:
         "-movflags", "+faststart", str(review),
     ])
 
+    recede_sample = full_water_end + (water_recede_end - full_water_end) / 2.0
+    black_sample = water_recede_end + (next_round - water_recede_end) / 2.0
+    next_round_sample = next_round + 0.14
     timing_samples = [
         (correct_video - 0.35, "Choice round"),
         (correct_video + 0.20, "Correct pulse\n+200 ms"),
         (correct_video + 0.52, "Water rising\n+520 ms"),
         (correct_video + 0.85, "Creature + name\n+850 ms"),
         (correct_video + 1.60, "Full-water hold\n+1600 ms"),
-        (correct_video + 2.68, "Recede\n+2680 ms"),
-        (correct_video + 2.90, "Black beat\n+2900 ms"),
-        (correct_video + 3.10, "Next round\n+3100 ms"),
+        (correct_video + recede_sample,
+         f"Recede\n+{round(recede_sample * 1000)} ms"),
+        (correct_video + black_sample,
+         f"Black beat\n+{round(black_sample * 1000)} ms"),
+        (correct_video + next_round_sample,
+         f"Next round\n+{round(next_round_sample * 1000)} ms"),
     ]
     with tempfile.TemporaryDirectory(prefix="walkthrough-evidence-", dir=output) as temp:
         temp_path = Path(temp)

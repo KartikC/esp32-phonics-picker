@@ -1,7 +1,10 @@
 # DEEP SEA PHONICS TOY V2
 
-This contract describes the accepted **DEEP SEA PHONICS TOY V2** product release.
-That release name is distinct from the Waveshare board's V2 hardware revision.
+This contract describes the checked-in **DEEP SEA PHONICS TOY V2**
+implementation. [CURRENT_RELEASE.md](CURRENT_RELEASE.md) separately identifies
+the accepted, physically installed release; newer compiled-only behavior in
+this contract still requires the physical gates recorded in [AGENTS.md](AGENTS.md).
+The product name is distinct from the Waveshare board's V2 hardware revision.
 
 ## Product contract
 
@@ -34,30 +37,62 @@ listing that described the original SH8601 + FT3168 revision.
   phonics clip; the printed screen never reveals the target sound.
 - With no input, give one calm nudge at 8 seconds and a second after another 10
   seconds, then remain quiet indefinitely. A tap resets the current deadline.
-- A wrong choice keeps the round in place, has no rewarding animation, and uses
-  one of three calm low-energy responses.
-- A correct choice gets one of four brief praise lines and a 2.96-second reward
+- One awake play period lasts exactly ten accumulated minutes (`600000 ms`).
+  Ordinary rounds, idle time, wrong-answer feedback, and correct-answer rewards
+  all count. Physical standby and USB diagnostic previews pause the allowance.
+  If the limit lands during an unanswered round, input locks immediately. If an
+  answer transition is already underway and the board remains awake, its
+  complete neutral or reward sequence and black beat finish first, but its next
+  spoken round is held until after the break. PWR standby retains the visual
+  transition deadline but intentionally cancels in-flight PCM as part of the
+  fail-safe audio power-down; wake does not replay a partially heard cue.
+- The play limit replaces the choice UI with a full-screen rest timer beginning
+  at `30:00`. It uses the untouched native 128x128 Retro Diffusion `rd_pro`
+  Shell-inlay tideglass from seed `82802`, centered at x=184 with its top at
+  y=54, plus one deterministic firmware-rendered `MM:SS` countdown, an elapsed
+  progress track, the small word `rest`, and the normal tiny battery dots on a
+  physically black AMOLED background. No generated text is baked into the
+  artwork. Remaining time is derived from elapsed milliseconds and rounded up
+  to the displayed second; a changed second or battery-state refresh redraws
+  the complete framebuffer.
+- A rest lasts thirty elapsed minutes (`1800000 ms`). During it, touch, tilt,
+  replay, nudges, phonics prompts, rewards, and gameplay diagnostics cannot
+  resume or cover the mandatory timer. Short-PWR standby turns the panel off
+  but the rest deadline continues. Wake shows the correct remaining time, or
+  speaks the already-selected unseen challenge (otherwise a newly selected
+  challenge) if rest completed while asleep. The next ten-minute allowance
+  begins only after that fresh challenge is installed. A PMIC hard-off, reset,
+  or cold boot starts a fresh play allowance; this implementation does not
+  claim a power-loss-resistant parental lockout.
+- A wrong choice freezes the answered round for at least 1100 ms while the
+  neutral 830 ms "No, no." cue plays. Card, replay, motion, and diagnostic
+  input stay locked. The compositor then shows one complete 120 ms black beat
+  before atomically drawing and speaking a new challenge; a busy loop may
+  delay that beat but can never skip it. There is no rewarding animation and
+  no second try on the answered challenge.
+- A correct choice gets one of four brief praise lines and a 3.28-second reward
   transition: the correct card confirms for 400 ms, water rises from 400-640
-  ms, and one large animated creature is visible from 640-2840 ms. The
-  full-water hold lasts through 2560 ms, water recedes from 2560-2840 ms, and a
-  fully black 120 ms beat precedes the next round at 2960 ms. The 2200 ms
-  creature window is 19.6% longer than the previous 1840 ms window. Choice and
-  replay input stay locked for that complete transition.
+  ms, and one large animated creature is visible from 640-3160 ms. The
+  full-water hold lasts through 2880 ms, water recedes from 2880-3160 ms, and a
+  fully black 120 ms beat precedes the next round at 3280 ms. The device-
+  rounded 2520 ms creature window is 14.5% longer than the previous 2200 ms
+  window: the exact 15% target is 2530 ms and the renderer advances on a 40 ms
+  transition cadence. Choice and replay input stay locked throughout.
 - Correct-answer audio follows those same visual boundaries. Praise begins at
   0 ms, one of four independently randomized bubble beds begins at 400 ms,
   and the selected species' cue begins at 640 ms. The bubble therefore leads
   the creature by 240 ms and the two effects overlap through the middle of the
-  reward. The shark uses the reviewed rounded pressure pulse and disturbed
+  reward. Audio ends by 2680 ms, preserving a quiet 600 ms tail before the
+  next round. The shark uses the reviewed rounded pressure pulse and disturbed
   bubbles that follows its chomp; the other seven cues remain species-specific.
-  Immediate bubble repeats are excluded. Audio ends by 2680 ms, preserving a
-  quiet 280 ms tail before the next round.
-- While the creature is visible from 640-2840 ms, its animal name is shown on
+  Immediate bubble repeats are excluded.
+- While the creature is visible from 640-3160 ms, its animal name is shown on
   one tiny, centered line at the bottom. It remains adult-legible and
   unobtrusive, is not a score or rarity label, and is absent during the water
   rise, terminal black beat, and choice round.
 - Every correct answer earns one of exactly eight creatures: moon jelly, reef
   shark, giant octopus, seahorse, glass squid, anglerfish, sea angel, or gulper
-  eel (displayed as "Deep-sea eel"). Base species selection uses 80:30:13 weights
+  eel (displayed as "Deep-sea eel"). Base species selection uses 80:30:16 weights
   for three tiers: basic contains moon jelly, seahorse, and glass squid; medium
   contains giant octopus and sea angel; rare contains reef shark, anglerfish,
   and gulper eel. The reward selector owns a separate random stream, never
@@ -79,12 +114,15 @@ listing that described the original SH8601 + FT3168 revision.
 - Authored rare-treatment rewards use the selected creature's species-specific
   treatment and, where that species permits it, restrained sparkles. Sea angel
   explicitly keeps its clean translucent silhouette with no generic sparkles.
-  Rare treatments do not add a score or gameplay advantage. In a clean run, correct
-  answers 1-4 have 1/50 hidden
-  odds, answers 5-8 have 1/25 odds, answer 9 has 1/13 odds, and answer 10 is
-  guaranteed rare. A separate 14-correct pity counter survives mistakes, so errors cannot make a
-  rare unreachable. A wrong answer resets only clean progress. Neither counter
-  nor rarity is printed on the child-facing screen.
+  Rare treatments do not add a score or gameplay advantage. In a clean run,
+  correct answers 1-3 have 1/43 hidden odds, answers 4-6 have 1/21 odds,
+  answer 7 has 1/11 odds, and answer 8 is guaranteed rare. A separate
+  12-correct pity counter survives mistakes, so errors cannot make a rare
+  unreachable. Together, the rounded hazards and guarantees raise effective
+  rare-treatment incidence by 24.26% in a clean run and 16.45% when every
+  correct answer is separated by a mistake. A wrong answer resets only clean
+  progress and then advances to a new challenge. Neither counter nor rarity is
+  printed on the child-facing screen.
 - There are no visible scores, stars, streak counters, applause, badges,
   failure screens, or ads.
 - Every visible frame is composed off-screen and transferred only when complete.
@@ -144,7 +182,9 @@ listing that described the original SH8601 + FT3168 revision.
   nudge deadline, and celebration deadline.
 - Wake restores the retained complete frame before brightness, quietly primes
   the audio path, resumes the same round and remaining deadlines, and requires
-  a zero-finger touch sample before accepting another choice.
+  a zero-finger touch sample before accepting another choice. Audio interrupted
+  by standby is not resumed mid-asset or replayed; the next newly scheduled cue
+  uses the normally restored path.
 - The software ignores a held PWR release at 1.5 seconds or longer and leaves
   the board's factory PMIC long-hold hard-off/cold-start behavior in control.
   Hold PWR for 6 seconds to hard-off; from hard-off, click PWR once to start.
@@ -189,11 +229,12 @@ listing that described the original SH8601 + FT3168 revision.
   silence plus a 750 ms idle guard, firmware mutes and powers down the codec,
   gates the speaker amplifier, and disables I2S transmit. A later cue restores
   the path while muted, preloads silence, enables the amplifier, waits 10 ms,
-  and unmutes before queuing its first PCM frame. This power transition is
-  transparent to replay, wrong-answer, praise, next-round, standby, and
-  maintenance-mute behavior. After unmuting, every cold wake feeds 120 ms of
-  digital silence through I2S before the first authored PCM frame so the ES8311
-  and speaker amplifier cannot swallow an opening consonant.
+  and unmutes before queuing its first PCM frame. This idle power transition is
+  transparent to later replay, wrong-answer, praise, next-round, and
+  maintenance-mute behavior; explicit standby instead cancels any in-flight
+  PCM and does not resume it mid-asset. After unmuting, every cold wake feeds
+  120 ms of digital silence through I2S before the first authored PCM frame so
+  the ES8311 and speaker amplifier cannot swallow an opening consonant.
 - Codec initialization matches the current Waveshare V2 managed path, including
   a deterministic reset, 16 kHz DAC OSR `0x20`, and the complete reference and
   system-register sequence.

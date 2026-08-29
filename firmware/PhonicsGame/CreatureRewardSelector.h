@@ -49,8 +49,8 @@ class CreatureRewardSelector {
   static constexpr uint8_t kCreatureCount = 8;
   static constexpr uint8_t kPatternCount = 4;
   static constexpr uint8_t kAutomaticPaletteCount = 5;
-  static constexpr uint8_t kCleanStreakGuarantee = 10;
-  static constexpr uint8_t kCorrectPityGuarantee = 14;
+  static constexpr uint8_t kCleanStreakGuarantee = 8;
+  static constexpr uint8_t kCorrectPityGuarantee = 12;
 
   explicit CreatureRewardSelector(uint32_t seed) { reset(seed); }
 
@@ -127,11 +127,15 @@ class CreatureRewardSelector {
            paletteIndex == 1 || paletteIndex == 5;
   }
 
+  // Device-rounded hazards plus the eighth-correct clean guarantee raise the
+  // clean renewal incidence from 11.284% to 14.021% (+24.26%). The twelfth-
+  // correct pity guarantee keeps an every-answer-wrong run at 9.453%, 16.45%
+  // above the former 1/50 plus fourteenth-correct policy.
   static constexpr uint8_t rareOddsDenominator(
       uint8_t cleanProgressBeforeAnswer) {
-    return cleanProgressBeforeAnswer <= 3
-               ? 50
-               : (cleanProgressBeforeAnswer <= 7 ? 25 : 13);
+    return cleanProgressBeforeAnswer <= 2
+               ? 43
+               : (cleanProgressBeforeAnswer <= 5 ? 21 : 11);
   }
 
   static constexpr CreatureBaseTier speciesBaseTier(uint8_t creatureIndex) {
@@ -157,13 +161,15 @@ class CreatureRewardSelector {
   inline static constexpr uint8_t
       kAutomaticPaletteIndices[kAutomaticPaletteCount] = {0, 1, 2, 4, 5};
 
-  // Per-species weights are 80:30:13 for basic:medium:rare. Compared with the
-  // preceding 80:30:11 policy, this makes rare-tier species about 14.7% more
-  // frequent after immediate repeats are removed: 12,714/93,414, or 13.61%.
+  // Per-species weights are 80:30:16 for basic:medium:rare. Compared with the
+  // preceding 80:30:13 policy, this makes rare-tier species 17.87% more
+  // frequent after immediate repeats are removed: 15,936/99,336, or 16.04%.
+  // A weight of 15 would produce only a 12.08% effective increase because the
+  // immediately previous species is removed before each later draw.
   // Manifest order: jelly, shark, octopus, seahorse, glass squid, anglerfish,
   // sea angel, gulper eel.
   inline static constexpr uint8_t kCreatureBaseWeights[kCreatureCount] = {
-      80, 13, 30, 80, 80, 13, 30, 13};
+      80, 16, 30, 80, 80, 16, 30, 16};
 
   inline static constexpr uint32_t kRarityDomain = 0xA511E9B3u;
   inline static constexpr uint32_t kCreatureDomain = 0x43D2C8F1u;

@@ -7,29 +7,38 @@ namespace phonics_game {
 constexpr uint8_t kLetterCount = 26;
 constexpr uint8_t kPromptVariantCount = 5;
 constexpr uint8_t kNudgeVariantCount = 4;
-constexpr uint8_t kWrongVariantCount = 3;
+// Only the neutral "No, no." cue fits a wrong answer that advances instead of
+// inviting another try on the same challenge.
+constexpr uint8_t kWrongVariantCount = 1;
 constexpr uint8_t kPraiseVariantCount = 4;
 constexpr uint8_t kLayoutVariantCount = 6;
 constexpr uint32_t kFirstNudgeDelayMs = 8000;
 constexpr uint32_t kSecondNudgeDelayMs = 10000;
+// Freeze the answered round long enough for a cold audio wake plus the 830 ms
+// neutral cue, then show a complete black beat before composing the next
+// challenge. The black phase is timed from the frame that actually draws it,
+// so a busy loop can delay but never skip the visual transition.
+constexpr uint32_t kWrongFeedbackDurationMs = 1100;
+constexpr uint32_t kWrongBlackBeatDurationMs = 120;
 // A correct answer first confirms the chosen card, then transitions into a
 // short underwater creature reward before returning to the next clean round.
 constexpr uint32_t kCorrectPulseEndMs = 400;
 constexpr uint32_t kWaterRiseEndMs = 640;
-// Keep the creature on screen for 2200 ms (640..2840), about 20% longer than
-// the previous 1840 ms window. Only the full-water hold grows; the rise and
-// recede keep their established pacing.
-constexpr uint32_t kCreatureRewardEndMs = 2560;
-constexpr uint32_t kWaterRecedeEndMs = 2840;
+// Keep the creature on screen for a device-rounded 2520 ms (640..3160), 14.5%
+// longer than the previous 2200 ms window. Only the full-water hold grows; the
+// rise and recede keep their established pacing.
+constexpr uint32_t kCreatureRewardEndMs = 2880;
+constexpr uint32_t kWaterRecedeEndMs = 3160;
 // Leave a deliberate fully black beat after the recede. At 120 ms it cannot
 // be skipped by a single framebuffer composite/flush before the next round.
-constexpr uint32_t kCelebrationDurationMs = 2960;
+constexpr uint32_t kCelebrationDurationMs = 3280;
 
 enum class EventType : uint8_t {
   none,
   roundStarted,
   nudge,
   wrongChoice,
+  wrongBlackBeat,
   correctChoice,
 };
 
@@ -80,6 +89,26 @@ class GameEngine {
   Event update(uint32_t nowMs) {
     if (!started_ || suspended_) return Event{};
 
+    if (wrongFeedback_) {
+      if (elapsed(nowMs, wrongTransitionStartedAtMs_) >=
+          kWrongFeedbackDurationMs) {
+        wrongFeedback_ = false;
+        wrongBlackBeat_ = true;
+        wrongTransitionStartedAtMs_ = nowMs;
+        return Event{EventType::wrongBlackBeat, 0};
+      }
+      return Event{};
+    }
+
+    if (wrongBlackBeat_) {
+      if (wrongBlackFramePresented_ &&
+          elapsed(nowMs, wrongTransitionStartedAtMs_) >=
+          kWrongBlackBeatDurationMs) {
+        return beginRound(nowMs);
+      }
+      return Event{};
+    }
+
     if (celebrating_) {
       if (elapsed(nowMs, celebrationStartedAtMs_) >= kCelebrationDurationMs) {
         return beginRound(nowMs);
@@ -102,10 +131,12 @@ class GameEngine {
   }
 
   Event choose(bool choseLeft, uint32_t nowMs) {
-    if (!started_ || suspended_ || celebrating_) return Event{};
+    if (!acceptingInput()) return Event{};
     lastInteractionAtMs_ = nowMs;
     const bool correct = choseLeft == round_.targetOnLeft;
     if (!correct) {
+      wrongFeedback_ = true;
+      wrongTransitionStartedAtMs_ = nowMs;
       return Event{EventType::wrongChoice, random_.below(kWrongVariantCount)};
     }
 
@@ -117,9 +148,18 @@ class GameEngine {
   // Replay keeps the exact round and prompt, but counts as engagement so an
   // idle nudge never talks over the replayed instruction.
   bool replay(uint32_t nowMs) {
-    if (!started_ || suspended_ || celebrating_) return false;
+    if (!acceptingInput()) return false;
     lastInteractionAtMs_ = nowMs;
     return true;
+  }
+
+  // Start the black-beat clock only after the compositor confirms the complete
+  // frame was flushed. Without this acknowledgement, fail closed on black
+  // rather than exposing a too-short or skipped transition.
+  void acknowledgeWrongBlackFrame(uint32_t nowMs) {
+    if (!wrongBlackBeat_) return;
+    wrongBlackFramePresented_ = true;
+    wrongTransitionStartedAtMs_ = nowMs;
   }
 
   void suspend(uint32_t nowMs) {
@@ -133,11 +173,21 @@ class GameEngine {
     const uint32_t pausedMs = elapsed(nowMs, suspendedAtMs_);
     lastInteractionAtMs_ += pausedMs;
     if (celebrating_) celebrationStartedAtMs_ += pausedMs;
+    if (wrongTransitioning()) wrongTransitionStartedAtMs_ += pausedMs;
     suspended_ = false;
   }
 
   const Round& round() const { return round_; }
   bool celebrating() const { return celebrating_; }
+  bool wrongTransitioning() const {
+    return wrongFeedback_ || wrongBlackBeat_;
+  }
+  bool wrongFeedback() const { return wrongFeedback_; }
+  bool wrongBlackBeat() const { return wrongBlackBeat_; }
+  bool transitioning() const { return celebrating_ || wrongTransitioning(); }
+  bool acceptingInput() const {
+    return started_ && !suspended_ && !transitioning();
+  }
   bool suspended() const { return suspended_; }
   uint32_t celebrationElapsed(uint32_t nowMs) const {
     const uint32_t effectiveNow = suspended_ ? suspendedAtMs_ : nowMs;
@@ -167,6 +217,9 @@ class GameEngine {
 
   Event beginRound(uint32_t nowMs) {
     celebrating_ = false;
+    wrongFeedback_ = false;
+    wrongBlackBeat_ = false;
+    wrongBlackFramePresented_ = false;
     nudgeLevel_ = 0;
     lastInteractionAtMs_ = nowMs;
 
@@ -193,6 +246,9 @@ class GameEngine {
   Round round_;
   bool started_ = false;
   bool celebrating_ = false;
+  bool wrongFeedback_ = false;
+  bool wrongBlackBeat_ = false;
+  bool wrongBlackFramePresented_ = false;
   bool suspended_ = false;
   bool hasPreviousTarget_ = false;
   uint8_t previousTarget_ = 0;
@@ -201,6 +257,7 @@ class GameEngine {
   uint8_t lastNudgeVariant_ = 0xff;
   uint32_t lastInteractionAtMs_ = 0;
   uint32_t celebrationStartedAtMs_ = 0;
+  uint32_t wrongTransitionStartedAtMs_ = 0;
   uint32_t suspendedAtMs_ = 0;
 };
 
