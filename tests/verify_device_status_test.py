@@ -38,4 +38,14 @@ parsed_interrupted = VERIFY_DEVICE.parse_status(interrupted)
 assert parsed_interrupted["audio_power"] == "idle"
 assert not VERIFY_DEVICE.status_is_complete(parsed_interrupted)
 
+firmware = (ROOT / "firmware/PhonicsGame/PhonicsGame.ino").read_text()
+status_handler = firmware.split('if (command == "STATUS") {', 1)[1].split(
+    'if (command == "FRAME") {', 1
+)[0]
+assert "USBSerial.setTxTimeoutMs(25);" in status_handler
+assert "USBSerial.flush();" in status_handler
+assert status_handler.rfind("USBSerial.setTxTimeoutMs(0);") > status_handler.rfind(
+    "USBSerial.flush();"
+)
+
 print("verify_device_status_test passed")

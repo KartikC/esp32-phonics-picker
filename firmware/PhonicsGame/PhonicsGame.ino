@@ -1199,6 +1199,11 @@ void handlePreviewCommands() {
                              "suspended" :
                              (maintenanceMute.muted() ? "muted" :
                              (AudioPlan::ready() ? "ready" : "FAILED"));
+    // STATUS is longer than the 256-byte HWCDC transmit ring. Gameplay logs
+    // intentionally remain non-blocking, but this host-requested diagnostic
+    // reply gets a small bounded window to drain so it cannot be truncated
+    // and joined to the next asynchronous battery record.
+    USBSerial.setTxTimeoutMs(25);
     USBSerial.printf(
         "[status] psram=%u audio=%s audio_power=%s audio_idle_downs=%u "
         "audio_write_failures=%u volume=%u imu=%s preview=%s standby=%s "
@@ -1228,6 +1233,8 @@ void handlePreviewCommands() {
         touchInterruptGateAvailable ? "yes" : "no",
         static_cast<unsigned>(touchPollCount),
         static_cast<unsigned>(powerPollCount));
+    USBSerial.flush();
+    USBSerial.setTxTimeoutMs(0);
     return;
   }
   if (command == "FRAME") {
